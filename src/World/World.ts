@@ -1,4 +1,4 @@
-import { Camera, Group, Mesh } from "three";
+import { Camera, Group } from "three";
 import { Experience } from "../experience/Experience";
 import { Environment } from "./Environment";
 import { TowerFloor, GroundArea, GroundFloor } from "./objects";
@@ -27,32 +27,19 @@ export default class World {
     this.camera = this.experience.camera.camera;
     this.debug = this.experience.debug;
     this.physics = this.experience.physics;
-    this.tower = new Group();
-    this.world = new Group();
     this.environment = new Environment({
       hasAmbientLight: true,
       hasDirectionalLight: true,
     });
+
+    this.tower = new Group();
+    this.world = new Group();
+
     this.addedObjects = [];
     this.floorY = 2;
+
     this.createWorld();
-
-    gsap.to(this.camera.position, {
-      y: 3,
-      duration: 1,
-    });
-
-    const debugProps = {
-      reset: () => this.reset(),
-      drop: () => {
-        if (this.currentFloor && this.currentFloor.isFollowing) return;
-        this.currentFloor.drop();
-      },
-    };
-    this.debugFolder = this.debug.ui.addFolder("towers");
-
-    this.debugFolder.add(debugProps, "reset");
-    this.debugFolder.add(debugProps, "drop");
+    this.debugPanel();
   }
 
   addFloor() {
@@ -77,30 +64,31 @@ export default class World {
     this.world.add(this.tower, this.groundFloor.mesh, this.ground.mesh);
     this.experience.scene.add(this.world);
 
-    // this.physics.world.addEventListener("beginContact", (event: any) => {
-    //   const bodyA = event.bodyA;
-    //   const bodyB = event.bodyB;
+    gsap.to(this.camera.position, {
+      y: 3,
+      duration: 1,
+    });
+  }
 
-    //   // Check if bodyA and bodyB are the bodies you want to check for collision
-    //   if (
-    //     (bodyA === this.currentFloor.towerBody &&
-    //       bodyB === this.groundFloor.towerBody) ||
-    //     (bodyA === this.groundFloor.towerBody &&
-    //       bodyB === this.currentFloor.towerBody)
-    //   ) {
-    //     console.log("Bodies collide!");
-    //     // Perform collision response or other actions here
-    //   }
-    // });
+  debugPanel() {
+    const debugProps = {
+      reset: () => this.reset(),
+      drop: () => {
+        if (this.currentFloor && this.currentFloor.isFalling) return;
+        this.currentFloor.drop();
+      },
+    };
+
+    this.debugFolder = this.debug.ui.addFolder("towers");
+    this.debugFolder.add(debugProps, "reset");
+    this.debugFolder.add(debugProps, "drop");
   }
 
   update() {}
 
   reset() {
     for (const object of this.addedObjects) {
-      console.log(object);
-
-      object.reset();
+      object.remove();
       this.physics.world.remove(object.body);
       this.tower.remove(object.mesh);
     }

@@ -20,7 +20,7 @@ export default class TowerFloor extends EventEmitter {
   physics: PhysicsWorld;
 
   swinging: any;
-  isFollowing: boolean;
+  isFalling: boolean;
   hasCollided: boolean;
 
   //
@@ -36,7 +36,7 @@ export default class TowerFloor extends EventEmitter {
     this.physics = this.experience.physics;
 
     this.hasCollided = false;
-    this.isFollowing = false;
+    this.isFalling = false;
 
     this.createMesh();
     this.time.on("tick", () => this.update());
@@ -45,30 +45,22 @@ export default class TowerFloor extends EventEmitter {
     this.geometry = new BoxGeometry(1, 1, 1);
   }
   setMaterial() {
-    // const matcap = this.experience.resources.items.mapCap8;
     const color = Math.floor(Math.random() * 16777215).toString(16);
 
     this.material = new MeshMatcapMaterial({
-      // @ts-ignore TODO
-      // matcap,
       color: `#${color}`,
     });
   }
   setBody() {
-    const shape = new CANNON.Box(new CANNON.Vec3(1 * 0.5, 1 * 0.5, 1 * 0.5));
-
     this.body = new CANNON.Body({
       mass: 1,
       position: new CANNON.Vec3(0, this.positionY + 5, 0),
-      shape,
+      shape: new CANNON.Box(new CANNON.Vec3(1 * 0.5, 1 * 0.5, 1 * 0.5)),
       allowSleep: true, // Enable sleeping
       sleepSpeedLimit: 0.1,
     });
 
-    this.body.position.x = this.mesh.position.x;
-    this.body.position.y = this.mesh.position.y;
-    this.body.position.z = this.mesh.position.z;
-
+    this.body.position.copy(this.mesh.position as any);
     this.physics.world.addBody(this.body);
   }
   swingingAnimation() {
@@ -94,35 +86,31 @@ export default class TowerFloor extends EventEmitter {
     });
 
     this.camera.lookAt(this.mesh.position);
-
     this.swingingAnimation();
   }
   drop() {
     this.swinging.pause();
     this.setBody();
-    this.isFollowing = true;
+    this.isFalling = true;
 
     this.body.addEventListener("collide", () => this.handleCollision());
   }
   handleCollision() {
     if (!this.hasCollided) {
       this.hasCollided = true;
-      this.isFollowing = false;
+      this.isFalling = false;
 
       this.trigger("handleHasCollided");
     }
   }
   update() {
     if (this.body) {
-      this.mesh.position.x = this.body.position.x;
-      this.mesh.position.y = this.body.position.y;
-      this.mesh.position.z = this.body.position.z;
-
+      this.mesh.position.copy(this.body.position as any);
       this.mesh.quaternion.copy(this.body.quaternion as any);
     }
   }
 
-  reset() {
+  remove() {
     this.body.removeEventListener("collide", () => this.handleCollision);
   }
 }
