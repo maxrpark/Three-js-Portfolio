@@ -1,11 +1,11 @@
-import { Camera, Group } from "three";
-import { Experience } from "../experience/Experience";
-import { Environment } from "./Environment";
-import { TowerFloor, GroundArea, GroundFloor } from "./objects";
-import Debug from "../experience/utils/Debug";
-import GUI from "lil-gui";
-import { PhysicsWorld } from "../experience/utils";
-import { gsap } from "gsap";
+import { Camera, Group } from 'three';
+import { Experience } from '../experience/Experience';
+import { Environment } from './Environment';
+import { TowerFloor, GroundArea, GroundFloor, Text2D } from './objects';
+import Debug from '../experience/utils/Debug';
+import GUI from 'lil-gui';
+import { PhysicsWorld } from '../experience/utils';
+import { gsap } from 'gsap';
 
 export default class World {
   experience: Experience;
@@ -22,6 +22,8 @@ export default class World {
   floorY: number;
   currentFloor: TowerFloor;
 
+  floorLevel: Text2D;
+
   constructor() {
     this.experience = new Experience();
     this.camera = this.experience.camera.camera;
@@ -31,6 +33,8 @@ export default class World {
       hasAmbientLight: true,
       hasDirectionalLight: true,
     });
+
+    this.floorLevel = new Text2D({ text: 0, anchorX: -1.5, fontSize: 1 });
 
     this.tower = new Group();
     this.world = new Group();
@@ -46,12 +50,24 @@ export default class World {
     if (this.currentFloor) this.floorY = this.currentFloor.mesh.position.y;
 
     this.currentFloor = new TowerFloor({ positionY: this.floorY });
-    this.currentFloor.on("handleHasCollided", () => {
+    this.currentFloor.on('handleHasCollided', () => {
       this.addedObjects.push(this.currentFloor);
+      this.updateFloorLevelText();
+
       this.addFloor();
     });
 
     this.tower.add(this.currentFloor.mesh);
+  }
+  updateFloorLevelText() {
+    this.floorLevel.updateText(this.addedObjects.length);
+    this.floorLevel.updatePositionY(-this.currentFloor.mesh.position.y - 0.5);
+
+    if (this.addedObjects.length === 0) {
+      this.floorLevel.instance.visible = false;
+    } else {
+      this.floorLevel.instance.visible = true;
+    }
   }
   createGroundArea() {
     this.groundFloor = new GroundFloor();
@@ -61,7 +77,13 @@ export default class World {
     this.createGroundArea();
     this.addFloor();
 
-    this.world.add(this.tower, this.groundFloor.mesh, this.ground.mesh);
+    this.world.add(
+      this.tower,
+      this.groundFloor.mesh,
+      this.ground.mesh,
+      // @ts-ignore
+      this.floorLevel.instance
+    );
     this.experience.scene.add(this.world);
 
     gsap.to(this.camera.position, {
@@ -79,9 +101,9 @@ export default class World {
       },
     };
 
-    this.debugFolder = this.debug.ui.addFolder("towers");
-    this.debugFolder.add(debugProps, "reset");
-    this.debugFolder.add(debugProps, "drop");
+    this.debugFolder = this.debug.ui.addFolder('towers');
+    this.debugFolder.add(debugProps, 'reset');
+    this.debugFolder.add(debugProps, 'drop');
   }
 
   update() {}
@@ -92,6 +114,12 @@ export default class World {
       this.physics.world.remove(object.body);
       this.tower.remove(object.mesh);
     }
+
+    this.floorY = 2;
     this.addedObjects.splice(0, this.addedObjects.length);
+    this.updateFloorLevelText();
+
+    if (this.currentFloor && !this.currentFloor.isFalling)
+      this.currentFloor.drop();
   }
 }
