@@ -60,6 +60,7 @@ export default class TowerFloor extends EventEmitter {
       sleepSpeedLimit: 0.1,
     });
 
+    this.mesh.userData.body = this.body;
     this.body.position.copy(this.mesh.position as any);
     this.physics.world.addBody(this.body);
   }
@@ -89,6 +90,7 @@ export default class TowerFloor extends EventEmitter {
     this.swingingAnimation();
   }
   drop() {
+    if (this.isFalling) return;
     this.swinging.pause();
     this.setBody();
     this.isFalling = true;

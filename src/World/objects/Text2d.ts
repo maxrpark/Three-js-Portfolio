@@ -1,4 +1,4 @@
-import { Text } from 'troika-three-text';
+import { Text } from "troika-three-text";
 
 interface Prop {
   text: string | number;
@@ -33,8 +33,8 @@ export default class Text2D {
 
     this.instance.text = this.text;
     this.instance.fontSize = this.fontSize ? this.fontSize : 2;
-    this.instance.color = this.color ? this.color : 'red';
-    this.instance.anchorX = this.anchorX ? this.anchorX : 'center';
+    this.instance.color = this.color ? this.color : "white";
+    this.instance.anchorX = this.anchorX ? this.anchorX : "center";
     this.instance.sync();
   }
 
