@@ -43,7 +43,6 @@ export default class GameState implements State {
   intro() {}
   start() {}
   playing() {}
-  // pause() {}
   gameOver() {}
   reset() {}
 }
@@ -58,11 +57,3 @@ export class ResetState extends GameState {
   public gameOver(): void {}
   public reset(): void {}
 }
-
-// export const stateClasses: Record<GameStateType, typeof GameState> = {
-//   [GameStateType.Intro]: IntroState,
-//   [GameStateType.Start]: StartState,
-//   [GameStateType.Playing]: PlayingState,
-//   [GameStateType.GameOver]: GameOverState,
-//   // add more state classes here...
-// };

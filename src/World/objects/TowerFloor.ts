@@ -65,15 +65,28 @@ export default class TowerFloor extends EventEmitter {
     this.physics.world.addBody(this.body);
   }
   swingingAnimation() {
-    this.swinging = gsap.timeline({ paused: true });
+    this.swinging = gsap.timeline({ paused: true, duration: 2 });
 
-    this.swinging.fromTo(
-      this.mesh.position,
-      {
-        x: 1,
-      },
-      { x: -1, repeat: -1, yoyo: true, ease: "none", duration: 1 }
-    );
+    this.swinging
+      .from(this.mesh.position, {
+        x: -2,
+      })
+      .fromTo(
+        this.mesh.position,
+        {
+          x: -1.2,
+          ease: "back",
+        },
+        {
+          x: 1.2,
+          repeat: -1,
+          yoyo: true,
+          ease: "none",
+          duration: 1,
+          // ease: "power3",
+        }
+      );
+    this.swinging.progress(0.5);
     this.swinging.play();
   }
   createMesh() {

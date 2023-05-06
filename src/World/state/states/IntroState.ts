@@ -13,6 +13,18 @@ export default class IntroState extends GameState {
     this.world = this.experience.world;
   }
 
+  private keyEventListeners(event: KeyboardEvent) {
+    switch (event.code) {
+      case "Enter":
+        this.world.startNewGame();
+        break;
+      default:
+        break;
+    }
+  }
+
+  private keyEventListener = this.keyEventListeners.bind(this);
+
   public enter(): void {
     this.world.createWorld();
 
@@ -20,14 +32,12 @@ export default class IntroState extends GameState {
       y: 3,
       duration: 1,
     });
-  }
-  public update(): void {}
-  public exit(): void {
-    // console.log("end");
+
+    window.addEventListener("keydown", this.keyEventListener);
   }
 
-  public start(): void {}
-  public playing(): void {}
-  public gameOver(): void {}
-  public reset(): void {}
+  public update(): void {}
+  public exit(): void {
+    window.removeEventListener("keydown", this.keyEventListener);
+  }
 }

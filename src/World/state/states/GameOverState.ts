@@ -5,6 +5,7 @@ import World from "../../World";
 export default class GameOverState extends GameState {
   experience: Experience;
   world: World;
+
   constructor() {
     super();
 
@@ -12,14 +13,24 @@ export default class GameOverState extends GameState {
     this.world = this.experience.world;
   }
 
+  private keyEventListeners(event: KeyboardEvent) {
+    switch (event.code) {
+      case "Enter":
+        this.world.resetGame();
+      default:
+        break;
+    }
+  }
+
+  private keyEventListener = this.keyEventListeners.bind(this);
+
   public enter(): void {
     this.world.gameEnded();
-  }
-  public update(): void {}
-  public exit(): void {}
 
-  public start(): void {}
-  public playing(): void {}
-  public gameOver(): void {}
-  public reset(): void {}
+    window.addEventListener("keydown", this.keyEventListener);
+  }
+
+  public exit(): void {
+    window.removeEventListener("keydown", this.keyEventListener);
+  }
 }

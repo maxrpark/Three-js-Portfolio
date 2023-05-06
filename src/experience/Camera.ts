@@ -33,11 +33,8 @@ export class Camera implements CameraInt {
     this.sizes = this.experience.sizes;
     this.canvas = this.experience.canvas!;
 
-    const axesHelper = new AxesHelper(5);
-    this.scene.add(axesHelper);
-
     this.debug = this.experience.debug;
-    this.debugFolder = this.debug.ui.addFolder("towers");
+    if (this.debug.active) this.debugFolder = this.debug.ui.addFolder("towers");
 
     this.setCamera();
   }

@@ -1,19 +1,12 @@
-import { Group, Mesh, Object3D } from "three";
+import { Group, Object3D } from "three";
 import { Experience } from "../experience/Experience";
 import { Environment } from "./Environment";
 import { TowerFloor, GroundArea, GroundFloor, Text2D } from "./objects";
 import Debug from "../experience/utils/Debug";
 import GUI from "lil-gui";
-import { gsap } from "gsap";
 import { PhysicsWorld } from "../experience/utils";
-import {
-  // StartState,
-  // PlayingState,
-  // GameOverState,
-  // ResetState,
-  StateMachine,
-} from "./state/GameState";
-import { PlayingState, StartState } from "./state/states";
+import { StateMachine } from "./state/GameState";
+import { PlayingState } from "./state/states";
 
 export default class World {
   experience: Experience;
@@ -27,7 +20,7 @@ export default class World {
   debug: Debug;
   debugFolder: GUI;
   floorY: number;
-  currentFloor: TowerFloor;
+  currentFloor: TowerFloor | null;
 
   floorLevel: Text2D;
   gameOver: boolean;
@@ -37,7 +30,6 @@ export default class World {
   constructor() {
     this.experience = new Experience();
     this.stateMachine = this.experience.stateMachine;
-    this.debug = this.experience.debug;
     this.physics = this.experience.physics;
     this.environment = new Environment({
       hasAmbientLight: true,
@@ -49,10 +41,7 @@ export default class World {
     this.tower = new Group();
     this.world = new Group();
 
-    this.gameOver = false;
     this.addedObjects = [];
-
-    this.debugPanel();
   }
 
   setFloorY(y: number) {
@@ -62,18 +51,19 @@ export default class World {
   addFloor() {
     if (this.currentFloor) this.floorY = this.currentFloor.mesh.position.y;
     this.currentFloor = new TowerFloor({ positionY: this.floorY });
-    this.currentFloor.on("handleHasCollided", () => {
-      this.addedObjects.push(this.currentFloor);
-      this.updateFloorLevelText();
 
+    this.currentFloor.on("handleHasCollided", () => {
+      this.addedObjects.push(this.currentFloor!);
+      this.updateFloorLevelText();
       this.addFloor();
     });
+
     this.tower.add(this.currentFloor.mesh);
   }
 
   updateFloorLevelText() {
     this.floorLevel.updateText(this.addedObjects.length);
-    this.floorLevel.updatePositionY(-this.currentFloor.mesh.position.y - 0.5);
+    this.floorLevel.updatePositionY(-this.currentFloor!.mesh.position.y - 0.5);
     this.floorLevel.instance.visible = this.addedObjects.length > 0;
   }
   createWorld() {
@@ -88,21 +78,6 @@ export default class World {
       this.floorLevel.instance
     );
     this.experience.scene.add(this.world);
-  }
-
-  startNewGame() {
-    this.stateMachine.change(new PlayingState());
-  }
-
-  debugPanel() {
-    const debugProps = {
-      reset: () => this.reset(),
-      newGame: () => this.startNewGame(),
-    };
-
-    this.debugFolder = this.debug.ui.addFolder("towers");
-    this.debugFolder.add(debugProps, "reset");
-    this.debugFolder.add(debugProps, "newGame");
   }
 
   handleGroundCollision(
@@ -121,21 +96,25 @@ export default class World {
     });
   }
 
-  gameEnded() {
-    this.gameOver = true;
-    this.tower.remove(this.currentFloor.mesh);
+  startNewGame() {
+    this.stateMachine.change(new PlayingState());
   }
 
-  reset() {
+  gameEnded() {
+    this.tower.remove(this.currentFloor!.mesh);
+  }
+
+  resetGame() {
     for (const object of this.addedObjects) {
       object.remove();
       this.physics.world.remove(object.body);
       this.tower.remove(object.mesh);
     }
 
-    this.floorY = 2;
+    this.currentFloor = null;
     this.addedObjects.splice(0, this.addedObjects.length);
-    this.updateFloorLevelText();
+
+    this.stateMachine.change(new PlayingState());
   }
 
   update() {}

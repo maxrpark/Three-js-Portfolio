@@ -22,7 +22,7 @@ export default class PlayingState extends GameState {
   private keyEventListeners(event: KeyboardEvent) {
     switch (event.code) {
       case "Space":
-        this.world.currentFloor.drop();
+        this.world.currentFloor!.drop();
         break;
       default:
         break;
