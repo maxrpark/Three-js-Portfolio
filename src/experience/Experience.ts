@@ -5,6 +5,8 @@ import { Scene } from "three";
 import World from "../World/World";
 import Resources from "./utils/Resources";
 import source from "../sources/base";
+import { StateMachine } from "../World/state/GameState";
+import { IntroState } from "../World/state/states";
 
 declare global {
   interface Window {
@@ -23,6 +25,7 @@ export interface ExperienceInt {
   debug: Debug;
   physics: PhysicsWorld;
   resources: Resources;
+  stateMachine: StateMachine;
   update: () => void;
   resize: () => void;
 }
@@ -40,11 +43,14 @@ export class Experience implements ExperienceInt {
   debug: Debug;
   physics: PhysicsWorld;
   resources: Resources;
+  stateMachine: StateMachine;
 
   constructor(canvas?: HTMLCanvasElement) {
     if (instance) {
       return instance;
     }
+    console.log("new instance");
+
     instance = this;
 
     window.experience = this;
@@ -68,7 +74,10 @@ export class Experience implements ExperienceInt {
     this.resources = new Resources(source);
 
     this.resources.on("loaded", () => {
+      this.stateMachine = new StateMachine();
       this.world = new World();
+
+      this.stateMachine.change(new IntroState());
     });
   }
   update() {
