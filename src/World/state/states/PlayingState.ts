@@ -34,7 +34,9 @@ export default class PlayingState extends GameState {
   public enter(): void {
     this.world.setFloorY(1);
     this.world.addFloor();
-    this.world.updateFloorLevelText();
+    this.world.controllers.show();
+    this.world.isGameOver = false;
+    this.world.floorLevel.updatePositionY(-1);
 
     this.world.handleGroundCollision((objectInTower: Object3D | undefined) => {
       if (objectInTower) {

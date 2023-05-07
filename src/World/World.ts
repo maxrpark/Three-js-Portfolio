@@ -7,6 +7,7 @@ import GUI from "lil-gui";
 import { PhysicsWorld } from "../experience/utils";
 import { StateMachine } from "./state/GameState";
 import { PlayingState } from "./state/states";
+import { Controllers } from "./utils/";
 
 export default class World {
   experience: Experience;
@@ -23,9 +24,11 @@ export default class World {
   currentFloor: TowerFloor | null;
 
   floorLevel: Text2D;
-  gameOver: boolean;
+  isGameOver: boolean;
 
   stateMachine: StateMachine;
+
+  controllers: Controllers;
 
   constructor() {
     this.experience = new Experience();
@@ -40,7 +43,6 @@ export default class World {
 
     this.tower = new Group();
     this.world = new Group();
-
     this.addedObjects = [];
   }
 
@@ -69,6 +71,7 @@ export default class World {
   createWorld() {
     this.groundFloor = new GroundFloor();
     this.ground = new GroundArea();
+    this.gameControllers();
 
     this.world.add(
       this.tower,
@@ -96,12 +99,32 @@ export default class World {
     });
   }
 
+  gameControllers() {
+    this.controllers = new Controllers();
+
+    this.controllers.on("controllerDrop", () => {
+      if (this.isGameOver) return;
+      this.currentFloor!.drop();
+    });
+    this.controllers.on("controllerPause", () => {
+      if (this.isGameOver) return;
+      console.log("hey");
+
+      // this.currentFloor!.swinging.pause();
+    });
+  }
+
   startNewGame() {
     this.stateMachine.change(new PlayingState());
   }
 
   gameEnded() {
     this.tower.remove(this.currentFloor!.mesh);
+
+    if (!this.isGameOver) {
+      this.controllers.hide();
+      this.isGameOver = true;
+    }
   }
 
   resetGame() {
@@ -111,9 +134,13 @@ export default class World {
       this.tower.remove(object.mesh);
     }
 
+    for (const object of this.tower.children) {
+      this.tower.remove(object);
+    }
+
     this.currentFloor = null;
     this.addedObjects.splice(0, this.addedObjects.length);
-
+    this.floorLevel.updateText(0);
     this.stateMachine.change(new PlayingState());
   }
 

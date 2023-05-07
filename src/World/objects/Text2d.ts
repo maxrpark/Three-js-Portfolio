@@ -1,4 +1,5 @@
 import { Text } from "troika-three-text";
+import { gsap } from "gsap";
 
 interface Prop {
   text: string | number;
@@ -35,6 +36,7 @@ export default class Text2D {
     this.instance.fontSize = this.fontSize ? this.fontSize : 2;
     this.instance.color = this.color ? this.color : "white";
     this.instance.anchorX = this.anchorX ? this.anchorX : "center";
+
     this.instance.sync();
   }
 
@@ -43,7 +45,10 @@ export default class Text2D {
     this.instance.sync();
   }
   updatePositionY(positionY: any) {
-    this.instance.anchorY = positionY;
+    gsap.to(this.instance, {
+      anchorY: positionY,
+    });
+
     this.instance.sync();
   }
 }

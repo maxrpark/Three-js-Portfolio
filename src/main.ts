@@ -6,4 +6,4 @@ canvas.setAttribute("id", "webgl");
 
 document.getElementById("app")?.appendChild(canvas);
 
-const experience = new Experience(canvas);
+new Experience(canvas);
