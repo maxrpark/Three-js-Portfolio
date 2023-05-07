@@ -1,16 +1,16 @@
 import EventEmitter from "../../experience/utils/EventEmitter";
 
 export default class Controllers extends EventEmitter {
-  buttonWrapper: HTMLDivElement;
-  dropButton: HTMLButtonElement;
-  pauseButton: HTMLButtonElement;
-  playButton: HTMLButtonElement;
+  private buttonWrapper: HTMLDivElement;
+  private dropButton: HTMLButtonElement;
+  private pauseButton: HTMLButtonElement;
+  private playButton: HTMLButtonElement;
   constructor() {
     super();
     this.createButtons();
   }
 
-  createButtons() {
+  private createButtons() {
     this.buttonWrapper = document.createElement("div");
     this.buttonWrapper.classList.add("controllers-container");
 
@@ -25,7 +25,7 @@ export default class Controllers extends EventEmitter {
     this.setHandlers();
     this.playButton.classList.add("show");
   }
-  setHandlers() {
+  private setHandlers() {
     this.dropButton = document.getElementById("drop") as HTMLButtonElement;
     this.dropButton.addEventListener("click", () =>
       this.trigger("controllerDrop")
@@ -43,14 +43,14 @@ export default class Controllers extends EventEmitter {
     );
   }
 
-  showPlayButtons() {
+  public showPlayButtons() {
     this.dropButton.classList.add("show");
     this.pauseButton.classList.add("show");
 
     this.playButton.classList.remove("show");
   }
 
-  hidePlayButtons() {
+  public hidePlayButtons() {
     this.dropButton.classList.remove("show");
     this.pauseButton.classList.remove("show");
 

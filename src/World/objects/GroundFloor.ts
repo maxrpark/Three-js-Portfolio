@@ -1,19 +1,17 @@
 import { BoxGeometry, Mesh, MeshStandardMaterial } from "three";
 import CANNON from "cannon";
 import { Experience } from "../../experience/Experience";
-import { PhysicsWorld, Time } from "../../experience/utils";
+import { PhysicsWorld } from "../../experience/utils";
 
 export default class GroundFloor {
-  experience: Experience;
-  time: Time;
-  geometry: BoxGeometry;
-  material: MeshStandardMaterial;
-  mesh: Mesh;
+  private experience: Experience;
+  private geometry: BoxGeometry;
+  private material: MeshStandardMaterial;
+  public mesh: Mesh;
 
-  towerBody: CANNON.Body;
-  physics: PhysicsWorld;
+  private towerBody: CANNON.Body;
+  private physics: PhysicsWorld;
 
-  positionY: number;
   constructor() {
     this.experience = new Experience();
     this.physics = this.experience.physics;
@@ -21,13 +19,13 @@ export default class GroundFloor {
     this.createMesh();
     this.setBody();
   }
-  setGeometry() {
+  private setGeometry() {
     this.geometry = new BoxGeometry(1, 1, 1);
   }
-  setMaterial() {
+  private setMaterial() {
     this.material = new MeshStandardMaterial();
   }
-  setBody() {
+  private setBody() {
     this.towerBody = new CANNON.Body({
       mass: 1,
       position: new CANNON.Vec3(0, 0.5, 0),
@@ -39,7 +37,7 @@ export default class GroundFloor {
     this.physics.world.addBody(this.towerBody);
   }
 
-  createMesh() {
+  private createMesh() {
     this.setGeometry();
     this.setMaterial();
     this.mesh = new Mesh(this.geometry, this.material);

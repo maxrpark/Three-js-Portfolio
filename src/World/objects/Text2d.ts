@@ -13,23 +13,23 @@ interface Prop {
 }
 
 export default class Text2D {
-  instance: Text;
+  public instance: Text;
 
   // Props
-  text: string;
-  fontSize: number;
-  color: string;
-  anchorX: string | number;
-  anchorY: string | number;
-  textAlign: string;
-  visible: boolean;
+  private text: string;
+  private fontSize: number;
+  private color: string;
+  private anchorX: string | number;
+  public anchorY: string | number;
+  public textAlign: string;
+  public visible: boolean;
 
   constructor(props?: Prop) {
     Object.assign(this, props);
     this.createText();
   }
 
-  createText() {
+  private createText() {
     this.instance = new Text();
 
     this.instance.text = this.text;
@@ -40,11 +40,11 @@ export default class Text2D {
     this.instance.sync();
   }
 
-  updateText(text: string | number) {
+  public updateText(text: string | number) {
     this.instance.text = text;
     this.instance.sync();
   }
-  updatePositionY(positionY: any) {
+  public updatePositionY(positionY: any) {
     gsap.to(this.instance, {
       anchorY: positionY,
     });

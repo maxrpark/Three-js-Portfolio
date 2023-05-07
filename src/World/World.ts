@@ -1,34 +1,35 @@
-import { Group, Object3D } from "three";
+import { Group } from "three";
 import { Experience } from "../experience/Experience";
 import { Environment } from "./Environment";
-import { TowerFloor, GroundArea, GroundFloor, Text2D } from "./objects";
 import Debug from "../experience/utils/Debug";
 import GUI from "lil-gui";
+
+import { TowerFloor, GroundArea, GroundFloor, Text2D } from "./objects";
 import { PhysicsWorld } from "../experience/utils";
 import { StateMachine } from "./state/GameState";
-import { PlayingState } from "./state/states";
+import { GameOverState, PlayingState } from "./state/states";
 import { Controllers } from "./utils/";
 
 export default class World {
-  experience: Experience;
-  environment: Environment;
-  physics: PhysicsWorld;
-  world: Group;
-  tower: Group;
-  addedObjects: TowerFloor[];
-  ground: GroundArea;
-  groundFloor: GroundFloor;
-  debug: Debug;
-  debugFolder: GUI;
-  floorY: number;
-  currentFloor: TowerFloor | null;
+  private experience: Experience;
+  public environment: Environment;
+  private physics: PhysicsWorld;
+  public debug: Debug;
+  public debugFolder: GUI;
 
-  floorLevel: Text2D;
-  isGameOver: boolean;
+  private world: Group;
+  private tower: Group;
+  private addedObjects: TowerFloor[];
+  private groundFloor: GroundFloor;
+  private ground: GroundArea;
+  private floorLevel: Text2D;
+  private stateMachine: StateMachine;
+  private controllers: Controllers;
 
-  stateMachine: StateMachine;
+  public currentFloor: TowerFloor | null;
 
-  controllers: Controllers;
+  private floorY: number = 1;
+  private isGameOver: boolean = false;
 
   constructor() {
     this.experience = new Experience();
@@ -46,13 +47,26 @@ export default class World {
     this.addedObjects = [];
   }
 
-  setFloorY(y: number) {
-    this.floorY = y;
+  private set floorPositionY(value: number) {
+    this.floorY = value;
   }
 
-  addFloor() {
-    if (this.currentFloor) this.floorY = this.currentFloor.mesh.position.y;
-    this.currentFloor = new TowerFloor({ positionY: this.floorY });
+  private get floorPositionY(): number {
+    return this.floorY;
+  }
+
+  private set setGameOver(value: boolean) {
+    this.isGameOver = value;
+  }
+
+  private get setGameOver(): boolean {
+    return this.isGameOver;
+  }
+
+  private addFloor() {
+    if (this.currentFloor)
+      this.floorPositionY = this.currentFloor.mesh.position.y;
+    this.currentFloor = new TowerFloor({ positionY: this.floorPositionY });
 
     this.currentFloor.on("handleHasCollided", () => {
       this.addedObjects.push(this.currentFloor!);
@@ -63,15 +77,16 @@ export default class World {
     this.tower.add(this.currentFloor.mesh);
   }
 
-  updateFloorLevelText() {
+  private updateFloorLevelText() {
     this.floorLevel.updateText(this.addedObjects.length);
     this.floorLevel.updatePositionY(-this.currentFloor!.mesh.position.y - 0.5);
     this.floorLevel.instance.visible = this.addedObjects.length > 0;
   }
-  createWorld() {
+  public createWorld() {
     this.groundFloor = new GroundFloor();
     this.ground = new GroundArea();
     this.gameControllers();
+    this.handleGroundCollision();
 
     this.world.add(
       this.tower,
@@ -83,23 +98,24 @@ export default class World {
     this.experience.scene.add(this.world);
   }
 
-  handleGroundCollision(
-    callback: (objectInTower: Object3D | undefined) => void
-  ) {
+  private handleGroundCollision() {
     this.ground.groundBody.addEventListener("collide", (event: any) => {
       const collidedBody = event.body;
 
       if (!collidedBody || this.tower.children.length === 0) return;
-
       const objectInTower = this.tower.children.find((child) => {
         return child.userData.body === collidedBody;
       });
 
-      callback(objectInTower);
+      if (!this.isGameOver && objectInTower) {
+        this.gameEnded();
+
+        this.stateMachine.change(new GameOverState());
+      }
     });
   }
 
-  gameControllers() {
+  private gameControllers() {
     this.controllers = new Controllers();
 
     this.controllers.on("controllerDrop", () => {
@@ -123,12 +139,21 @@ export default class World {
     this.stateMachine.change(new PlayingState());
   }
 
+  public setGameStart(): void {
+    this.floorPositionY = 1;
+
+    this.addFloor();
+    this.setGameOver = false;
+    this.controllers.showPlayButtons();
+    this.floorLevel.updatePositionY(-1);
+  }
+
   gameEnded() {
     this.tower.remove(this.currentFloor!.mesh);
 
     if (!this.isGameOver) {
       this.controllers.hidePlayButtons();
-      this.isGameOver = true;
+      this.setGameOver = true;
     }
   }
 
@@ -149,5 +174,5 @@ export default class World {
     this.stateMachine.change(new PlayingState());
   }
 
-  update() {}
+  // update() {}
 }

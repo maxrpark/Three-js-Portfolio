@@ -9,19 +9,19 @@ interface Props {
   positionY: number;
 }
 export default class TowerFloor extends EventEmitter {
-  experience: Experience;
-  camera: Camera;
-  time: Time;
-  geometry: BoxGeometry;
-  material: MeshMatcapMaterial;
-  mesh: Mesh;
+  private experience: Experience;
+  private camera: Camera;
+  private time: Time;
+  private geometry: BoxGeometry;
+  private material: MeshMatcapMaterial;
+  public mesh: Mesh;
+  private physics: PhysicsWorld;
 
-  body: CANNON.Body;
-  physics: PhysicsWorld;
+  public body: CANNON.Body;
 
-  swinging: any;
-  isFalling: boolean;
-  hasCollided: boolean;
+  private swinging: any;
+  private isFalling: boolean;
+  private hasCollided: boolean;
 
   //
 
@@ -41,17 +41,17 @@ export default class TowerFloor extends EventEmitter {
     this.createMesh();
     this.time.on("tick", () => this.update());
   }
-  setGeometry() {
+  private setGeometry() {
     this.geometry = new BoxGeometry(1, 1, 1);
   }
-  setMaterial() {
+  private setMaterial() {
     const color = Math.floor(Math.random() * 16777215).toString(16);
 
     this.material = new MeshMatcapMaterial({
       color: `#${color}`,
     });
   }
-  setBody() {
+  private setBody() {
     this.body = new CANNON.Body({
       mass: 1,
       position: new CANNON.Vec3(0, this.positionY + 5, 0),
@@ -64,7 +64,7 @@ export default class TowerFloor extends EventEmitter {
     this.body.position.copy(this.mesh.position as any);
     this.physics.world.addBody(this.body);
   }
-  swingingAnimation() {
+  private swingingAnimation() {
     this.swinging = gsap.timeline({ paused: true, duration: 2 });
 
     this.swinging
@@ -89,7 +89,7 @@ export default class TowerFloor extends EventEmitter {
     this.swinging.progress(0.5);
     this.swinging.play();
   }
-  createMesh() {
+  private createMesh() {
     this.setGeometry();
     this.setMaterial();
     this.mesh = new Mesh(this.geometry, this.material);
@@ -102,7 +102,7 @@ export default class TowerFloor extends EventEmitter {
     this.camera.lookAt(this.mesh.position);
     this.swingingAnimation();
   }
-  drop() {
+  public drop() {
     if (this.isFalling) return;
     this.swinging.pause();
     this.setBody();
@@ -110,7 +110,7 @@ export default class TowerFloor extends EventEmitter {
 
     this.body.addEventListener("collide", () => this.handleCollision());
   }
-  handleCollision() {
+  private handleCollision() {
     if (!this.hasCollided) {
       this.hasCollided = true;
       this.isFalling = false;
@@ -118,14 +118,14 @@ export default class TowerFloor extends EventEmitter {
       this.trigger("handleHasCollided");
     }
   }
-  update() {
+  private update() {
     if (this.body) {
       this.mesh.position.copy(this.body.position as any);
       this.mesh.quaternion.copy(this.body.quaternion as any);
     }
   }
 
-  remove() {
+  public remove() {
     this.body.removeEventListener("collide", () => this.handleCollision);
   }
 }
