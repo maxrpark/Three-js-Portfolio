@@ -174,5 +174,5 @@ export default class World {
     this.stateMachine.change(new PlayingState());
   }
 
-  // update() {}
+  update() {}
 }
