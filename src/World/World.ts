@@ -81,6 +81,8 @@ export default class World {
       this.floorLevel.instance
     );
     this.experience.scene.add(this.world);
+
+    this.startNewGame();
   }
 
   handleGroundCollision(
@@ -108,9 +110,10 @@ export default class World {
     });
     this.controllers.on("controllerPause", () => {
       if (this.isGameOver) return;
-      console.log("hey");
+    });
 
-      // this.currentFloor!.swinging.pause();
+    this.controllers.on("controllerRestart", () => {
+      if (this.isGameOver) this.resetGame();
     });
   }
 
@@ -122,7 +125,7 @@ export default class World {
     this.tower.remove(this.currentFloor!.mesh);
 
     if (!this.isGameOver) {
-      this.controllers.hide();
+      this.controllers.hidePlayButtons();
       this.isGameOver = true;
     }
   }
