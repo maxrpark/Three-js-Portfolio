@@ -81,8 +81,6 @@ export default class World {
       this.floorLevel.instance
     );
     this.experience.scene.add(this.world);
-
-    this.startNewGame(); // Only during mobile testing
   }
 
   handleGroundCollision(
@@ -112,8 +110,12 @@ export default class World {
       if (this.isGameOver) return;
     });
 
-    this.controllers.on("controllerRestart", () => {
-      if (this.isGameOver) this.resetGame();
+    this.controllers.on("controllerPlay", () => {
+      if (this.isGameOver) {
+        this.resetGame();
+      } else {
+        this.startNewGame();
+      }
     });
   }
 

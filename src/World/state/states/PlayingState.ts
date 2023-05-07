@@ -39,7 +39,7 @@ export default class PlayingState extends GameState {
     this.world.floorLevel.updatePositionY(-1);
 
     this.world.handleGroundCollision((objectInTower: Object3D | undefined) => {
-      if (objectInTower) {
+      if (!this.world.isGameOver && objectInTower) {
         this.gameOver();
       }
     });

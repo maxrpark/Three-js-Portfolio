@@ -4,7 +4,7 @@ export default class Controllers extends EventEmitter {
   buttonWrapper: HTMLDivElement;
   dropButton: HTMLButtonElement;
   pauseButton: HTMLButtonElement;
-  restartButton: HTMLButtonElement;
+  playButton: HTMLButtonElement;
   constructor() {
     super();
     this.createButtons();
@@ -15,14 +15,15 @@ export default class Controllers extends EventEmitter {
     this.buttonWrapper.classList.add("controllers-container");
 
     this.buttonWrapper.innerHTML = /*html*/ `
-    <button id="drop" class="control-btn">Drop</button>
     <button id="pause" class="control-btn">Pause</button>
-    <button id="restart" class="control-btn">restart</button>
+    <button id="drop" class="control-btn">Drop</button>
+    <button id="play" class="control-btn">Play</button>
     `;
 
     document.getElementById("app")?.appendChild(this.buttonWrapper);
 
     this.setHandlers();
+    this.playButton.classList.add("show");
   }
   setHandlers() {
     this.dropButton = document.getElementById("drop") as HTMLButtonElement;
@@ -35,12 +36,10 @@ export default class Controllers extends EventEmitter {
       this.trigger("controllerPause")
     );
 
-    this.restartButton = document.getElementById(
-      "restart"
-    ) as HTMLButtonElement;
+    this.playButton = document.getElementById("play") as HTMLButtonElement;
 
-    this.restartButton.addEventListener("click", () =>
-      this.trigger("controllerRestart")
+    this.playButton.addEventListener("click", () =>
+      this.trigger("controllerPlay")
     );
   }
 
@@ -48,13 +47,13 @@ export default class Controllers extends EventEmitter {
     this.dropButton.classList.add("show");
     this.pauseButton.classList.add("show");
 
-    this.restartButton.classList.remove("show");
+    this.playButton.classList.remove("show");
   }
 
   hidePlayButtons() {
     this.dropButton.classList.remove("show");
     this.pauseButton.classList.remove("show");
 
-    this.restartButton.classList.add("show");
+    this.playButton.classList.add("show");
   }
 }
