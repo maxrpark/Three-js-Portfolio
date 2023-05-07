@@ -82,7 +82,7 @@ export default class World {
     );
     this.experience.scene.add(this.world);
 
-    this.startNewGame();
+    this.startNewGame(); // Only during mobile testing
   }
 
   handleGroundCollision(
