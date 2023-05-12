@@ -22,7 +22,7 @@ export default class Text2D {
   private anchorX: string | number;
   public anchorY: string | number;
   public textAlign: string;
-  public visible: boolean;
+  public visible: boolean = true;
 
   constructor(props?: Prop) {
     Object.assign(this, props);
@@ -36,7 +36,15 @@ export default class Text2D {
     this.instance.fontSize = this.fontSize ? this.fontSize : 2;
     this.instance.color = this.color ? this.color : "white";
     this.instance.anchorX = this.anchorX ? this.anchorX : "center";
+    this.instance.visible = this.visible;
 
+    this.instance.sync();
+  }
+
+  public isVisible(value: boolean) {
+    this.visible = value;
+
+    this.instance.visible = this.visible;
     this.instance.sync();
   }
 
@@ -48,7 +56,6 @@ export default class Text2D {
     gsap.to(this.instance, {
       anchorY: positionY,
     });
-
     this.instance.sync();
   }
 }

@@ -4,8 +4,8 @@ import World from "../../World";
 import { gsap } from "gsap";
 
 export default class IntroState extends GameState {
-  experience: Experience;
-  world: World;
+  private experience: Experience;
+  private world: World;
   constructor() {
     super();
 
@@ -13,17 +13,17 @@ export default class IntroState extends GameState {
     this.world = this.experience.world;
   }
 
-  private keyEventListeners(event: KeyboardEvent) {
-    switch (event.code) {
-      case "Enter":
-        this.world.startNewGame();
-        break;
-      default:
-        break;
-    }
-  }
+  // private keyEventListeners(event: KeyboardEvent) {
+  //   switch (event.code) {
+  //     case "Enter":
+  //       this.world.startNewGame();
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
 
-  private keyEventListener = this.keyEventListeners.bind(this);
+  // private keyEventListener = this.keyEventListeners.bind(this);
 
   public enter(): void {
     this.world.createWorld();
@@ -33,11 +33,11 @@ export default class IntroState extends GameState {
       duration: 1,
     });
 
-    window.addEventListener("keydown", this.keyEventListener);
+    // window.addEventListener("keydown", this.keyEventListener);
   }
 
   public update(): void {}
   public exit(): void {
-    window.removeEventListener("keydown", this.keyEventListener);
+    // window.removeEventListener("keydown", this.keyEventListener);
   }
 }

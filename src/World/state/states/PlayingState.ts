@@ -3,8 +3,8 @@ import { Experience } from "../../../experience/Experience";
 import World from "../../World";
 
 export default class PlayingState extends GameState {
-  experience: Experience;
-  world: World;
+  private experience: Experience;
+  private world: World;
 
   constructor() {
     super();

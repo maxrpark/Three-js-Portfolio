@@ -3,6 +3,9 @@ import { Sizes, Camera } from "./utils";
 import {
   WebGLRenderer,
   Scene,
+  sRGBEncoding,
+  PCFSoftShadowMap,
+  LinearToneMapping,
   // sRGBEncoding,
   // CineonToneMapping,
   // PCFSoftShadowMap,
@@ -38,18 +41,18 @@ export class Renderer implements RendererInt {
       canvas: this.canvas,
       antialias: true,
     });
-    this.renderer.setClearColor("#211d20");
+    this.renderer.setClearColor("#557edd");
     this.renderer.setSize(this.sizes.width, this.sizes.height);
     this.renderer.setPixelRatio(Math.min(this.sizes.pixelRatio, 2));
     this.renderer.shadowMap.enabled = true;
     // this.renderer.physicallyCorrectLights = true;
 
     // this.renderer.physicallyCorrectLights = true;
-    // this.renderer.outputEncoding = sRGBEncoding;
-    // this.renderer.toneMapping = CineonToneMapping;
-    // this.renderer.toneMappingExposure = 1;
-    // this.renderer.shadowMap.enabled = true;
-    // this.renderer.shadowMap.type = PCFSoftShadowMap;
+    this.renderer.outputEncoding = sRGBEncoding;
+    this.renderer.toneMapping = LinearToneMapping;
+    this.renderer.toneMappingExposure = 1;
+    this.renderer.shadowMap.enabled = true;
+    this.renderer.shadowMap.type = PCFSoftShadowMap;
   }
 
   update() {

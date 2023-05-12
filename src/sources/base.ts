@@ -43,6 +43,31 @@ export default [
     path: "textures/concrete/roughness.jpg",
   },
   {
+    name: "towerFloorColor",
+    type: "textureLoader",
+    path: "textures/brick-wall/color.jpg",
+  },
+  {
+    name: "towerFloorNormal",
+    type: "textureLoader",
+    path: "textures/brick-wall/normal.jpg",
+  },
+  {
+    name: "towerFloorHeight",
+    type: "textureLoader",
+    path: "textures/brick-wall/height.png",
+  },
+  {
+    name: "towerFloorAOM",
+    type: "textureLoader",
+    path: "textures/brick-wall/aom.jpg",
+  },
+  {
+    name: "towerFloorRoughness",
+    type: "textureLoader",
+    path: "textures/brick-wall/roughness.jpg",
+  },
+  {
     name: "mapCap8",
     type: "textureLoader",
     path: "textures/mapCaps/8.png",

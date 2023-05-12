@@ -1,9 +1,11 @@
-import { BoxGeometry, Camera, Mesh, MeshMatcapMaterial } from "three";
+import { BoxGeometry, Camera, Float32BufferAttribute, Mesh, MeshStandardMaterial } from "three";
 import CANNON from "cannon";
 import { Experience } from "../../experience/Experience";
 import { PhysicsWorld, Time } from "../../experience/utils";
 import { gsap } from "gsap";
 import EventEmitter from "../../experience/utils/EventEmitter";
+import Resources from "../../experience/utils/Resources";
+import { MeshTextureInt } from "../../ts/globalnterfaces";
 
 interface Props {
   positionY: number;
@@ -13,8 +15,9 @@ export default class TowerFloor extends EventEmitter {
   private camera: Camera;
   private time: Time;
   private geometry: BoxGeometry;
-  private material: MeshMatcapMaterial;
+  private material: MeshStandardMaterial;
   public mesh: Mesh;
+  public textures: MeshTextureInt; // todo pubic private
   private physics: PhysicsWorld;
 
   public body: CANNON.Body;
@@ -22,6 +25,8 @@ export default class TowerFloor extends EventEmitter {
   private swinging: any;
   private isFalling: boolean;
   private hasCollided: boolean;
+
+  private resources: Resources;
 
   //
 
@@ -35,6 +40,8 @@ export default class TowerFloor extends EventEmitter {
     this.time = this.experience.time;
     this.physics = this.experience.physics;
 
+    this.resources = this.experience.resources;
+
     this.hasCollided = false;
     this.isFalling = false;
 
@@ -42,13 +49,34 @@ export default class TowerFloor extends EventEmitter {
     this.time.on("tick", () => this.update());
   }
   private setGeometry() {
-    this.geometry = new BoxGeometry(1, 1, 1);
+    this.geometry = new BoxGeometry(1, 1, 1, 100, 100, 100);
+  }
+  private setTexture() {
+    // const color = Math.floor(Math.random() * 16777215).toString(16);
+    this.textures = {
+      map: this.resources.items.towerFloorColor,
+      normalMap: this.resources.items.towerFloorNormal,
+      displacementMap: this.resources.items.towerFloorHeight,
+      displacementScale: 0.001,
+      roughnessMap: this.resources.items.towerFloorRoughness,
+      aoMap: this.resources.items.towerFloorAOM,
+      roughness: 0.2,
+      // color: `#${color}`,
+    };
+
+    this.geometry.setAttribute(
+      "uv2",
+      //@ts-ignore
+      new Float32BufferAttribute(this.geometry.attributes.uv.array, 2)
+    );
   }
   private setMaterial() {
-    const color = Math.floor(Math.random() * 16777215).toString(16);
+    this.setTexture();
+    // const color = Math.floor(Math.random() * 16777215).toString(16);
 
-    this.material = new MeshMatcapMaterial({
-      color: `#${color}`,
+    this.material = new MeshStandardMaterial({
+      // color: `#${color}`,
+      ...this.textures,
     });
   }
   private setBody() {

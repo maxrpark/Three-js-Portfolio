@@ -7,8 +7,8 @@ import GUI from "lil-gui";
 import { TowerFloor, GroundArea, GroundFloor, Text2D } from "./objects";
 import { PhysicsWorld } from "../experience/utils";
 import { StateMachine } from "./state/GameState";
-import { GameOverState, PlayingState } from "./state/states";
-import { Controllers } from "./utils/";
+import { GameOverState, IntroState, PlayingState } from "./state/states";
+import { Controllers, Modal, MenuIcon } from "./utils/";
 
 export default class World {
   private experience: Experience;
@@ -25,6 +25,8 @@ export default class World {
   private floorLevel: Text2D;
   private stateMachine: StateMachine;
   private controllers: Controllers;
+  private modal: Modal;
+  private menuIcon: MenuIcon;
 
   public currentFloor: TowerFloor | null;
 
@@ -40,11 +42,18 @@ export default class World {
       hasDirectionalLight: true,
     });
 
-    this.floorLevel = new Text2D({ text: 0, anchorX: -1.5, fontSize: 1 });
+    this.floorLevel = new Text2D({
+      text: 0,
+      anchorX: -1.5,
+      fontSize: 1,
+      visible: false,
+    });
 
     this.tower = new Group();
     this.world = new Group();
     this.addedObjects = [];
+
+    this.createModal();
   }
 
   private set floorPositionY(value: number) {
@@ -80,11 +89,12 @@ export default class World {
   private updateFloorLevelText() {
     this.floorLevel.updateText(this.addedObjects.length);
     this.floorLevel.updatePositionY(-this.currentFloor!.mesh.position.y - 0.5);
-    this.floorLevel.instance.visible = this.addedObjects.length > 0;
+    this.floorLevel.isVisible(this.addedObjects.length > 0);
   }
   public createWorld() {
     this.groundFloor = new GroundFloor();
     this.ground = new GroundArea();
+    this.createMenuIcon();
     this.gameControllers();
     this.handleGroundCollision();
 
@@ -97,6 +107,8 @@ export default class World {
     );
     this.experience.scene.add(this.world);
   }
+
+  public worldIntro() {}
 
   private handleGroundCollision() {
     this.ground.groundBody.addEventListener("collide", (event: any) => {
@@ -112,6 +124,24 @@ export default class World {
 
         this.stateMachine.change(new GameOverState());
       }
+    });
+  }
+
+  createModal() {
+    this.modal = new Modal();
+    this.modal.on("handleGameStartClick", () => this.startNewGame());
+
+    // Game Over Modal
+    this.modal.on("handleGameRestart", () => this.resetGame());
+  }
+
+  createMenuIcon() {
+    this.menuIcon = new MenuIcon();
+    this.menuIcon.classAdd("hide-icon");
+
+    this.menuIcon.on("handleMenuClick", () => {
+      this.modal.display("flex");
+      this.menuIcon.classRemove("hide-icon");
     });
   }
 
@@ -133,9 +163,23 @@ export default class World {
         this.startNewGame();
       }
     });
+
+    this.modal.on("handleContinue", () => {
+      this.menuIcon.classRemove("hide-icon");
+      this.modal.display("none");
+    });
+
+    this.modal.on("handleExit", () => {
+      this.menuIcon.classRemove("hide-icon");
+      this.stateMachine.change(new IntroState());
+    });
   }
 
   startNewGame() {
+    this.modal.pauseMode();
+    this.modal.display("none");
+    this.menuIcon.classAdd("hide-icon");
+    this.floorLevel.isVisible(false);
     this.stateMachine.change(new PlayingState());
   }
 
@@ -155,6 +199,8 @@ export default class World {
       this.controllers.hidePlayButtons();
       this.setGameOver = true;
     }
+
+    this.modal.gameOver({ score: this.addedObjects.length });
   }
 
   resetGame() {
@@ -171,7 +217,9 @@ export default class World {
     this.currentFloor = null;
     this.addedObjects.splice(0, this.addedObjects.length);
     this.floorLevel.updateText(0);
-    this.stateMachine.change(new PlayingState());
+
+    this.startNewGame(); // Move to it own state
+    // this.stateMachine.change(new PlayingState());
   }
 
   update() {}

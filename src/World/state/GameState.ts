@@ -1,21 +1,3 @@
-// import World from "../World";
-// import { Experience } from "../../experience/Experience";
-// import { IntroState } from "./states";
-
-interface State {
-  enter(): void;
-  update(): void;
-  exit(): void;
-}
-
-// export enum GameStateType {
-//   Intro,
-//   Start,
-//   Playing,
-//   GameOver,
-//   // add more states here...
-// }
-
 export class StateMachine {
   private currentState: GameState;
 
@@ -35,16 +17,10 @@ export class StateMachine {
   }
 }
 
-export default class GameState implements State {
+export default class GameState {
   public enter(): void {}
   public update(): void {}
   public exit(): void {}
-
-  intro() {}
-  start() {}
-  playing() {}
-  gameOver() {}
-  reset() {}
 }
 
 export class ResetState extends GameState {
