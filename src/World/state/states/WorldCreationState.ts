@@ -1,22 +1,17 @@
-import GameState, { StateMachine, StatesNames } from "../GameState";
+import GameState from "../GameState";
 import { Experience } from "../../../experience/Experience";
 import World from "../../World";
-import { Modal } from "../../utils";
-import PlayingState from "./PlayingState";
-// import { gsap } from "gsap";
+import { gsap } from "gsap";
+import { StatesNames } from "../GameState";
 
-export default class IntroState extends GameState {
+export default class WorldCreationState extends GameState {
   private experience: Experience;
   private world: World;
-  private modal: Modal;
-  private stateMachine: StateMachine;
   constructor() {
-    super(StatesNames.INTRO);
+    super(StatesNames.CREATION);
 
     this.experience = new Experience();
     this.world = this.experience.world;
-    this.modal = this.world.modal;
-    this.stateMachine = this.world.stateMachine;
   }
 
   // private keyEventListeners(event: KeyboardEvent) {
@@ -32,7 +27,9 @@ export default class IntroState extends GameState {
   // private keyEventListener = this.keyEventListeners.bind(this);
 
   public enter(): void {
-    this.intro();
+    this.createWorld();
+
+    // window.addEventListener("keydown", this.keyEventListener);
   }
 
   public update(): void {}
@@ -40,16 +37,16 @@ export default class IntroState extends GameState {
     // window.removeEventListener("keydown", this.keyEventListener);
   }
 
-  public createWorld(): void {
-    window.alert("World Already created");
-  }
-  public intro(): void {
-    this.world.intro();
+  public createWorld() {
+    this.world.createWorld();
 
-    this.modal.on("handleGameStartClick", () =>
-      this.stateMachine.change(new PlayingState())
-    );
+    gsap.to(this.experience.camera.camera.position, {
+      y: 3,
+      duration: 1,
+    });
   }
+
+  public intro(): void {}
   public start(): void {}
   public playing(): void {}
   public paused(): void {}

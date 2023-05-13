@@ -10,7 +10,6 @@ export default class Modal extends EventEmitter {
   constructor() {
     super();
     this.createModal();
-    this.intro();
   }
   private createModal() {
     this.modalWrapper = document.createElement("div");

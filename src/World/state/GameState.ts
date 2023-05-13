@@ -1,5 +1,6 @@
 export class StateMachine {
   private currentState: GameState;
+  public currentStateName: string;
 
   public change(state: GameState): void {
     if (this.currentState !== undefined) {
@@ -7,6 +8,7 @@ export class StateMachine {
     }
 
     this.currentState = state;
+    this.currentStateName = state.stateName;
     this.currentState.enter();
   }
 
@@ -17,19 +19,21 @@ export class StateMachine {
   }
 }
 
-export default class GameState {
-  public enter(): void {}
-  public update(): void {}
-  public exit(): void {}
+export enum StatesNames {
+  CREATION = "creation",
+  INTRO = "intro",
+  START_GAME = "start",
+  PLAYING = "playing",
+  GAME_OVER = "gameOver",
+  RESTART_GAME = "restart",
 }
 
-export class ResetState extends GameState {
+export default class GameState {
+  public stateName: string;
   public enter(): void {}
   public update(): void {}
   public exit(): void {}
-
-  public start(): void {}
-  public playing(): void {}
-  public gameOver(): void {}
-  public reset(): void {}
+  constructor(stateName: StatesNames) {
+    this.stateName = stateName;
+  }
 }

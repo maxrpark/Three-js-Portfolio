@@ -6,7 +6,7 @@ import World from "../World/World";
 import Resources from "./utils/Resources";
 import source from "../sources/base";
 import { StateMachine } from "../World/state/GameState";
-import { IntroState } from "../World/state/states";
+import { WorldCreationState } from "../World/state/states";
 
 declare global {
   interface Window {
@@ -77,7 +77,7 @@ export class Experience implements ExperienceInt {
       this.stateMachine = new StateMachine();
       this.world = new World();
 
-      this.stateMachine.change(new IntroState());
+      this.stateMachine.change(new WorldCreationState());
     });
   }
   update() {
