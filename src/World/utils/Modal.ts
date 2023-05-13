@@ -41,9 +41,9 @@ export default class Modal extends EventEmitter {
       this.trigger("handleGameStartClick")
     );
 
-    exploreWorld.addEventListener("click", () => {
-      this.display("none");
-    });
+    exploreWorld.addEventListener("click", () =>
+      this.trigger("handleExploreWorld")
+    );
   }
   public gameOver({ score }: gameOverParams) {
     this.display("flex");
@@ -54,6 +54,7 @@ export default class Modal extends EventEmitter {
        <h2>Game Over</h2>
        <h3>Your score is ${score}</h3>
       <button id="gameRestart" class="btn">Re Start</button>
+      <button id="exitGame" class="btn">Exist</button>
       <button id="exploreWorld" class="btn">Explore</button>
     </div>
     `;
@@ -62,13 +63,17 @@ export default class Modal extends EventEmitter {
     const gameRestart = this.modalWrapper.querySelector("#gameRestart")!;
     const exploreWorld = this.modalWrapper.querySelector("#exploreWorld")!;
 
+    const exitGame = this.modalWrapper.querySelector("#exitGame")!;
+
+    exitGame.addEventListener("click", () => this.trigger("handleExit"));
+
     gameRestart.addEventListener("click", () =>
       this.trigger("handleGameRestart")
     );
 
-    exploreWorld.addEventListener("click", () => {
-      this.display("none");
-    });
+    exploreWorld.addEventListener("click", () =>
+      this.trigger("handleExploreWorld")
+    );
   }
   public pauseMode() {
     this.display("flex");

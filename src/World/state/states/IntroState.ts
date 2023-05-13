@@ -1,35 +1,28 @@
 import GameState, { StateMachine, StatesNames } from "../GameState";
 import { Experience } from "../../../experience/Experience";
 import World from "../../World";
-import { Modal } from "../../utils";
-import PlayingState from "./PlayingState";
-// import { gsap } from "gsap";
+import { Modal, MenuIcon, Controllers } from "../../utils";
+import { StartGameState } from "./";
 
 export default class IntroState extends GameState {
   private experience: Experience;
   private world: World;
   private modal: Modal;
   private stateMachine: StateMachine;
+  private menuIcon: MenuIcon;
+  private controllers: Controllers;
+
   constructor() {
     super(StatesNames.INTRO);
 
     this.experience = new Experience();
     this.world = this.experience.world;
     this.modal = this.world.modal;
+    this.menuIcon = this.world.menuIcon;
     this.stateMachine = this.world.stateMachine;
+    this.modal = this.world.modal;
+    this.controllers = this.world.controllers;
   }
-
-  // private keyEventListeners(event: KeyboardEvent) {
-  //   switch (event.code) {
-  //     case "Enter":
-  //       this.world.startNewGame();
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
-
-  // private keyEventListener = this.keyEventListeners.bind(this);
 
   public enter(): void {
     this.intro();
@@ -37,8 +30,9 @@ export default class IntroState extends GameState {
 
   public update(): void {}
   public exit(): void {
-    // window.removeEventListener("keydown", this.keyEventListener);
     this.modal.off("handleGameStartClick");
+    this.modal.off("handleMenuClick");
+    this.controllers.off("controllerMenu");
   }
 
   public createWorld(): void {
@@ -48,7 +42,15 @@ export default class IntroState extends GameState {
     this.world.intro();
 
     this.modal.on("handleGameStartClick", () => {
-      this.stateMachine.change(new PlayingState());
+      this.stateMachine.change(new StartGameState());
+    });
+
+    this.menuIcon.on("handleMenuClick", () => {
+      this.modal.display("flex");
+    });
+
+    this.controllers.on("controllerMenu", () => {
+      this.modal.display("flex");
     });
   }
 

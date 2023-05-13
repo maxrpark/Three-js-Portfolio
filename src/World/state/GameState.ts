@@ -3,12 +3,15 @@ export class StateMachine {
   public currentStateName: string;
 
   public change(state: GameState): void {
+    if (this.currentState?.stateName === state.stateName) return;
+
     if (this.currentState !== undefined) {
       this.currentState.exit();
     }
 
     this.currentState = state;
     this.currentStateName = state.stateName;
+    console.log(`STATE NAME: ${state.stateName}`);
     this.currentState.enter();
   }
 
@@ -24,8 +27,9 @@ export enum StatesNames {
   INTRO = "intro",
   START_GAME = "start",
   PLAYING = "playing",
+  PAUSED = "paused",
   GAME_OVER = "gameOver",
-  RESTART_GAME = "restart",
+  RESET_GAME = "reset",
 }
 
 export default class GameState {

@@ -2,8 +2,8 @@ import GameState, { StateMachine, StatesNames } from "../GameState";
 import { Experience } from "../../../experience/Experience";
 import World from "../../World";
 import Controllers from "../../utils/GameControllers";
-import { Modal } from "../../utils";
-import { ResetState } from "./";
+import { MenuIcon, Modal } from "../../utils";
+import { IntroState, ResetState } from "./";
 
 export default class GameOverState extends GameState {
   experience: Experience;
@@ -11,6 +11,7 @@ export default class GameOverState extends GameState {
   controllers: Controllers;
   modal: Modal;
   stateMachine: StateMachine;
+  menuIcon: MenuIcon;
 
   constructor() {
     super(StatesNames.GAME_OVER);
@@ -19,27 +20,19 @@ export default class GameOverState extends GameState {
     this.world = this.experience.world;
     this.controllers = this.world.controllers;
     this.modal = this.world.modal;
+    this.menuIcon = this.world.menuIcon;
     this.stateMachine = this.world.stateMachine;
   }
 
-  // private keyEventListeners(event: KeyboardEvent) {
-  //   switch (event.code) {
-  //     case "Enter":
-  //       this.world.resetGame();
-  //     default:
-  //       break;
-  //   }
-  // }
-
-  // private keyEventListener = this.keyEventListeners.bind(this);
-
   public enter(): void {
     this.gameOver();
-    // window.addEventListener("keydown", this.keyEventListener);
   }
 
   public exit(): void {
-    // window.removeEventListener("keydown", this.keyEventListener);
+    this.modal.off("handleGameRestart");
+    this.modal.off("handleExit");
+    this.menuIcon.off("handleMenuClick");
+    this.controllers.off("controllerMenu");
   }
 
   public createWorld(): void {}
@@ -48,10 +41,24 @@ export default class GameOverState extends GameState {
   public playing(): void {}
   public paused(): void {}
   public gameOver(): void {
+    this.world.gameEnded();
+
     this.modal.on("handleGameRestart", () =>
       this.stateMachine.change(new ResetState())
     );
-    this.world.gameEnded();
+
+    this.modal.on("handleExit", () => {
+      this.world.resetGame();
+      this.stateMachine.change(new IntroState());
+    });
+
+    this.menuIcon.on("handleMenuClick", () => {
+      this.modal.display("flex");
+    });
+
+    this.controllers.on("controllerMenu", () => {
+      this.modal.display("flex");
+    });
   }
   public reset(): void {}
 }

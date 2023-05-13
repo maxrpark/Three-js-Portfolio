@@ -3,16 +3,12 @@ import { Experience } from "../experience/Experience";
 import { Environment } from "./Environment";
 import Debug from "../experience/utils/Debug";
 import GUI from "lil-gui";
+import { gsap } from "gsap";
 
 import { TowerFloor, GroundArea, GroundFloor, Text2D } from "./objects";
 import { PhysicsWorld } from "../experience/utils";
 import { StateMachine } from "./state/GameState";
-import {
-  GameOverState,
-  IntroState,
-  PausedState,
-  PlayingState,
-} from "./state/states";
+import { GameOverState, IntroState } from "./state/states";
 import { Controllers, Modal, MenuIcon } from "./utils/";
 import { StatesNames } from "./state/GameState";
 
@@ -37,7 +33,7 @@ export default class World {
   public currentFloor: TowerFloor | null;
 
   private floorY: number = 1;
-  private isGameOver: boolean = false;
+  public isGameOver: boolean = false;
 
   constructor() {
     this.experience = new Experience();
@@ -81,9 +77,10 @@ export default class World {
 
     this.groundFloor = new GroundFloor();
     this.ground = new GroundArea();
+    this.menuIcon = new MenuIcon();
+    this.controllers = new Controllers();
+
     this.createModal();
-    this.createMenuIcon();
-    this.gameControllers();
     this.handleGroundCollision();
 
     this.world.add(
@@ -93,21 +90,28 @@ export default class World {
       // @ts-ignore
       this.floorLevel.instance
     );
+
     this.experience.scene.add(this.world);
     this.stateMachine.change(new IntroState());
   }
 
   public intro() {
     this.modal.intro();
+    this.menuIcon.classAdd("hide-icon");
+
+    gsap.to(this.experience.camera.camera.position, {
+      x: 2,
+      y: 3,
+      z: 8,
+      duration: 1,
+    });
   }
 
   public setGameStart(): void {
     this.modal.display("none");
-    this.menuIcon.classAdd("hide-icon");
-    this.floorLevel.isVisible(false);
+    this.menuIcon.classRemove("hide-icon");
 
     this.floorPositionY = 1;
-
     this.addFloor();
     this.setGameOver = false;
     this.controllers.showPlayButtons();
@@ -152,42 +156,21 @@ export default class World {
   createModal() {
     this.modal = new Modal();
 
-    this.modal.on("handleContinue", () => {
+    // TODO Create EXPLORE STATE IN THE FUTURE
+    // To interact with world model and portfolio
+    this.modal.on("handleExploreWorld", () => {
       this.menuIcon.classRemove("hide-icon");
+      this.controllers.showPlayMenu();
       this.modal.display("none");
     });
-
-    this.modal.on("handleExit", () => {
-      this.menuIcon.classRemove("hide-icon");
-      this.resetGame();
-      this.stateMachine.change(new IntroState());
-    });
   }
 
-  createMenuIcon() {
-    this.menuIcon = new MenuIcon();
-    this.menuIcon.classAdd("hide-icon");
-
-    this.menuIcon.on("handleMenuClick", () => {
-      this.stateMachine.change(new PausedState());
-      // this.modal.display("flex");
-      // this.menuIcon.classRemove("hide-icon");
-    });
-  }
-
-  private gameControllers() {
-    this.controllers = new Controllers();
-
-    this.controllers.on("controllerDrop", () => {
-      if (this.isGameOver) return;
-      this.currentFloor!.drop();
-    });
-    this.controllers.on("controllerPause", () => {
-      if (this.isGameOver) return;
-    });
+  public dropFloor() {
+    this.currentFloor!.drop();
   }
 
   gameEnded() {
+    this.menuIcon.classAdd("hide-icon");
     this.tower.remove(this.currentFloor!.mesh);
 
     if (!this.isGameOver) {
@@ -212,8 +195,7 @@ export default class World {
     this.currentFloor = null;
     this.addedObjects.splice(0, this.addedObjects.length);
     this.floorLevel.updateText(0);
-
-    // this.stateMachine.change(new PlayingState());
+    this.floorLevel.isVisible(false);
   }
 
   update() {}

@@ -3,8 +3,7 @@ import EventEmitter from "../../experience/utils/EventEmitter";
 export default class Controllers extends EventEmitter {
   private buttonWrapper: HTMLDivElement;
   private dropButton: HTMLButtonElement;
-  private pauseButton: HTMLButtonElement;
-  private playButton: HTMLButtonElement;
+  private menuButton: HTMLButtonElement;
   constructor() {
     super();
     this.createButtons();
@@ -15,17 +14,15 @@ export default class Controllers extends EventEmitter {
     this.buttonWrapper.classList.add("controllers-container");
 
     this.buttonWrapper.innerHTML = /*html*/ `
-    <button id="pause" class="control-btn">
+    <button id="menu" class="control-btn">
     <span class="inner-line"></span>
     </button>
     <button id="drop" class="control-btn">Drop</button>
-    <button id="play" class="control-btn">Play</button>
     `;
 
     document.getElementById("app")?.appendChild(this.buttonWrapper);
 
     this.setHandlers();
-    this.playButton.classList.add("show");
   }
   private setHandlers() {
     this.dropButton = document.getElementById("drop") as HTMLButtonElement;
@@ -33,29 +30,22 @@ export default class Controllers extends EventEmitter {
       this.trigger("controllerDrop")
     );
 
-    this.pauseButton = document.getElementById("pause") as HTMLButtonElement;
-    this.pauseButton.addEventListener("click", () =>
-      this.trigger("controllerPause")
-    );
-
-    this.playButton = document.getElementById("play") as HTMLButtonElement;
-
-    this.playButton.addEventListener("click", () =>
-      this.trigger("controllerPlay")
-    );
+    this.menuButton = document.getElementById("menu") as HTMLButtonElement;
+    this.menuButton.addEventListener("click", () => {
+      this.trigger("controllerMenu");
+    });
   }
 
   public showPlayButtons() {
     this.dropButton.classList.add("show");
-    this.pauseButton.classList.add("show");
-
-    this.playButton.classList.remove("show");
+    this.menuButton.classList.add("show");
+  }
+  public showPlayMenu() {
+    this.menuButton.classList.add("show");
   }
 
   public hidePlayButtons() {
     this.dropButton.classList.remove("show");
-    this.pauseButton.classList.remove("show");
-
-    this.playButton.classList.add("show");
+    // this.menuButton.classList.remove("show");
   }
 }

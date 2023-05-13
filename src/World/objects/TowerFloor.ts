@@ -1,4 +1,10 @@
-import { BoxGeometry, Camera, Float32BufferAttribute, Mesh, MeshStandardMaterial } from "three";
+import {
+  BoxGeometry,
+  Camera,
+  Float32BufferAttribute,
+  Mesh,
+  MeshStandardMaterial,
+} from "three";
 import CANNON from "cannon";
 import { Experience } from "../../experience/Experience";
 import { PhysicsWorld, Time } from "../../experience/utils";

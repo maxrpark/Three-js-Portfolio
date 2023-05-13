@@ -30,9 +30,9 @@ export default class MenuIcon extends EventEmitter {
   }
 
   classAdd(className: string) {
-    this.menuIconElem.classList.toggle(className);
+    this.menuIconElem.classList.add(className);
   }
   classRemove(className: string) {
-    this.menuIconElem.classList.toggle(className);
+    this.menuIconElem.classList.remove(className);
   }
 }
