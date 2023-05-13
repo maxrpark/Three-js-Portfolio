@@ -1,16 +1,19 @@
 import GameState from "../GameState";
 import { Experience } from "../../../experience/Experience";
 import World from "../../World";
-import { StatesNames } from "../GameState";
+import { StatesNames, StateMachine } from "../GameState";
+import { PlayingState } from "./";
 
 export default class ResetState extends GameState {
   private experience: Experience;
   private world: World;
+  private stateMachine: StateMachine;
   constructor() {
     super(StatesNames.RESTART_GAME);
 
     this.experience = new Experience();
     this.world = this.experience.world;
+    this.stateMachine = this.experience.stateMachine;
   }
   public enter(): void {
     this.reset();
@@ -26,5 +29,6 @@ export default class ResetState extends GameState {
   public gameOver(): void {}
   public reset(): void {
     this.world.resetGame();
+    this.stateMachine.change(new PlayingState());
   }
 }

@@ -38,6 +38,7 @@ export default class IntroState extends GameState {
   public update(): void {}
   public exit(): void {
     // window.removeEventListener("keydown", this.keyEventListener);
+    this.modal.off("handleGameStartClick");
   }
 
   public createWorld(): void {
@@ -46,10 +47,11 @@ export default class IntroState extends GameState {
   public intro(): void {
     this.world.intro();
 
-    this.modal.on("handleGameStartClick", () =>
-      this.stateMachine.change(new PlayingState())
-    );
+    this.modal.on("handleGameStartClick", () => {
+      this.stateMachine.change(new PlayingState());
+    });
   }
+
   public start(): void {}
   public playing(): void {}
   public paused(): void {}

@@ -7,7 +7,12 @@ import GUI from "lil-gui";
 import { TowerFloor, GroundArea, GroundFloor, Text2D } from "./objects";
 import { PhysicsWorld } from "../experience/utils";
 import { StateMachine } from "./state/GameState";
-import { GameOverState, IntroState, PlayingState } from "./state/states";
+import {
+  GameOverState,
+  IntroState,
+  PausedState,
+  PlayingState,
+} from "./state/states";
 import { Controllers, Modal, MenuIcon } from "./utils/";
 import { StatesNames } from "./state/GameState";
 
@@ -24,8 +29,8 @@ export default class World {
   private groundFloor: GroundFloor;
   private ground: GroundArea;
   private floorLevel: Text2D;
-  private menuIcon: MenuIcon;
 
+  public menuIcon: MenuIcon;
   public controllers: Controllers;
   public modal: Modal;
   public stateMachine: StateMachine;
@@ -97,7 +102,6 @@ export default class World {
   }
 
   public setGameStart(): void {
-    this.modal.pauseMode();
     this.modal.display("none");
     this.menuIcon.classAdd("hide-icon");
     this.floorLevel.isVisible(false);
@@ -147,8 +151,6 @@ export default class World {
 
   createModal() {
     this.modal = new Modal();
-    // Game Over Modal
-    // this.modal.on("handleGameRestart", () => this.resetGame());
 
     this.modal.on("handleContinue", () => {
       this.menuIcon.classRemove("hide-icon");
@@ -157,6 +159,7 @@ export default class World {
 
     this.modal.on("handleExit", () => {
       this.menuIcon.classRemove("hide-icon");
+      this.resetGame();
       this.stateMachine.change(new IntroState());
     });
   }
@@ -166,8 +169,9 @@ export default class World {
     this.menuIcon.classAdd("hide-icon");
 
     this.menuIcon.on("handleMenuClick", () => {
-      this.modal.display("flex");
-      this.menuIcon.classRemove("hide-icon");
+      this.stateMachine.change(new PausedState());
+      // this.modal.display("flex");
+      // this.menuIcon.classRemove("hide-icon");
     });
   }
 
@@ -209,7 +213,7 @@ export default class World {
     this.addedObjects.splice(0, this.addedObjects.length);
     this.floorLevel.updateText(0);
 
-    this.stateMachine.change(new PlayingState());
+    // this.stateMachine.change(new PlayingState());
   }
 
   update() {}

@@ -32,13 +32,10 @@ export default class Modal extends EventEmitter {
       <button id="exploreWorld" class="btn">Explore</button>
       </div>
       `;
-    // <button id="multiPlayer" class="btn">Play with a friend</button>
 
     // Modal Events
     const gameStart = document.getElementById("gameStart")!;
     const exploreWorld = document.getElementById("exploreWorld")!;
-    // const gameScores = document.getElementById("gameScores")!;
-    // const multiPlayer = document.getElementById("multiPlayer")!;
 
     gameStart.addEventListener("click", () =>
       this.trigger("handleGameStartClick")
