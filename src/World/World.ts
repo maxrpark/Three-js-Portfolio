@@ -34,6 +34,7 @@ export default class World {
 
   private floorY: number = 1;
   public isGameOver: boolean = false;
+  public score: number = 0;
 
   constructor() {
     this.experience = new Experience();
@@ -68,8 +69,12 @@ export default class World {
     this.isGameOver = value;
   }
 
-  private get setGameOver(): boolean {
-    return this.isGameOver;
+  private set setScore(value: number) {
+    this.score = value;
+  }
+
+  public get getScore(): number {
+    return this.score;
   }
 
   public createWorld() {
@@ -108,7 +113,7 @@ export default class World {
   }
 
   public setGameStart(): void {
-    this.modal.display("none");
+    this.modal.reverseAnimation();
     this.menuIcon.classRemove("hide-icon");
 
     this.floorPositionY = 1;
@@ -125,6 +130,7 @@ export default class World {
 
     this.currentFloor.on("handleHasCollided", () => {
       this.addedObjects.push(this.currentFloor!);
+      this.setScore = this.addedObjects.length;
       this.updateFloorLevelText();
       this.addFloor();
     });
@@ -133,9 +139,9 @@ export default class World {
   }
 
   private updateFloorLevelText() {
-    this.floorLevel.updateText(this.addedObjects.length);
+    this.floorLevel.updateText(this.getScore);
     this.floorLevel.updatePositionY(-this.currentFloor!.mesh.position.y - 0.5);
-    this.floorLevel.isVisible(this.addedObjects.length > 0);
+    this.floorLevel.isVisible(this.getScore > 0);
   }
 
   private handleGroundCollision() {
@@ -161,7 +167,7 @@ export default class World {
     this.modal.on("handleExploreWorld", () => {
       this.menuIcon.classRemove("hide-icon");
       this.controllers.showPlayMenu();
-      this.modal.display("none");
+      this.modal.reverseAnimation();
     });
   }
 
@@ -178,7 +184,7 @@ export default class World {
       this.setGameOver = true;
     }
 
-    this.modal.gameOver({ score: this.addedObjects.length });
+    this.modal.gameOver({ score: this.getScore });
   }
 
   resetGame() {
@@ -193,7 +199,7 @@ export default class World {
     }
 
     this.currentFloor = null;
-    this.addedObjects.splice(0, this.addedObjects.length);
+    this.addedObjects.splice(0, this.getScore);
     this.floorLevel.updateText(0);
     this.floorLevel.isVisible(false);
   }

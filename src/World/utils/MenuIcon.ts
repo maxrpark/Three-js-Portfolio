@@ -17,7 +17,6 @@ export default class MenuIcon extends EventEmitter {
     innerLine.classList.add("inner-line");
     this.menuIconElem.appendChild(innerLine);
 
-    // this.display(this.displayElem);
     document.getElementById("app")?.appendChild(this.menuIconElem);
 
     this.menuIconElem.addEventListener("click", () =>

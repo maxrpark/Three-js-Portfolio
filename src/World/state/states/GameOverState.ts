@@ -52,13 +52,13 @@ export default class GameOverState extends GameState {
       this.stateMachine.change(new IntroState());
     });
 
-    this.menuIcon.on("handleMenuClick", () => {
-      this.modal.display("flex");
-    });
+    this.menuIcon.on("handleMenuClick", () =>
+      this.modal.gameOver({ score: this.world.getScore })
+    );
 
-    this.controllers.on("controllerMenu", () => {
-      this.modal.display("flex");
-    });
+    this.controllers.on("controllerMenu", () =>
+      this.modal.gameOver({ score: this.world.getScore })
+    );
   }
   public reset(): void {}
 }

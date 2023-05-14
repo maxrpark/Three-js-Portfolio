@@ -41,7 +41,7 @@ export default class PausedState extends GameState {
     this.menuIcon.classAdd("hide-icon");
 
     this.modal.on("handleContinue", () => {
-      this.modal.display("none");
+      this.modal.reverseAnimation();
       this.stateMachine.change(new PlayingState());
     });
 

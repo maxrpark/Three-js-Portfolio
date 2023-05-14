@@ -62,10 +62,11 @@ export default class TowerFloor extends EventEmitter {
     this.textures = {
       map: this.resources.items.towerFloorColor,
       normalMap: this.resources.items.towerFloorNormal,
-      displacementMap: this.resources.items.towerFloorHeight,
-      displacementScale: 0.001,
+      // displacementMap: this.resources.items.towerFloorHeight,
+      displacementScale: 0.02,
       roughnessMap: this.resources.items.towerFloorRoughness,
       aoMap: this.resources.items.towerFloorAOM,
+      // aoMapIntensity: 20,
       roughness: 0.2,
       // color: `#${color}`,
     };
@@ -83,6 +84,8 @@ export default class TowerFloor extends EventEmitter {
     this.material = new MeshStandardMaterial({
       // color: `#${color}`,
       ...this.textures,
+      // displacementBias: 0.0002,
+      // wireframe: true,
     });
   }
   private setBody() {

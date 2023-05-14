@@ -45,13 +45,9 @@ export default class IntroState extends GameState {
       this.stateMachine.change(new StartGameState());
     });
 
-    this.menuIcon.on("handleMenuClick", () => {
-      this.modal.display("flex");
-    });
+    this.menuIcon.on("handleMenuClick", () => this.modal.intro());
 
-    this.controllers.on("controllerMenu", () => {
-      this.modal.display("flex");
-    });
+    this.controllers.on("controllerMenu", () => this.modal.intro());
   }
 
   public start(): void {}

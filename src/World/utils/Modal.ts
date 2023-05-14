@@ -1,4 +1,5 @@
 import EventEmitter from "../../experience/utils/EventEmitter";
+import { gsap } from "gsap";
 
 interface gameOverParams {
   score: number;
@@ -6,6 +7,7 @@ interface gameOverParams {
 
 export default class Modal extends EventEmitter {
   private modalWrapper: HTMLDivElement;
+  private timeLine: any;
 
   constructor() {
     super();
@@ -44,6 +46,7 @@ export default class Modal extends EventEmitter {
     exploreWorld.addEventListener("click", () =>
       this.trigger("handleExploreWorld")
     );
+    this.animation();
   }
   public gameOver({ score }: gameOverParams) {
     this.display("flex");
@@ -74,6 +77,10 @@ export default class Modal extends EventEmitter {
     exploreWorld.addEventListener("click", () =>
       this.trigger("handleExploreWorld")
     );
+
+    // animation
+
+    this.animation();
   }
   public pauseMode() {
     this.display("flex");
@@ -95,5 +102,47 @@ export default class Modal extends EventEmitter {
     gameContinue.addEventListener("click", () =>
       this.trigger("handleContinue")
     );
+    // animation
+
+    this.animation();
+  }
+
+  animation() {
+    this.timeLine = gsap.timeline({ paused: true });
+
+    this.timeLine
+      .to(this.modalWrapper, {
+        background: "rgba(255, 255, 255, 0.3)",
+      })
+      .from(".btn", {
+        yPercent: 100,
+        opacity: 0,
+        scale: 0.9,
+      });
+
+    // timeLine.reversed(!timeLine.reversed());
+    if (this.timeLine.isActive()) {
+      this.timeLine.reverse();
+      console.log("reversed");
+    } else {
+      this.timeLine.play();
+      console.log("play");
+    }
+  }
+  reverseAnimation() {
+    // this.timeLine.reverse();
+
+    if (this.timeLine.isActive()) {
+      this.timeLine.reverse();
+      console.log("one");
+    } else {
+      this.timeLine.reverse().then(() => {
+        console.log("two");
+        this.display("none");
+
+        // complete any additional tasks that need to be done when the animation is finished playing backwards
+        // for example, hiding the modal or resetting its state
+      });
+    }
   }
 }
