@@ -36,30 +36,28 @@ export default class GameOverState extends GameState {
   }
 
   public createWorld(): void {}
-  public intro(): void {}
+  public intro(): void {
+    this.world.resetGame();
+    this.stateMachine.change(new IntroState());
+  }
   public start(): void {}
   public playing(): void {}
   public paused(): void {}
   public gameOver(): void {
     this.world.gameEnded();
 
-    this.modal.on("handleGameRestart", () => {
-      this.modal.closeModal();
-      this.stateMachine.change(new ResetState());
-    });
+    this.modal.on("handleExit", () => this.intro());
+    this.modal.on("handleGameRestart", () => this.reset());
 
-    this.modal.on("handleExit", () => {
-      this.world.resetGame();
-      this.stateMachine.change(new IntroState());
-    });
-
-    this.menuIcon.on("handleMenuClick", () =>
-      this.modal.gameOver({ score: this.world.getScore })
-    );
-
-    this.controllers.on("controllerMenu", () =>
-      this.modal.gameOver({ score: this.world.getScore })
-    );
+    this.menuIcon.on("handleMenuClick", () => this.closeModal());
+    this.controllers.on("controllerMenu", () => this.closeModal());
   }
-  public reset(): void {}
+  public reset(): void {
+    this.modal.closeModal();
+    this.stateMachine.change(new ResetState());
+  }
+
+  closeModal() {
+    this.modal.gameOver({ score: this.world.getScore });
+  }
 }
