@@ -19,13 +19,7 @@ export default class Modal extends EventEmitter {
     document.getElementById("app")?.appendChild(this.modalWrapper);
   }
 
-  public display(type: "none" | "flex" = "none") {
-    this.modalWrapper.style.display = type;
-  }
-
   public intro() {
-    this.display("flex");
-
     // Modal Content
     this.modalWrapper.innerHTML = /*html*/ ` 
     <div class="modal-content">
@@ -49,8 +43,6 @@ export default class Modal extends EventEmitter {
     this.animation();
   }
   public gameOver({ score }: gameOverParams) {
-    this.display("flex");
-
     // Modal Content
     this.modalWrapper.innerHTML = /*html*/ ` 
     <div class="modal-content">
@@ -83,8 +75,6 @@ export default class Modal extends EventEmitter {
     this.animation();
   }
   public pauseMode() {
-    this.display("flex");
-
     // Modal Content
     this.modalWrapper.innerHTML = /*html*/ ` 
     <div class="modal-content">
@@ -105,44 +95,55 @@ export default class Modal extends EventEmitter {
     // animation
 
     this.animation();
+    // this.openModal();
   }
 
   animation() {
-    this.timeLine = gsap.timeline({ paused: true });
+    this.timeLine = gsap.timeline({ ease: "none" });
+
+    this.timeLine
+      .to(".menu-icon, .control-btn", {
+        opacity: 1,
+        y: gsap.utils.wrap([-100, 100]),
+      })
+      .to(this.modalWrapper, {
+        background: "rgba(255, 255, 255, 0.3)",
+        display: "flex",
+      })
+      .from(
+        ".btn",
+        {
+          yPercent: 100,
+          opacity: 0,
+          scale: 0.9,
+        },
+        "<="
+      );
+  }
+
+  openModal() {
+    this.timeLine.play();
+  }
+  closeModal() {
+    this.timeLine = gsap.timeline({ ease: "none" });
 
     this.timeLine
       .to(this.modalWrapper, {
-        background: "rgba(255, 255, 255, 0.3)",
+        background: "transparent",
+        display: "none",
       })
-      .from(".btn", {
-        yPercent: 100,
-        opacity: 0,
-        scale: 0.9,
+      .to(
+        ".btn",
+        {
+          yPercent: 100,
+          opacity: 0,
+          // scale: 0.9,
+        },
+        "<="
+      )
+      .to(".menu-icon, .control-btn", {
+        opacity: 1,
+        y: 0,
       });
-
-    // timeLine.reversed(!timeLine.reversed());
-    if (this.timeLine.isActive()) {
-      this.timeLine.reverse();
-      console.log("reversed");
-    } else {
-      this.timeLine.play();
-      console.log("play");
-    }
-  }
-  reverseAnimation() {
-    // this.timeLine.reverse();
-
-    if (this.timeLine.isActive()) {
-      this.timeLine.reverse();
-      console.log("one");
-    } else {
-      this.timeLine.reverse().then(() => {
-        console.log("two");
-        this.display("none");
-
-        // complete any additional tasks that need to be done when the animation is finished playing backwards
-        // for example, hiding the modal or resetting its state
-      });
-    }
   }
 }

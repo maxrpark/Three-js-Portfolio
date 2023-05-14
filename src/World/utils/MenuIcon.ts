@@ -1,8 +1,6 @@
 import EventEmitter from "../../experience/utils/EventEmitter";
-
 export default class MenuIcon extends EventEmitter {
   private menuIconElem: HTMLDivElement;
-  public displayElem: "none" | "flex" = "flex";
   constructor() {
     super();
     this.createElement();
@@ -22,16 +20,5 @@ export default class MenuIcon extends EventEmitter {
     this.menuIconElem.addEventListener("click", () =>
       this.trigger("handleMenuClick")
     );
-  }
-
-  public display(type: "none" | "flex" = "none") {
-    this.menuIconElem.style.display = type;
-  }
-
-  classAdd(className: string) {
-    this.menuIconElem.classList.add(className);
-  }
-  classRemove(className: string) {
-    this.menuIconElem.classList.remove(className);
   }
 }

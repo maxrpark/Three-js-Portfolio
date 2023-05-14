@@ -51,16 +51,16 @@ export default class PlayingState extends GameState {
   public playing(): void {
     window.addEventListener("keydown", this.keyEventListener);
 
-    this.menuIcon.on("handleMenuClick", () => {
-      this.stateMachine.change(new PausedState());
-    });
+    this.menuIcon.on("handleMenuClick", () =>
+      this.stateMachine.change(new PausedState())
+    );
 
     this.controllers.on("controllerDrop", () => {
       this.world.dropFloor();
     });
+
     this.controllers.on("controllerMenu", () => {
       this.stateMachine.change(new PausedState());
-      // this.modal.display("flex");
     });
   }
   public paused(): void {}

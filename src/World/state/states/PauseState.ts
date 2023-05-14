@@ -2,7 +2,7 @@ import GameState from "../GameState";
 import { Experience } from "../../../experience/Experience";
 import World from "../../World";
 import { StatesNames, StateMachine } from "../GameState";
-import MenuIcon from "../../utils/MenuIcon";
+// import MenuIcon from "../../utils/MenuIcon";
 import Modal from "../../utils/Modal";
 import PlayingState from "./PlayingState";
 import IntroState from "./IntroState";
@@ -11,7 +11,7 @@ export default class PausedState extends GameState {
   private experience: Experience;
   private world: World;
   private modal: Modal;
-  private menuIcon: MenuIcon;
+  // private menuIcon: MenuIcon;
   private stateMachine: StateMachine;
   constructor() {
     super(StatesNames.PAUSED);
@@ -19,7 +19,7 @@ export default class PausedState extends GameState {
     this.experience = new Experience();
     this.world = this.experience.world;
     this.modal = this.world.modal;
-    this.menuIcon = this.world.menuIcon;
+    // this.menuIcon = this.world.menuIcon;
     this.stateMachine = this.world.stateMachine;
   }
   public enter(): void {
@@ -29,7 +29,7 @@ export default class PausedState extends GameState {
   public exit(): void {
     this.modal.off("handleContinue");
     this.modal.off("handleExit");
-    this.menuIcon.classRemove("hide-icon");
+    // this.modal.closeModal();
   }
 
   public createWorld(): void {}
@@ -38,10 +38,9 @@ export default class PausedState extends GameState {
   public playing(): void {}
   public paused(): void {
     this.modal.pauseMode();
-    this.menuIcon.classAdd("hide-icon");
 
     this.modal.on("handleContinue", () => {
-      this.modal.reverseAnimation();
+      this.modal.closeModal();
       this.stateMachine.change(new PlayingState());
     });
 

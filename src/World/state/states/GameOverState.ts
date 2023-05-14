@@ -43,9 +43,10 @@ export default class GameOverState extends GameState {
   public gameOver(): void {
     this.world.gameEnded();
 
-    this.modal.on("handleGameRestart", () =>
-      this.stateMachine.change(new ResetState())
-    );
+    this.modal.on("handleGameRestart", () => {
+      this.modal.closeModal();
+      this.stateMachine.change(new ResetState());
+    });
 
     this.modal.on("handleExit", () => {
       this.world.resetGame();

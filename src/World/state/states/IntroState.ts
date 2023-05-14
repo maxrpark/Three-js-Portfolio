@@ -11,7 +11,6 @@ export default class IntroState extends GameState {
   private stateMachine: StateMachine;
   private menuIcon: MenuIcon;
   private controllers: Controllers;
-
   constructor() {
     super(StatesNames.INTRO);
 
@@ -32,7 +31,7 @@ export default class IntroState extends GameState {
   public exit(): void {
     this.modal.off("handleGameStartClick");
     this.modal.off("handleMenuClick");
-    this.controllers.off("controllerMenu");
+    this.modal.closeModal();
   }
 
   public createWorld(): void {
@@ -46,7 +45,6 @@ export default class IntroState extends GameState {
     });
 
     this.menuIcon.on("handleMenuClick", () => this.modal.intro());
-
     this.controllers.on("controllerMenu", () => this.modal.intro());
   }
 

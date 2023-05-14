@@ -102,7 +102,7 @@ export default class World {
 
   public intro() {
     this.modal.intro();
-    this.menuIcon.classAdd("hide-icon");
+    // this.menuIcon.classAdd("hide-icon");
 
     gsap.to(this.experience.camera.camera.position, {
       x: 2,
@@ -113,9 +113,6 @@ export default class World {
   }
 
   public setGameStart(): void {
-    this.modal.reverseAnimation();
-    this.menuIcon.classRemove("hide-icon");
-
     this.floorPositionY = 1;
     this.addFloor();
     this.setGameOver = false;
@@ -165,9 +162,8 @@ export default class World {
     // TODO Create EXPLORE STATE IN THE FUTURE
     // To interact with world model and portfolio
     this.modal.on("handleExploreWorld", () => {
-      this.menuIcon.classRemove("hide-icon");
       this.controllers.showPlayMenu();
-      this.modal.reverseAnimation();
+      this.modal.closeModal();
     });
   }
 
@@ -176,7 +172,6 @@ export default class World {
   }
 
   gameEnded() {
-    this.menuIcon.classAdd("hide-icon");
     this.tower.remove(this.currentFloor!.mesh);
 
     if (!this.isGameOver) {

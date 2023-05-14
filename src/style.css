@@ -116,19 +116,14 @@ canvas {
     justify-content: center;
     align-items: center;
   }
-
-  .hide-icon {
-    display: none;
-  }
 }
 
 /* Modal */
 .modal-wrapper {
   position: fixed;
   inset: 0 0 0 0;
-  /* background: rgba(255, 255, 255, 0.3); */
   z-index: 10;
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
 }
