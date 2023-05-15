@@ -9,6 +9,7 @@ export default class MenuIcon extends EventEmitter {
   createElement() {
     this.menuIconElem = document.createElement("div");
     this.menuIconElem.classList.add("menu-icon");
+    this.menuIconElem.classList.add("btn-primary");
 
     // menu icons line
     const innerLine = document.createElement("span");

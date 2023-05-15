@@ -23,9 +23,9 @@ export default class Modal extends EventEmitter {
     // Modal Content
     this.modalWrapper.innerHTML = /*html*/ ` 
     <div class="modal-content">
-      <button id="gameStart" class="btn">Start</button>
-      <button id="gameScores" class="btn">Scores</button>
-      <button id="exploreWorld" class="btn">Explore</button>
+      <button id="gameStart" class="btn btn-primary">Start</button>
+      <button id="gameScores" class="btn btn-primary">Scores</button>
+      <button id="exploreWorld" class="btn btn-primary">Explore</button>
       </div>
       `;
 
@@ -48,9 +48,9 @@ export default class Modal extends EventEmitter {
     <div class="modal-content">
        <h2>Game Over</h2>
        <h3>Your score is ${score}</h3>
-      <button id="gameRestart" class="btn">Re Start</button>
-      <button id="exitGame" class="btn">Exist</button>
-      <button id="exploreWorld" class="btn">Explore</button>
+      <button id="gameRestart" class="btn btn-primary">Re Start</button>
+      <button id="exitGame" class="btn btn-primary">Exist</button>
+      <button id="exploreWorld" class="btn btn-primary">Explore</button>
     </div>
     `;
 
@@ -78,8 +78,8 @@ export default class Modal extends EventEmitter {
     // Modal Content
     this.modalWrapper.innerHTML = /*html*/ ` 
     <div class="modal-content">
-      <button id="gameContinue" class="btn">Continue</button>
-      <button id="exitGame" class="btn">Exist</button>
+      <button id="gameContinue" class="btn btn-primary">Continue</button>
+      <button id="exitGame" class="btn btn-primary">Exist</button>
     </div>
     `;
 
