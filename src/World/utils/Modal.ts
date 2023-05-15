@@ -21,7 +21,7 @@ export default class Modal extends EventEmitter {
 
   public intro() {
     // Modal Content
-    this.modalWrapper.innerHTML = "";
+
     this.modalWrapper.innerHTML = /*html*/ ` 
     <div class="modal-content">
       <button id="gameStart" class="btn btn-primary">Start</button>
@@ -122,7 +122,8 @@ export default class Modal extends EventEmitter {
         stagger: 0.2,
       })
       .to(this.modalWrapper, {
-        backdropFilter: "blur(10px)",
+        // backdropFilter: "blur(10px)",
+        background: "rgba(255, 255, 255, 0.3)",
 
         display: "flex",
       })
@@ -156,7 +157,11 @@ export default class Modal extends EventEmitter {
         },
       })
       .to(this.modalWrapper, {
-        backdropFilter: "none",
+        // backdropFilter: "blur(0px)",
+        background: "transparent",
+        // display: "none",
+      })
+      .set(this.modalWrapper, {
         display: "none",
       })
       .to(".menu-icon, .control-btn", {

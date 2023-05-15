@@ -38,9 +38,9 @@ canvas {
 }
 
 .btn-primary:hover {
-  -webkit-box-shadow: rgb(201, 46, 70) 0px 7px 0px 0px;
-  box-shadow: rgb(201, 46, 70) 0px 7px 0px 0px;
-  transition: all 0.3s ease;
+  /* -webkit-box-shadow: rgb(201, 46, 70) 0px 7px 0px 0px; */
+  /* box-shadow: rgb(201, 46, 70) 0px 7px 0px 0px; */
+  /* transition: all 0.3s ease; */
 }
 
 .btn-primary:active {
@@ -51,8 +51,8 @@ canvas {
   -webkit-transform: translateY(5px);
   -ms-transform: translateY(5px);
   transform: translateY(5px);
-  -webkit-transition: 200ms;
-  transition: 200ms;
+  /* -webkit-transition: 200ms; */
+  /* transition: 200ms; */
 }
 
 /* Controllers */
@@ -151,6 +151,8 @@ canvas {
   display: none;
   justify-content: center;
   align-items: center;
+  /* backdrop-filter: blur(10px); */
+  /* filter: blur(10px); */
 }
 
 .modal-content {
