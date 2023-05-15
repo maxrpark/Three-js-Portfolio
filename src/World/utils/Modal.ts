@@ -21,6 +21,7 @@ export default class Modal extends EventEmitter {
 
   public intro() {
     // Modal Content
+    this.modalWrapper.innerHTML = "";
     this.modalWrapper.innerHTML = /*html*/ ` 
     <div class="modal-content">
       <button id="gameStart" class="btn btn-primary">Start</button>
