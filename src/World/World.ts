@@ -102,7 +102,6 @@ export default class World {
 
   public intro() {
     this.modal.intro();
-    // this.menuIcon.classAdd("hide-icon");
 
     gsap.to(this.experience.camera.camera.position, {
       x: 2,
@@ -197,6 +196,7 @@ export default class World {
     this.addedObjects.splice(0, this.getScore);
     this.floorLevel.updateText(0);
     this.floorLevel.isVisible(false);
+    this.controllers.hidePlayButtons();
   }
 
   update() {}
