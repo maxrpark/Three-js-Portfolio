@@ -101,39 +101,42 @@ export default class Modal extends EventEmitter {
   animation() {
     this.timeLine = gsap.timeline({ ease: "none" });
 
-    let mm = gsap.matchMedia();
-    let breakPoint = 687;
-    mm.add(
-      {
-        isDesktop: `(min-width: ${breakPoint}px)`,
-        isMobile: `(max-width: ${breakPoint - 1}px)`,
-      },
-      (context) => {
-        //@ts-ignore
-        let { isDesktop } = context.conditions;
+    // let mm = gsap.matchMedia();
+    // let breakPoint = 687;
+    // mm.add(
+    //   {
+    //     isDesktop: `(min-width: ${breakPoint}px)`,
+    //     isMobile: `(max-width: ${breakPoint - 1}px)`,
+    //   },
+    //   (context) => {
+    //     //@ts-ignore
+    //     let { isDesktop } = context.conditions;
 
-        this.timeLine
-          .to(".menu-icon, .controllers-container", {
-            opacity: 0,
-            y: isDesktop ? -100 : 100,
-            stagger: 0.2,
-          })
-          .to(this.modalWrapper, {
-            background: "rgba(255, 255, 255, 0.3)",
-            display: "flex",
-          })
-          .from(
-            ".btn",
-            {
-              yPercent: 100,
-              opacity: 0,
-              scale: 0.9,
-              stagger: 0.2,
-            },
-            "<="
-          );
-      }
-    );
+    this.timeLine
+      .to(".menu-icon, .control-btn", {
+        opacity: 0,
+        // y: isDesktop ? -100 : 100,
+        xPercent: 100,
+        scale: 0.5,
+        stagger: 0.2,
+      })
+      .to(this.modalWrapper, {
+        backdropFilter: "blur(10px)",
+
+        display: "flex",
+      })
+      .from(
+        ".btn",
+        {
+          yPercent: 100,
+          opacity: 0,
+          scale: 0.9,
+          stagger: 0.2,
+        },
+        "<="
+      );
+    // }
+    // );
   }
 
   openModal() {
@@ -146,19 +149,19 @@ export default class Modal extends EventEmitter {
       .to(".btn", {
         yPercent: 100,
         opacity: 0,
-        // scale: 0.9,
         stagger: {
-          from: "end", //try "center" and "edges"
+          from: "end",
           each: 0.2,
         },
       })
       .to(this.modalWrapper, {
-        background: "transparent",
+        backdropFilter: "none",
         display: "none",
       })
-      .to(".menu-icon, .controllers-container", {
+      .to(".menu-icon, .control-btn", {
         opacity: 1,
-        y: 0,
+        xPercent: 0,
+        scale: 1,
         stagger: 0.2,
       });
   }
