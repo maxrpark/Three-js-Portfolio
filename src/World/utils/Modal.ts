@@ -129,12 +129,18 @@ export default class Modal extends EventEmitter {
 
         display: "flex",
       })
-      .from(
+      .fromTo(
         modalButtons,
         {
           yPercent: 100,
           opacity: 0,
           scale: 0.9,
+          // stagger: 0.2,
+        },
+        {
+          yPercent: 0,
+          opacity: 1,
+          scale: 1,
           stagger: 0.2,
         },
         "<="
@@ -143,35 +149,58 @@ export default class Modal extends EventEmitter {
     // );
   }
 
-  openModal() {
-    this.timeLine.play();
-  }
   closeModal() {
     this.timeLine = gsap.timeline({ ease: "none" });
     const modalButtons = this.modalWrapper.querySelectorAll(".btn");
 
     this.timeLine
-      .to(modalButtons, {
-        yPercent: 100,
-        opacity: 0,
-        scale: 1,
-        stagger: {
-          from: "end",
-          each: 0.2,
+      .fromTo(
+        modalButtons,
+        {
+          yPercent: 0,
+          opacity: 1,
+          scale: 1,
         },
-      })
-      .to(this.modalWrapper, {
-        background: "transparent",
-      })
+        {
+          yPercent: 100,
+          opacity: 0,
+          scale: 0.9,
+          stagger: {
+            from: "end",
+            each: 0.2,
+          },
+        }
+      )
+      .fromTo(
+        this.modalWrapper,
+        {
+          background: "rgba(255, 255, 255, 0.3)",
+        },
+        {
+          background: "transparent",
+        }
+      )
       .set(this.modalWrapper, {
         display: "none",
       })
-      .to(".menu-icon, .control-btn", {
-        opacity: 1,
-        xPercent: 0,
-        scale: 1,
-        stagger: 0.2,
-        onComplete: () => (this.modalWrapper.innerHTML = ""),
-      });
+      .fromTo(
+        ".menu-icon, .control-btn",
+        {
+          opacity: 0,
+          // y: isDesktop ? -100 : 100,
+          xPercent: 100,
+          scale: 0.5,
+          stagger: 0.2,
+        },
+        {
+          opacity: 1,
+          xPercent: 0,
+          scale: 1,
+          stagger: 0.2,
+          // onComplete: () => {
+          //   this.modalWrapper.innerHTML = "";
+          // },
+        }
+      );
   }
 }

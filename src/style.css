@@ -40,7 +40,7 @@ canvas {
 .btn-primary:hover {
   -webkit-box-shadow: rgb(201, 46, 70) 0px 7px 0px 0px;
   box-shadow: rgb(201, 46, 70) 0px 7px 0px 0px;
-  transition: all 0.3s ease;
+  transition: box-shadow 0.1s linear;
 }
 
 .btn-primary:active {
@@ -48,11 +48,7 @@ canvas {
   /*50, 168, 80*/
   -webkit-box-shadow: rgb(201, 46, 70) 0px 0px 0px 0px;
   box-shadow: rgb(201, 46, 70) 0px 0px 0px 0px;
-  -webkit-transform: translateY(5px);
-  -ms-transform: translateY(5px);
-  transform: translateY(5px);
-  -webkit-transition: 200ms;
-  transition: 200ms;
+  transition: box-shadow 0.1s linear;
 }
 
 /* Controllers */

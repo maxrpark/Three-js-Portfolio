@@ -1,4 +1,9 @@
-import { BoxGeometry, Float32BufferAttribute, Mesh, MeshStandardMaterial } from "three";
+import {
+  BoxGeometry,
+  Float32BufferAttribute,
+  Mesh,
+  MeshStandardMaterial,
+} from "three";
 import CANNON from "cannon";
 import { Experience } from "../../experience/Experience";
 import { PhysicsWorld } from "../../experience/utils";
@@ -62,7 +67,7 @@ export default class GroundFloor {
   }
   private setBody() {
     this.towerBody = new CANNON.Body({
-      mass: 1,
+      mass: 0,
       position: new CANNON.Vec3(0, 0.5, 0),
       shape: new CANNON.Box(new CANNON.Vec3(1 * 0.5, 1 * 0.5, 1 * 0.5)),
       allowSleep: true, // Enable sleeping
