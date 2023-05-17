@@ -113,6 +113,8 @@ export default class Modal extends EventEmitter {
     //     //@ts-ignore
     //     let { isDesktop } = context.conditions;
 
+    const modalButtons = this.modalWrapper.querySelectorAll(".btn");
+
     this.timeLine
       .to(".menu-icon, .control-btn", {
         opacity: 0,
@@ -128,7 +130,7 @@ export default class Modal extends EventEmitter {
         display: "flex",
       })
       .from(
-        ".btn",
+        modalButtons,
         {
           yPercent: 100,
           opacity: 0,
@@ -146,20 +148,20 @@ export default class Modal extends EventEmitter {
   }
   closeModal() {
     this.timeLine = gsap.timeline({ ease: "none" });
+    const modalButtons = this.modalWrapper.querySelectorAll(".btn");
 
     this.timeLine
-      .to(".btn", {
+      .to(modalButtons, {
         yPercent: 100,
         opacity: 0,
+        scale: 1,
         stagger: {
           from: "end",
           each: 0.2,
         },
       })
       .to(this.modalWrapper, {
-        // backdropFilter: "blur(0px)",
         background: "transparent",
-        // display: "none",
       })
       .set(this.modalWrapper, {
         display: "none",
@@ -169,6 +171,7 @@ export default class Modal extends EventEmitter {
         xPercent: 0,
         scale: 1,
         stagger: 0.2,
+        onComplete: () => (this.modalWrapper.innerHTML = ""),
       });
   }
 }

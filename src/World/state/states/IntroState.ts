@@ -40,7 +40,7 @@ export default class IntroState extends GameState {
   public intro(): void {
     this.world.intro();
 
-    this.modal.on("handleGameStartClick", () => {
+    this.modal.on("handleGameStartClick", async () => {
       this.stateMachine.change(new StartGameState());
     });
 
