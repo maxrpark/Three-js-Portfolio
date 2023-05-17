@@ -112,7 +112,7 @@ export default class World {
   }
 
   public setGameStart(): void {
-    this.floorPositionY = 1;
+    this.floorPositionY = 0.5;
     this.addFloor();
     this.setGameOver = false;
     this.controllers.showPlayButtons();

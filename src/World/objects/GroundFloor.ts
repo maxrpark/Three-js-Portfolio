@@ -20,6 +20,9 @@ export default class GroundFloor {
   private physics: PhysicsWorld;
   private resources: Resources;
   public textures: MeshTextureInt; // todo pubic private
+  private floorX: number;
+  private floorY: number;
+  private floorZ: number;
 
   constructor() {
     this.experience = new Experience();
@@ -27,11 +30,15 @@ export default class GroundFloor {
 
     this.resources = this.experience.resources;
 
+    this.floorX = 1;
+    this.floorY = 1;
+    this.floorZ = 1;
+
     this.createMesh();
     this.setBody();
   }
   private setGeometry() {
-    this.geometry = new BoxGeometry(1, 1, 1);
+    this.geometry = new BoxGeometry(this.floorX, this.floorY, this.floorZ);
   }
 
   private setTexture() {
@@ -55,13 +62,9 @@ export default class GroundFloor {
   }
 
   private setMaterial() {
-    // this.material = new MeshStandardMaterial();
-
     this.setTexture();
-    // const color = Math.floor(Math.random() * 16777215).toString(16);
 
     this.material = new MeshStandardMaterial({
-      // color: `#${color}`,
       ...this.textures,
     });
   }
@@ -69,7 +72,9 @@ export default class GroundFloor {
     this.towerBody = new CANNON.Body({
       mass: 0,
       position: new CANNON.Vec3(0, 0.5, 0),
-      shape: new CANNON.Box(new CANNON.Vec3(1 * 0.5, 1 * 0.5, 1 * 0.5)),
+      shape: new CANNON.Box(
+        new CANNON.Vec3(this.floorX * 0.5, this.floorY * 0.5, this.floorZ * 0.5)
+      ),
       allowSleep: true, // Enable sleeping
       sleepSpeedLimit: 0.1,
     });

@@ -24,6 +24,10 @@ export default class Modal extends EventEmitter {
 
     this.modalWrapper.innerHTML = /*html*/ ` 
     <div class="modal-content">
+
+      <div class="modal-texts-wrapper">
+          <h2 class="modal-texts">Intro</h2>
+       </div>
       <button id="gameStart" class="btn btn-primary">Start</button>
       <button id="gameScores" class="btn btn-primary">Scores</button>
       <button id="exploreWorld" class="btn btn-primary">Explore</button>
@@ -47,8 +51,10 @@ export default class Modal extends EventEmitter {
     // Modal Content
     this.modalWrapper.innerHTML = /*html*/ ` 
     <div class="modal-content">
-       <h2>Game Over</h2>
-       <h3>Your score is ${score}</h3>
+       <div class="modal-texts-wrapper">
+          <h2 class="modal-texts">Game Over</h2>
+          <h3 class="modal-texts-wrapper">Your score is ${score}</h3>
+       </div>
       <button id="gameRestart" class="btn btn-primary">Play Again</button>
       <button id="exitGame" class="btn btn-primary">Exit</button>
       <button id="exploreWorld" class="btn btn-primary">Explore</button>
@@ -79,6 +85,9 @@ export default class Modal extends EventEmitter {
     // Modal Content
     this.modalWrapper.innerHTML = /*html*/ ` 
     <div class="modal-content">
+       <div class="modal-texts-wrapper">
+          <h2 class="modal-texts">Pause</h2>
+       </div>
       <button id="gameContinue" class="btn btn-primary">Continue</button>
       <button id="exitGame" class="btn btn-primary">Exit</button>
     </div>
@@ -93,49 +102,50 @@ export default class Modal extends EventEmitter {
     gameContinue.addEventListener("click", () =>
       this.trigger("handleContinue")
     );
-    // animation
 
     this.animation();
-    // this.openModal();
   }
 
   animation() {
     this.timeLine = gsap.timeline({ ease: "none" });
 
-    // let mm = gsap.matchMedia();
-    // let breakPoint = 687;
-    // mm.add(
-    //   {
-    //     isDesktop: `(min-width: ${breakPoint}px)`,
-    //     isMobile: `(max-width: ${breakPoint - 1}px)`,
-    //   },
-    //   (context) => {
-    //     //@ts-ignore
-    //     let { isDesktop } = context.conditions;
-
     const modalButtons = this.modalWrapper.querySelectorAll(".btn");
-
+    const modalTextWrapper = this.modalWrapper.querySelectorAll(
+      ".modal-texts-wrapper"
+    );
     this.timeLine
       .to(".menu-icon, .control-btn", {
         opacity: 0,
-        // y: isDesktop ? -100 : 100,
         xPercent: 100,
         scale: 0.5,
         stagger: 0.2,
       })
-      .to(this.modalWrapper, {
-        // backdropFilter: "blur(10px)",
-        background: "rgba(255, 255, 255, 0.3)",
-
-        display: "flex",
-      })
+      .to(
+        this.modalWrapper,
+        {
+          background: "rgba(255, 255, 255, 0.3)",
+          display: "flex",
+        },
+        "<"
+      )
+      .fromTo(
+        modalTextWrapper,
+        {
+          xPercent: -100,
+          opacity: 0,
+        },
+        {
+          xPercent: 0,
+          opacity: 1,
+          scale: 1,
+        }
+      )
       .fromTo(
         modalButtons,
         {
           yPercent: 100,
           opacity: 0,
           scale: 0.9,
-          // stagger: 0.2,
         },
         {
           yPercent: 0,
@@ -143,17 +153,29 @@ export default class Modal extends EventEmitter {
           scale: 1,
           stagger: 0.2,
         },
-        "<="
+        "<"
       );
-    // }
-    // );
   }
 
   closeModal() {
     this.timeLine = gsap.timeline({ ease: "none" });
     const modalButtons = this.modalWrapper.querySelectorAll(".btn");
+    const modalTextWrapper = this.modalWrapper.querySelectorAll(
+      ".modal-texts-wrapper"
+    );
 
     this.timeLine
+      .to(
+        modalTextWrapper,
+        {
+          xPercent: 0,
+          opacity: 0,
+        }
+        // {
+        //   xPercent: 100,
+        //   opacity: 0,
+        // }
+      )
       .fromTo(
         modalButtons,
         {
@@ -169,7 +191,8 @@ export default class Modal extends EventEmitter {
             from: "end",
             each: 0.2,
           },
-        }
+        },
+        0
       )
       .fromTo(
         this.modalWrapper,
@@ -178,16 +201,13 @@ export default class Modal extends EventEmitter {
         },
         {
           background: "transparent",
+          display: "none",
         }
       )
-      .set(this.modalWrapper, {
-        display: "none",
-      })
       .fromTo(
         ".menu-icon, .control-btn",
         {
           opacity: 0,
-          // y: isDesktop ? -100 : 100,
           xPercent: 100,
           scale: 0.5,
           stagger: 0.2,
@@ -197,10 +217,8 @@ export default class Modal extends EventEmitter {
           xPercent: 0,
           scale: 1,
           stagger: 0.2,
-          // onComplete: () => {
-          //   this.modalWrapper.innerHTML = "";
-          // },
-        }
+        },
+        "<"
       );
   }
 }
