@@ -134,9 +134,10 @@ export default class TowerFloor extends EventEmitter {
 
     gsap.to(this.camera.position, {
       y: this.mesh.position.y + this.positionY / 2,
+
+      onComplete: () => this.camera.lookAt(this.mesh.position),
     });
 
-    this.camera.lookAt(this.mesh.position);
     this.swingingAnimation();
   }
   public drop() {

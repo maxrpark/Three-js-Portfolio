@@ -78,7 +78,6 @@ export default class Modal extends EventEmitter {
     );
 
     // animation
-
     this.animation();
   }
   public pauseMode() {
@@ -131,11 +130,12 @@ export default class Modal extends EventEmitter {
       .fromTo(
         modalTextWrapper,
         {
-          xPercent: -100,
+          yPercent: 100,
           opacity: 0,
+          scale: 0.6,
         },
         {
-          xPercent: 0,
+          yPercent: 0,
           opacity: 1,
           scale: 1,
         }
@@ -165,17 +165,6 @@ export default class Modal extends EventEmitter {
     );
 
     this.timeLine
-      .to(
-        modalTextWrapper,
-        {
-          xPercent: 0,
-          opacity: 0,
-        }
-        // {
-        //   xPercent: 100,
-        //   opacity: 0,
-        // }
-      )
       .fromTo(
         modalButtons,
         {
@@ -191,6 +180,19 @@ export default class Modal extends EventEmitter {
             from: "end",
             each: 0.2,
           },
+        }
+      )
+      .fromTo(
+        modalTextWrapper,
+        {
+          // y: 0,
+          opacity: 1,
+          scale: 1,
+        },
+        {
+          // y: 30,
+          opacity: 0,
+          scale: 0.9,
         },
         0
       )
