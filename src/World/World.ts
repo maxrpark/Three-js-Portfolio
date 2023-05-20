@@ -11,6 +11,7 @@ import { StateMachine } from "./state/GameState";
 import { GameOverState, IntroState } from "./state/states";
 import { Controllers, Modal, MenuIcon } from "./utils/";
 import { StatesNames } from "./state/GameState";
+import Water from "./shaders/water/Water";
 
 export default class World {
   private experience: Experience;
@@ -25,6 +26,7 @@ export default class World {
   private groundFloor: GroundFloor;
   private ground: GroundArea;
   private floorLevel: Text2D;
+  public water: Water;
 
   public menuIcon: MenuIcon;
   public controllers: Controllers;
@@ -84,6 +86,7 @@ export default class World {
     this.ground = new GroundArea();
     this.menuIcon = new MenuIcon();
     this.controllers = new Controllers();
+    this.water = new Water();
 
     this.createModal();
     this.handleGroundCollision();
@@ -92,6 +95,7 @@ export default class World {
       this.tower,
       this.groundFloor.mesh,
       this.ground.mesh,
+      this.water.mesh,
       // @ts-ignore
       this.floorLevel.instance
     );
@@ -199,5 +203,7 @@ export default class World {
     this.controllers.hidePlayButtons();
   }
 
-  update() {}
+  update() {
+    this.water.update();
+  }
 }

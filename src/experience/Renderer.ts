@@ -1,5 +1,6 @@
 import { Experience, ExperienceInt } from "./Experience";
 import { Sizes, Camera } from "./utils";
+import Stats from "three/examples/jsm/libs/stats.module";
 import {
   WebGLRenderer,
   Scene,
@@ -26,6 +27,7 @@ export class Renderer implements RendererInt {
   sizes: Sizes;
   canvas: HTMLCanvasElement;
   camera: Camera;
+  stats: any;
 
   constructor() {
     this.experience = new Experience();
@@ -33,6 +35,11 @@ export class Renderer implements RendererInt {
     this.sizes = this.experience.sizes;
     this.canvas = this.experience.canvas!;
     this.camera = this.experience.camera;
+
+    if (window.location.hash === "#debug") {
+      this.stats = Stats();
+      document.body.appendChild(this.stats.dom);
+    }
 
     this.setRenderer();
   }
@@ -56,6 +63,7 @@ export class Renderer implements RendererInt {
   }
 
   update() {
+    if (window.location.hash === "#debug") this.stats.update();
     this.renderer.render(this.scene, this.camera.camera);
   }
   resize() {

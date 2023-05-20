@@ -49,7 +49,6 @@ export class Experience implements ExperienceInt {
     if (instance) {
       return instance;
     }
-    console.log("new instance");
 
     instance = this;
 
@@ -84,6 +83,7 @@ export class Experience implements ExperienceInt {
     this.physics.update();
     if (this.world) this.world.update();
     this.camera.update();
+
     this.renderer.update();
   }
   resize() {
