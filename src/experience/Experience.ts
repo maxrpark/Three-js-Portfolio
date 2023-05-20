@@ -75,7 +75,6 @@ export class Experience implements ExperienceInt {
     this.resources.on("loaded", () => {
       this.stateMachine = new StateMachine();
       this.world = new World();
-
       this.stateMachine.change(new WorldCreationState());
     });
   }

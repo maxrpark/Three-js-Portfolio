@@ -60,7 +60,7 @@ export default class Water {
     this.mesh = new Mesh(this.geometry, this.material);
 
     this.mesh.rotation.x = -Math.PI * 0.5;
-    this.mesh.position.y = -0.1;
+    this.mesh.position.y = -0.17;
   }
 
   debugger() {

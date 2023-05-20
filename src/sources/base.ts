@@ -18,6 +18,11 @@ export default [
     ],
   },
   {
+    name: "model",
+    type: "gltfLoader",
+    path: "model/model.glb",
+  },
+  {
     name: "concreteColor",
     type: "textureLoader",
     path: "textures/concrete/color.jpg",

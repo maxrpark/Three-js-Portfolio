@@ -31,7 +31,7 @@ export default class GroundArea {
     this.createMesh();
   }
   private setGeometry() {
-    this.geometry = new PlaneGeometry(5, 5, 50, 50);
+    this.geometry = new PlaneGeometry(3, 3, 50, 50);
   }
   private setTextures() {
     this.textures = {

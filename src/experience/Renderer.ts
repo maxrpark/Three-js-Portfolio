@@ -1,5 +1,5 @@
 import { Experience, ExperienceInt } from "./Experience";
-import { Sizes, Camera } from "./utils";
+import { Sizes, Camera, Debug } from "./utils";
 import Stats from "three/examples/jsm/libs/stats.module";
 import {
   WebGLRenderer,
@@ -7,10 +7,15 @@ import {
   sRGBEncoding,
   PCFSoftShadowMap,
   LinearToneMapping,
+  NoToneMapping,
+  ReinhardToneMapping,
+  CineonToneMapping,
+  ACESFilmicToneMapping,
   // sRGBEncoding,
   // CineonToneMapping,
   // PCFSoftShadowMap,
 } from "three";
+import GUI from "lil-gui";
 
 export interface RendererInt {
   renderer: WebGLRenderer;
@@ -29,8 +34,12 @@ export class Renderer implements RendererInt {
   camera: Camera;
   stats: any;
 
+  debug: Debug;
+  debugFolder: GUI;
+
   constructor() {
     this.experience = new Experience();
+    this.debug = this.experience.debug;
     this.scene = this.experience.scene;
     this.sizes = this.experience.sizes;
     this.canvas = this.experience.canvas!;
@@ -52,14 +61,30 @@ export class Renderer implements RendererInt {
     this.renderer.setSize(this.sizes.width, this.sizes.height);
     this.renderer.setPixelRatio(Math.min(this.sizes.pixelRatio, 2));
     this.renderer.shadowMap.enabled = true;
-    // this.renderer.physicallyCorrectLights = true;
 
-    // this.renderer.physicallyCorrectLights = true;
     this.renderer.outputEncoding = sRGBEncoding;
     this.renderer.toneMapping = LinearToneMapping;
     this.renderer.toneMappingExposure = 1;
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = PCFSoftShadowMap;
+
+    if (this.debug.active) {
+      this.debugFolder = this.debug.ui.addFolder("environment");
+      this.debugFolder
+        .add(this.renderer, "toneMappingExposure")
+        .name("toneMappingExposure")
+        .min(0)
+        .max(4)
+        .step(0.001);
+      this.debugFolder.add(this.renderer, "toneMapping", {
+        No: NoToneMapping,
+        Linear: LinearToneMapping,
+        Reinhard: ReinhardToneMapping,
+        Cineon: CineonToneMapping,
+        ACESFilmic: ACESFilmicToneMapping,
+      });
+      // .onChange(this.environmentMap.updateMaterial);
+    }
   }
 
   update() {

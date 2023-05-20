@@ -6,6 +6,7 @@ interface IProps {
   environmentMapTexture?: any;
   hasAmbientLight?: boolean;
   hasDirectionalLight?: boolean;
+  castShadow?: boolean;
 }
 interface EnvironmentInt {
   experience: Experience;
@@ -18,6 +19,7 @@ interface EnvironmentInt {
   debugFolder: GUI;
   hasAmbientLight?: boolean;
   hasDirectionalLight?: boolean;
+  castShadow?: boolean;
 
   setAmbientLight: () => void;
   setDirectionalLight: () => void;
@@ -35,6 +37,8 @@ export class Environment implements EnvironmentInt {
   debugFolder: GUI;
   hasAmbientLight?: boolean;
   hasDirectionalLight?: boolean;
+
+  castShadow: boolean = false;
 
   constructor(props?: IProps) {
     Object.assign(this, props);
@@ -79,20 +83,25 @@ export class Environment implements EnvironmentInt {
     this.directionalLight.shadow.mapSize.width = 512;
     this.directionalLight.shadow.mapSize.height = 512;
 
-    this.directionalLight.shadow.camera.near = 2;
-    this.directionalLight.shadow.camera.far = -2;
+    this.directionalLight.shadow.camera.near = -20;
+    this.directionalLight.shadow.camera.far = 10;
 
-    this.directionalLight.shadow.camera.top = 2;
-    this.directionalLight.shadow.camera.bottom = -2;
-    this.directionalLight.shadow.camera.right = 2;
-    this.directionalLight.shadow.camera.left = -2;
+    this.directionalLight.castShadow = this.castShadow;
 
-    // const directionalLightCameraHelper = new THREE.CameraHelper(this.directionalLight.shadow.camera);
+    this.directionalLight.shadow.camera.top = 10;
+    this.directionalLight.shadow.camera.bottom = -10;
+    this.directionalLight.shadow.camera.right = 20;
+    this.directionalLight.shadow.camera.left = -20;
+    this.directionalLight.shadow.normalBias = 0.5;
 
-    const directionalLightCameraHelper = new THREE.DirectionalLightHelper(
-      this.directionalLight,
-      5
+    const directionalLightCameraHelper = new THREE.CameraHelper(
+      this.directionalLight.shadow.camera
     );
+
+    // const directionalLightCameraHelper = new THREE.DirectionalLightHelper(
+    //   this.directionalLight,
+    //   5
+    // );
 
     directionalLightCameraHelper.visible = false;
 

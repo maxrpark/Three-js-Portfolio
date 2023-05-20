@@ -12,6 +12,7 @@ import { GameOverState, IntroState } from "./state/states";
 import { Controllers, Modal, MenuIcon } from "./utils/";
 import { StatesNames } from "./state/GameState";
 import Water from "./shaders/water/Water";
+import City from "./models/City";
 
 export default class World {
   private experience: Experience;
@@ -27,6 +28,9 @@ export default class World {
   private ground: GroundArea;
   private floorLevel: Text2D;
   public water: Water;
+
+  // model
+  private city: City;
 
   public menuIcon: MenuIcon;
   public controllers: Controllers;
@@ -45,6 +49,7 @@ export default class World {
     this.environment = new Environment({
       hasAmbientLight: true,
       hasDirectionalLight: true,
+      castShadow: true,
     });
 
     this.floorLevel = new Text2D({
@@ -82,6 +87,8 @@ export default class World {
   public createWorld() {
     if (this.stateMachine.currentStateName !== StatesNames.CREATION) return;
 
+    this.city = new City();
+
     this.groundFloor = new GroundFloor();
     this.ground = new GroundArea();
     this.menuIcon = new MenuIcon();
@@ -97,7 +104,8 @@ export default class World {
       this.ground.mesh,
       this.water.mesh,
       // @ts-ignore
-      this.floorLevel.instance
+      this.floorLevel.instance,
+      this.city.model
     );
 
     this.experience.scene.add(this.world);
