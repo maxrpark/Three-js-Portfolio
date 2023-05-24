@@ -9,6 +9,7 @@
 :root {
   --primary-black: #000000;
   --primary-white: #ffffff;
+  --primary-color: rgb(255, 56, 86);
   --primary-font: "Roboto", sans-serif;
 }
 html,
@@ -33,7 +34,7 @@ canvas {
 .btn-primary {
   border-radius: 10px;
   border: 0;
-  background-color: rgb(255, 56, 86);
+  background-color: var(--primary-color);
   letter-spacing: 1.5px;
   font-size: 15px;
   -webkit-box-shadow: rgb(201, 46, 70) 0px 10px 0px 0px;
@@ -48,7 +49,7 @@ canvas {
 }
 
 .btn-primary:active {
-  background-color: rgb(255, 56, 86);
+  background-color: var(--primary-color);
   /*50, 168, 80*/
   -webkit-box-shadow: rgb(201, 46, 70) 0px 0px 0px 0px;
   box-shadow: rgb(201, 46, 70) 0px 0px 0px 0px;
@@ -143,6 +144,66 @@ canvas {
   }
 }
 
+/* Modal Progress */
+
+.modal-progress {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  inset: 0 0 0 0;
+  z-index: 11;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background: black; */
+}
+
+.progress-modal-content {
+  position: absolute;
+  left: 10%;
+  top: 10%;
+  color: var(--primary-white);
+}
+
+.progress-modal-content h2,
+.progress-modal-content h3 {
+  font-size: 12vh;
+}
+
+.progress-modal-content h3 {
+  font-size: 5vh;
+}
+
+.progress-section {
+  width: 50%;
+  height: 50%;
+  position: absolute;
+  background-color: var(--primary-color);
+}
+
+.top-left {
+  top: 0;
+  left: 0;
+}
+.top-right {
+  top: 0;
+  right: 0;
+}
+.bottom-left {
+  bottom: 0;
+  left: 0;
+}
+.bottom-right {
+  bottom: 0;
+  right: 0;
+}
+
+.loading-text {
+  color: white;
+  font-size: 4rem;
+  z-index: 1;
+}
+
 /* Modal */
 .modal-wrapper {
   position: fixed;
@@ -165,4 +226,41 @@ canvas {
 
 .modal-texts-wrapper {
   font-size: 2rem;
+}
+
+/*  PROGRESS SLIDER */
+
+.slider-container {
+  width: 100%;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  height: 50px;
+  background: #333;
+  z-index: 100;
+}
+
+#progressSlider {
+  width: 600px;
+  margin-left: 16px;
+  margin-right: 16px;
+}
+
+button {
+  border-radius: 10px;
+  background: #ffc34c;
+  color: #444;
+  font-size: 14px;
+  margin: 10px;
+  font-weight: 700;
+  width: 5em;
+}
+
+#time {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

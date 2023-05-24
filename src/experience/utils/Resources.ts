@@ -59,6 +59,8 @@ export default class Resources extends EventEmitter implements ResourcesInt {
 
     this.uploaded++;
 
+    this.trigger("itemLoaded");
+
     if (this.uploaded === this.toUpload) {
       this.trigger("loaded");
     }

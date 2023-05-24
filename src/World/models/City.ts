@@ -10,8 +10,6 @@ export default class City {
     this.experience = new Experience();
     this.resources = this.experience.resources;
 
-    console.log(this.resources.items.model);
-
     this.createModel();
     // this.resources.on
   }
