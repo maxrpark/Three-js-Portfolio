@@ -6,7 +6,11 @@ import World from "../World/World";
 import Resources from "./utils/Resources";
 import source from "../sources/base";
 import { StateMachine } from "../World/state/GameState";
-import { IntroState, WorldCreationState } from "../World/state/states";
+import {
+  // IntroState,
+
+  WorldCreationState,
+} from "../World/state/states";
 import LoadingModal from "../World/utils/LoadingModal";
 
 declare global {
