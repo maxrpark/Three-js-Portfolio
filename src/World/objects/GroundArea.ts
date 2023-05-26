@@ -18,9 +18,11 @@ export default class GroundArea {
   private material: MeshStandardMaterial;
   private resources: Resources;
   private textures: MeshTextureInt;
+  public baseAreaSize: number = 6;
 
   public mesh: Mesh;
   public groundBody: CANNON.Body;
+  public infiniteGroundBody: CANNON.Body;
 
   constructor() {
     this.experience = new Experience();
@@ -31,7 +33,12 @@ export default class GroundArea {
     this.createMesh();
   }
   private setGeometry() {
-    this.geometry = new PlaneGeometry(3, 3, 50, 50);
+    this.geometry = new PlaneGeometry(
+      this.baseAreaSize,
+      this.baseAreaSize,
+      50,
+      50
+    );
   }
   private setTextures() {
     this.textures = {
@@ -56,12 +63,30 @@ export default class GroundArea {
       ...this.textures,
     });
   }
-  private setBody() {
-    const shape = new CANNON.Plane();
+  private setInfiniteBody() {
+    this.infiniteGroundBody = new CANNON.Body({
+      mass: 0,
+      shape: new CANNON.Plane(),
+    });
+    this.infiniteGroundBody.quaternion.setFromAxisAngle(
+      new CANNON.Vec3(-1, 0, 0),
+      Math.PI * 0.5
+    );
+    this.infiniteGroundBody.position.y = -0.5;
+    this.physics.world.addBody(this.infiniteGroundBody);
+  }
+  private setBaseAreaBody() {
     this.groundBody = new CANNON.Body({
       mass: 0,
-      shape,
+      shape: new CANNON.Box(
+        new CANNON.Vec3(
+          this.baseAreaSize * 0.5,
+          this.baseAreaSize * 0.5,
+          0.1 * 0.5
+        )
+      ),
     });
+
     this.groundBody.quaternion.setFromAxisAngle(
       new CANNON.Vec3(-1, 0, 0),
       Math.PI * 0.5
@@ -70,7 +95,8 @@ export default class GroundArea {
     this.physics.world.addBody(this.groundBody);
   }
   private createMesh() {
-    this.setBody();
+    this.setInfiniteBody();
+    this.setBaseAreaBody();
     this.setGeometry();
     this.setMaterial();
     this.mesh = new Mesh(this.geometry, this.material);

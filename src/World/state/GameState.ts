@@ -23,6 +23,7 @@ export class StateMachine {
 }
 
 export enum StatesNames {
+  LOADING = "loading",
   CREATION = "creation",
   INTRO = "intro",
   START_GAME = "start",

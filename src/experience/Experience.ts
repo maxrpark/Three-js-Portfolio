@@ -6,7 +6,7 @@ import World from "../World/World";
 import Resources from "./utils/Resources";
 import source from "../sources/base";
 import { StateMachine } from "../World/state/GameState";
-import { WorldCreationState } from "../World/state/states";
+import { IntroState, WorldCreationState } from "../World/state/states";
 import LoadingModal from "../World/utils/LoadingModal";
 
 declare global {
@@ -30,7 +30,7 @@ export interface ExperienceInt {
   update: () => void;
   resize: () => void;
 
-  loadingModal: LoadingModal;
+  // loadingModal: LoadingModal;
 }
 
 let instance: Experience | null = null;
@@ -76,29 +76,22 @@ export class Experience implements ExperienceInt {
 
     this.resources = new Resources(source);
 
-    this.loadingModal = new LoadingModal();
+    // this.loadingModal = new LoadingModal();
     this.stateMachine = new StateMachine();
 
     // this.loadingModal.on("animationCompleted", () => {
-    //   this.world = new World();
-    //   this.stateMachine.change(new WorldCreationState());
+    //   this.stateMachine.change(new IntroState());
     // });
-    this.loadingModal.on("animationCompleted", () => {
-      this.world = new World();
-      this.stateMachine.change(new WorldCreationState());
-    });
+    this.world = new World();
 
     this.resources.on("loaded", () => {
-      // this.stateMachine = new StateMachine();
-
-      this.loadingModal.progressModalOut();
-      // this.world = new World();
-      // this.stateMachine.change(new WorldCreationState());
+      this.world.loadingModal.progressModalOut();
+      this.stateMachine.change(new WorldCreationState());
     });
   }
   update() {
     this.physics.update();
-    if (this.world) this.world.update();
+    // if (this.world) this.world.update();
     this.camera.update();
 
     this.renderer.update();

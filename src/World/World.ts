@@ -13,6 +13,7 @@ import { Controllers, Modal, MenuIcon } from "./utils/";
 import { StatesNames } from "./state/GameState";
 import Water from "./shaders/water/Water";
 import City from "./models/City";
+import LoadingModal from "./utils/LoadingModal";
 
 export default class World {
   private experience: Experience;
@@ -28,6 +29,10 @@ export default class World {
   private ground: GroundArea;
   private floorLevel: Text2D;
   public water: Water;
+
+  // Loader
+
+  loadingModal: LoadingModal;
 
   // model
   private city: City;
@@ -62,6 +67,12 @@ export default class World {
     this.tower = new Group();
     this.world = new Group();
     this.addedObjects = [];
+
+    this.loadingModal = new LoadingModal();
+
+    this.loadingModal.on("animationCompleted", () => {
+      this.stateMachine.change(new IntroState());
+    });
   }
 
   private set floorPositionY(value: number) {
@@ -96,7 +107,7 @@ export default class World {
     this.water = new Water();
 
     this.createModal();
-    this.handleGroundCollision();
+    this.setupCollisionListeners();
 
     this.world.add(
       this.tower,
@@ -109,7 +120,6 @@ export default class World {
     );
 
     this.experience.scene.add(this.world);
-    this.stateMachine.change(new IntroState());
   }
 
   public intro() {
@@ -152,18 +162,27 @@ export default class World {
     this.floorLevel.isVisible(this.getScore > 0);
   }
 
-  private handleGroundCollision() {
+  private handleCollision(collidedBody: CANNON.Body) {
+    if (!collidedBody || this.tower.children.length === 0) return;
+
+    if (!collidedBody || this.tower.children.length === 0) return;
+
+    const objectInTower = this.tower.children.find((child) => {
+      return child.userData.body === collidedBody;
+    });
+
+    if (!this.isGameOver && objectInTower) {
+      this.stateMachine.change(new GameOverState());
+    }
+  }
+
+  setupCollisionListeners() {
+    this.ground.infiniteGroundBody.addEventListener("collide", (event: any) => {
+      this.handleCollision(event.body);
+    });
+
     this.ground.groundBody.addEventListener("collide", (event: any) => {
-      const collidedBody = event.body;
-
-      if (!collidedBody || this.tower.children.length === 0) return;
-      const objectInTower = this.tower.children.find((child) => {
-        return child.userData.body === collidedBody;
-      });
-
-      if (!this.isGameOver && objectInTower) {
-        this.stateMachine.change(new GameOverState());
-      }
+      this.handleCollision(event.body);
     });
   }
 

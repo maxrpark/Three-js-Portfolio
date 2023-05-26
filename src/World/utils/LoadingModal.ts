@@ -77,11 +77,11 @@ export default class LoadingModal extends EventEmitter {
       })
       .to(".modal-text", {
         opacity: 0,
-        delay: 1,
+        delay: 0.5,
         xPercent: -10,
         stagger: 0.2,
       })
-      .to(".top-left", { yPercent: -100, xPercent: -100, duration })
+      .to(".top-left", { yPercent: -100, xPercent: -100, duration }, "-=0.1")
       .to(
         ".top-right",
         {
@@ -98,12 +98,12 @@ export default class LoadingModal extends EventEmitter {
           yPercent: 100,
           xPercent: 100,
           duration,
-          onStart: () => this.trigger("animationCompleted"),
         },
         "<"
       )
       .set(this.modalWrapper, {
         display: "none",
+        onStart: () => this.trigger("animationCompleted"),
       });
   }
 }

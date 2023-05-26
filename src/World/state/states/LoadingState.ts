@@ -3,7 +3,7 @@ import { Experience } from "../../../experience/Experience";
 import World from "../../World";
 import Controllers from "../../utils/GameControllers";
 import { MenuIcon, Modal } from "../../utils";
-import { IntroState, ResetState } from "./";
+import { IntroState, ResetState } from ".";
 
 export default class GameOverState extends GameState {
   experience: Experience;
