@@ -101,9 +101,15 @@ export default class LoadingModal extends EventEmitter {
         },
         "<"
       )
+      .to(
+        {},
+        {
+          onStart: () => this.trigger("animationCompleted"),
+        },
+        "<+=20%"
+      )
       .set(this.modalWrapper, {
         display: "none",
-        onStart: () => this.trigger("animationCompleted"),
       });
   }
 }
