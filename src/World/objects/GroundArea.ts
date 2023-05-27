@@ -1,26 +1,26 @@
-import {
-  MeshStandardMaterial,
-  Mesh,
-  PlaneGeometry,
-  Float32BufferAttribute,
-  // sRGBEncoding,
-} from "three";
+// import {
+//   MeshStandardMaterial,
+//   Mesh,
+//   PlaneGeometry,
+//   // Float32BufferAttribute,
+//   // sRGBEncoding,
+// } from "three";
 import CANNON from "cannon";
 import { Experience } from "../../experience/Experience";
 import { PhysicsWorld } from "../../experience/utils";
-import Resources from "../../experience/utils/Resources";
-import { MeshTextureInt } from "../../ts/globalnterfaces";
+// import Resources from "../../experience/utils/Resources";
+// import { MeshTextureInt } from "../../ts/globalnterfaces";
 
 export default class GroundArea {
   private experience: Experience;
   private physics: PhysicsWorld;
-  private geometry: PlaneGeometry;
-  private material: MeshStandardMaterial;
-  private resources: Resources;
-  private textures: MeshTextureInt;
-  public baseAreaSize: number = 6;
+  // private geometry: PlaneGeometry;
+  // private material: MeshStandardMaterial;
+  // private resources: Resources;
+  // private textures: MeshTextureInt;
+  public baseAreaSize: number = 11;
 
-  public mesh: Mesh;
+  // public mesh: Mesh;
   public groundBody: CANNON.Body;
   public infiniteGroundBody: CANNON.Body;
 
@@ -28,41 +28,44 @@ export default class GroundArea {
     this.experience = new Experience();
     this.physics = this.experience.physics;
 
-    this.resources = this.experience.resources;
+    // this.resources = this.experience.resources;
 
-    this.createMesh();
-  }
-  private setGeometry() {
-    this.geometry = new PlaneGeometry(
-      this.baseAreaSize,
-      this.baseAreaSize,
-      50,
-      50
-    );
-  }
-  private setTextures() {
-    this.textures = {
-      map: this.resources.items.concreteColor,
-      normalMap: this.resources.items.concreteNormal,
-      displacementMap: this.resources.items.concreteHeight,
-      displacementScale: 0.1,
-      roughnessMap: this.resources.items.concreteRoughness,
-      aoMap: this.resources.items.concreteAOM,
-      roughness: 2,
-    };
+    // this.createMesh();
 
-    this.geometry.setAttribute(
-      "uv2",
-      //@ts-ignore
-      new Float32BufferAttribute(this.geometry.attributes.uv.array, 2)
-    );
+    this.setInfiniteBody();
+    this.setBaseAreaBody();
   }
-  private setMaterial() {
-    this.setTextures();
-    this.material = new MeshStandardMaterial({
-      ...this.textures,
-    });
-  }
+  // private setGeometry() {
+  //   this.geometry = new PlaneGeometry(
+  //     this.baseAreaSize,
+  //     this.baseAreaSize,
+  //     50,
+  //     50
+  //   );
+  // }
+  // private setTextures() {
+  //   this.textures = {
+  //     map: this.resources.items.concreteColor,
+  //     normalMap: this.resources.items.concreteNormal,
+  //     displacementMap: this.resources.items.concreteHeight,
+  //     displacementScale: 0.1,
+  //     roughnessMap: this.resources.items.concreteRoughness,
+  //     aoMap: this.resources.items.concreteAOM,
+  //     roughness: 2,
+  //   };
+
+  //   this.geometry.setAttribute(
+  //     "uv2",
+  //     //@ts-ignore
+  //     new Float32BufferAttribute(this.geometry.attributes.uv.array, 2)
+  //   );
+  // }
+  // private setMaterial() {
+  //   // this.setTextures();
+  //   this.material = new MeshStandardMaterial({
+  //     // ...this.textures,
+  //   });
+  // }
   private setInfiniteBody() {
     this.infiniteGroundBody = new CANNON.Body({
       mass: 0,
@@ -94,12 +97,12 @@ export default class GroundArea {
 
     this.physics.world.addBody(this.groundBody);
   }
-  private createMesh() {
-    this.setInfiniteBody();
-    this.setBaseAreaBody();
-    this.setGeometry();
-    this.setMaterial();
-    this.mesh = new Mesh(this.geometry, this.material);
-    this.mesh.rotation.x = -Math.PI / 2;
-  }
+  // private createMesh() {
+  //   this.setInfiniteBody();
+  //   this.setBaseAreaBody();
+  //   this.setGeometry();
+  //   this.setMaterial();
+  //   this.mesh = new Mesh(this.geometry, this.material);
+  //   this.mesh.rotation.x = -Math.PI / 2;
+  // }
 }

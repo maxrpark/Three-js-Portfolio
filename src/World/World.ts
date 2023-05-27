@@ -112,7 +112,7 @@ export default class World {
     this.world.add(
       this.tower,
       this.groundFloor.mesh,
-      this.ground.mesh,
+      // this.ground.mesh,
       this.water.mesh,
       // @ts-ignore
       this.floorLevel.instance,

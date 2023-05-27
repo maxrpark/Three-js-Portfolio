@@ -28,7 +28,7 @@ export default class Water {
   }
 
   createGeometry() {
-    this.geometry = new PlaneGeometry(10, 10, 512, 512);
+    this.geometry = new PlaneGeometry(20, 20, 512, 512);
   }
   createMaterial() {
     this.material = new ShaderMaterial({
