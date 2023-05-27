@@ -1,7 +1,11 @@
 import GUI from "lil-gui";
 import { Experience, ExperienceInt } from "./Experience";
 import { Debug, Sizes } from "./utils";
-import { AxesHelper, PerspectiveCamera, Scene } from "three";
+import {
+  // AxesHelper,
+  PerspectiveCamera,
+  Scene,
+} from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 export interface CameraInt {
