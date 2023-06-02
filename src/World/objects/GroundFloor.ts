@@ -10,6 +10,10 @@ import { PhysicsWorld } from "../../experience/utils";
 import Resources from "../../experience/utils/Resources";
 import { MeshTextureInt } from "../../ts/globalnterfaces";
 
+interface Props {
+  floorSize: number;
+}
+
 export default class GroundFloor {
   private experience: Experience;
   private geometry: BoxGeometry;
@@ -20,25 +24,25 @@ export default class GroundFloor {
   private physics: PhysicsWorld;
   private resources: Resources;
   public textures: MeshTextureInt; // todo pubic private
-  private floorX: number;
-  private floorY: number;
-  private floorZ: number;
 
-  constructor() {
+  floorSize: number;
+
+  constructor(props: Props) {
+    Object.assign(this, props);
     this.experience = new Experience();
     this.physics = this.experience.physics;
 
     this.resources = this.experience.resources;
 
-    this.floorX = 1;
-    this.floorY = 1;
-    this.floorZ = 1;
-
     this.createMesh();
     this.setBody();
   }
   private setGeometry() {
-    this.geometry = new BoxGeometry(this.floorX, this.floorY, this.floorZ);
+    this.geometry = new BoxGeometry(
+      this.floorSize,
+      this.floorSize,
+      this.floorSize
+    );
   }
 
   private setTexture() {
@@ -71,9 +75,13 @@ export default class GroundFloor {
   private setBody() {
     this.towerBody = new CANNON.Body({
       mass: 0,
-      position: new CANNON.Vec3(0, 0.5, 0),
+      position: new CANNON.Vec3(0, this.floorSize * 0.5, 0),
       shape: new CANNON.Box(
-        new CANNON.Vec3(this.floorX * 0.5, this.floorY * 0.5, this.floorZ * 0.5)
+        new CANNON.Vec3(
+          this.floorSize * 0.5,
+          this.floorSize * 0.5,
+          this.floorSize * 0.5
+        )
       ),
       allowSleep: true, // Enable sleeping
       sleepSpeedLimit: 0.1,
@@ -86,6 +94,6 @@ export default class GroundFloor {
     this.setGeometry();
     this.setMaterial();
     this.mesh = new Mesh(this.geometry, this.material);
-    this.mesh.position.y = 0.5;
+    this.mesh.position.y = this.floorSize / 2;
   }
 }

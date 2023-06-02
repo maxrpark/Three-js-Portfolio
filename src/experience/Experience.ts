@@ -6,12 +6,6 @@ import World from "../World/World";
 import Resources from "./utils/Resources";
 import source from "../sources/base";
 import { StateMachine } from "../World/state/GameState";
-import {
-  // IntroState,
-
-  WorldCreationState,
-} from "../World/state/states";
-import LoadingModal from "../World/utils/LoadingModal";
 
 declare global {
   interface Window {
@@ -33,8 +27,6 @@ export interface ExperienceInt {
   stateMachine: StateMachine;
   update: () => void;
   resize: () => void;
-
-  // loadingModal: LoadingModal;
 }
 
 let instance: Experience | null = null;
@@ -52,7 +44,6 @@ export class Experience implements ExperienceInt {
   resources: Resources;
   stateMachine: StateMachine;
 
-  loadingModal: LoadingModal;
   constructor(canvas?: HTMLCanvasElement) {
     if (instance) {
       return instance;
@@ -77,21 +68,10 @@ export class Experience implements ExperienceInt {
     this.renderer = new Renderer();
 
     this.physics = new PhysicsWorld();
-
     this.resources = new Resources(source);
 
-    // this.loadingModal = new LoadingModal();
     this.stateMachine = new StateMachine();
-
-    // this.loadingModal.on("animationCompleted", () => {
-    //   this.stateMachine.change(new IntroState());
-    // });
     this.world = new World();
-
-    this.resources.on("loaded", () => {
-      this.world.loadingModal.progressModalOut();
-      this.stateMachine.change(new WorldCreationState());
-    });
   }
   update() {
     this.physics.update();

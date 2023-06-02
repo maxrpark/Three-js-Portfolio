@@ -26,6 +26,7 @@ export enum StatesNames {
   LOADING = "loading",
   CREATION = "creation",
   INTRO = "intro",
+  EXPLORING = "exploring",
   START_GAME = "start",
   PLAYING = "playing",
   PAUSED = "paused",

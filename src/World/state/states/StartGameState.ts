@@ -3,7 +3,6 @@ import { Experience } from "../../../experience/Experience";
 import World from "../../World";
 import { StateMachine } from "../GameState";
 import PlayingState from "./PlayingState";
-import { gsap } from "gsap";
 
 export default class StartGameState extends GameState {
   private experience: Experience;
@@ -28,13 +27,6 @@ export default class StartGameState extends GameState {
   public start(): void {
     this.world.setGameStart();
     this.stateMachine.change(new PlayingState());
-
-    gsap.to(this.experience.camera.camera.position, {
-      x: 2,
-      y: 3,
-      z: 8,
-      duration: 1,
-    });
   }
   public playing(): void {}
   public paused(): void {}

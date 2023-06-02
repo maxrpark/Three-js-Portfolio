@@ -5,10 +5,10 @@ import Debug from "../experience/utils/Debug";
 import GUI from "lil-gui";
 import { gsap } from "gsap";
 
-import { TowerFloor, GroundArea, GroundFloor, Text2D } from "./objects";
+import { TowerFloor, Ground, GroundFloor, Text2D } from "./objects";
 import { PhysicsWorld } from "../experience/utils";
 import { StateMachine } from "./state/GameState";
-import { GameOverState, IntroState } from "./state/states";
+import { GameOverState, IntroState, WorldCreationState } from "./state/states";
 import { Controllers, Modal, MenuIcon } from "./utils/";
 import { StatesNames } from "./state/GameState";
 import Water from "./shaders/water/Water";
@@ -21,31 +21,35 @@ export default class World {
   private physics: PhysicsWorld;
   public debug: Debug;
   public debugFolder: GUI;
+  public stateMachine: StateMachine;
 
+  // world elements
   private world: Group;
   private tower: Group;
-  private addedObjects: TowerFloor[];
   private groundFloor: GroundFloor;
-  private ground: GroundArea;
+  private ground: Ground;
   private floorLevel: Text2D;
   public water: Water;
 
-  // Loader
+  private addedObjects: TowerFloor[] = [];
 
-  loadingModal: LoadingModal;
+  // Intro Screen and Modal
+  public loadingModal: LoadingModal;
+  public modal: Modal;
 
-  // model
+  // 3D Model
   private city: City;
 
+  // Controls and Icons
   public menuIcon: MenuIcon;
   public controllers: Controllers;
-  public modal: Modal;
-  public stateMachine: StateMachine;
   public currentFloor: TowerFloor | null;
 
+  // Variables
   private floorY: number = 1;
   public isGameOver: boolean = false;
   public score: number = 0;
+  private floorSize: number = 3;
 
   constructor() {
     this.experience = new Experience();
@@ -59,19 +63,17 @@ export default class World {
 
     this.floorLevel = new Text2D({
       text: 0,
-      anchorX: -1.5,
+      anchorX: -3.5,
       fontSize: 1,
       visible: false,
     });
 
     this.tower = new Group();
     this.world = new Group();
-    this.addedObjects = [];
 
-    this.loadingModal = new LoadingModal();
-
-    this.loadingModal.on("animationCompleted", () => {
-      this.stateMachine.change(new IntroState());
+    this.experience.resources.on("loaded", () => {
+      // this.loadingModal.progressModalOut(); // COMMENTED DURING DEVELOPENT
+      this.stateMachine.change(new WorldCreationState());
     });
   }
 
@@ -99,9 +101,8 @@ export default class World {
     if (this.stateMachine.currentStateName !== StatesNames.CREATION) return;
 
     this.city = new City();
-
-    this.groundFloor = new GroundFloor();
-    this.ground = new GroundArea();
+    this.groundFloor = new GroundFloor({ floorSize: this.floorSize });
+    this.ground = new Ground();
     this.menuIcon = new MenuIcon();
     this.controllers = new Controllers();
     this.water = new Water();
@@ -120,22 +121,38 @@ export default class World {
     );
 
     this.experience.scene.add(this.world);
+    this.stateMachine.change(new IntroState()); // DURING DEVELOPENT
+  }
+
+  private setLoadingScreen() {
+    this.loadingModal = new LoadingModal();
+    this.loadingModal.on("animationCompleted", () => {
+      this.stateMachine.change(new IntroState());
+    });
   }
 
   public intro() {
     this.modal.intro();
 
     gsap.to(this.experience.camera.camera.position, {
-      x: 2,
-      y: 3,
-      z: 8,
+      x: 4,
+      y: 10,
+      z: 20,
       duration: 1,
     });
   }
 
   public setGameStart(): void {
-    this.floorPositionY = 0.5;
-    this.addFloor();
+    this.floorPositionY = this.floorSize * 1.5; // TODO ELEVATION
+
+    gsap.to(this.experience.camera.camera.position, {
+      // x: 2,
+      y: this.floorPositionY + this.floorSize,
+      // z: 8,
+      duration: 1,
+      onComplete: () => this.addFloor(),
+    });
+
     this.setGameOver = false;
     this.controllers.showPlayButtons();
     this.floorLevel.updatePositionY(-1);
@@ -144,7 +161,10 @@ export default class World {
   private addFloor() {
     if (this.currentFloor)
       this.floorPositionY = this.currentFloor.mesh.position.y;
-    this.currentFloor = new TowerFloor({ positionY: this.floorPositionY });
+    this.currentFloor = new TowerFloor({
+      positionY: this.floorPositionY,
+      floorSize: this.floorSize,
+    });
 
     this.currentFloor.on("handleHasCollided", () => {
       this.addedObjects.push(this.currentFloor!);

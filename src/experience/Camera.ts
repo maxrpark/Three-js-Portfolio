@@ -1,11 +1,7 @@
 import GUI from "lil-gui";
 import { Experience, ExperienceInt } from "./Experience";
 import { Debug, Sizes } from "./utils";
-import {
-  // AxesHelper,
-  PerspectiveCamera,
-  Scene,
-} from "three";
+import { PerspectiveCamera, Scene } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 export interface CameraInt {
@@ -39,13 +35,6 @@ export class Camera implements CameraInt {
 
     this.debug = this.experience.debug;
     if (this.debug.active) this.debugFolder = this.debug.ui.addFolder("towers");
-
-    // const axesHelper = new AxesHelper(5);
-
-    // axesHelper.dispose();
-
-    // this.scene.add(axesHelper);
-
     this.setCamera();
   }
 
@@ -54,12 +43,12 @@ export class Camera implements CameraInt {
       75,
       this.sizes.width / this.sizes.height,
       0.1,
-      100
+      200
     );
     this.camera.position.set(2, 20, 8);
 
     this.scene.add(this.camera);
-    this.setControls();
+    // this.setControls();
   }
   setControls() {
     this.controls = new OrbitControls(this.camera, this.canvas);
@@ -70,6 +59,6 @@ export class Camera implements CameraInt {
     this.camera.updateProjectionMatrix();
   }
   update() {
-    this.controls.update();
+    // this.controls.update();
   }
 }
