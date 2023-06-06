@@ -14,6 +14,7 @@ import { StatesNames } from "./state/GameState";
 import Water from "./shaders/water/Water";
 import City from "./models/City";
 import LoadingModal from "./utils/LoadingModal";
+import Character from "./models/Character";
 
 export default class World {
   private experience: Experience;
@@ -39,6 +40,7 @@ export default class World {
 
   // 3D Model
   private city: City;
+  private character: Character;
 
   // Controls and Icons
   public menuIcon: MenuIcon;
@@ -101,6 +103,7 @@ export default class World {
     if (this.stateMachine.currentStateName !== StatesNames.CREATION) return;
 
     this.city = new City();
+    this.character = new Character();
     this.groundFloor = new GroundFloor({ floorSize: this.floorSize });
     this.ground = new Ground();
     this.menuIcon = new MenuIcon();
@@ -117,7 +120,8 @@ export default class World {
       this.water.mesh,
       // @ts-ignore
       this.floorLevel.instance,
-      this.city.model
+      this.city.model,
+      this.character.model.mesh
     );
 
     this.experience.scene.add(this.world);
@@ -252,5 +256,7 @@ export default class World {
 
   update() {
     this.water.update();
+    if (this.stateMachine.currentStateName !== StatesNames.PLAYING)
+      this.character.update();
   }
 }

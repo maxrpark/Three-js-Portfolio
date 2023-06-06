@@ -20,7 +20,7 @@ export default [
   {
     name: "model",
     type: "gltfLoader",
-    path: "model/model.glb",
+    path: "models/model.glb",
   },
   {
     name: "concreteColor",
@@ -76,5 +76,15 @@ export default [
     name: "mapCap8",
     type: "textureLoader",
     path: "textures/mapCaps/8.png",
+  },
+  {
+    name: "foxModel",
+    type: "gltfLoader",
+    path: "models/fox/Fox.gltf",
+  },
+  {
+    name: "male_character",
+    type: "gltfLoader",
+    path: "models/character/scene.gltf",
   },
 ] as SourceInt[];

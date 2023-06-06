@@ -27,7 +27,7 @@ export class Time extends EventEmitter implements TimeInt {
   }
   tick() {
     const currentTime = this.clock.getElapsedTime();
-    this.delta = currentTime;
+    this.delta = currentTime - this.current;
     this.elapsed = this.current - this.start;
     this.current = currentTime;
 
