@@ -135,7 +135,6 @@ import { AnimationMixer, Mesh, Vector3 } from "three";
 import { Experience } from "../../experience/Experience";
 import { Camera } from "../../experience/Camera";
 import { gsap } from "gsap";
-import Resources from "../../experience/utils/Resources";
 import { Time } from "../../experience/utils";
 
 class Model {
