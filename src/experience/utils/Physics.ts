@@ -1,7 +1,7 @@
 import CANNON from "cannon";
 import { Experience } from "../Experience";
 import { Time } from "./Time";
-import CannonDebugger from "cannon-es-debugger";
+// import CannonDebugger from "cannon-es-debugger";
 
 export default class PhysicsWorld {
   experience: Experience;
