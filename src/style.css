@@ -73,7 +73,7 @@ canvas {
   padding: 1rem;
 }
 .exploring .controllers-container {
-  top: 0;
+  bottom: 150px;
 }
 
 .control-btn {
@@ -269,17 +269,26 @@ button {
 }
 /*  Mobile controller */
 
-.mobile-controller-wrapper {
-  width: 120px;
-  height: 120px;
-  background: rgba(255, 255, 255, 0.282);
+.mobile-character-controller {
   position: fixed;
   bottom: 20px;
   right: 5px;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  display: none;
+  padding: 0 1rem;
+}
+
+.mobile-directional-wrapper {
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.282);
+
   /* transform: translate(-50%); */
   border-radius: 50%;
-  z-index: 100;
-  display: none;
+  display: flex;
   justify-content: center;
   align-items: center;
 }
@@ -292,6 +301,16 @@ button {
   height: 50%;
   background: white;
   border-radius: 50%;
+}
+
+.run-btn {
+  width: 70px;
+  height: 70px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media screen and (min-width: 687px) {

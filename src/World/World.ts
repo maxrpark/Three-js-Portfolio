@@ -74,10 +74,10 @@ export default class World {
     this.tower = new Group();
     this.world = new Group();
 
-    this.setLoadingScreen();
+    // this.setLoadingScreen();
 
     this.experience.resources.on("loaded", () => {
-      this.loadingModal.progressModalOut(); // COMMENTED DURING DEVELOPENT
+      // this.loadingModal.progressModalOut(); // COMMENTED DURING DEVELOPENT
       this.stateMachine.change(new WorldCreationState());
     });
   }
@@ -128,7 +128,7 @@ export default class World {
     );
 
     this.experience.scene.add(this.world);
-    // this.stateMachine.change(new IntroState()); // DURING DEVELOPENT
+    this.stateMachine.change(new IntroState()); // DURING DEVELOPENT
   }
 
   private setLoadingScreen() {
@@ -236,7 +236,7 @@ export default class World {
     this.modal.closeModal();
     document.body.classList.add("exploring");
     document.body
-      .querySelector(".mobile-controller-wrapper")
+      .querySelector(".mobile-character-controller")
       ?.classList.add("visible");
   }
 

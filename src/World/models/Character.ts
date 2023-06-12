@@ -148,6 +148,7 @@ class Controllers {
     Draggable.create(this.directionalController, {
       bounds: "#directionalControllerWrapper",
       inertia: false,
+      allowEventDefault: true,
 
       onDrag: function () {
         if (this.getDirection() === "up") {
