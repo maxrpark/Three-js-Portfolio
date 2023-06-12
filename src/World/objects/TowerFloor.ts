@@ -1,10 +1,4 @@
-import {
-  BoxGeometry,
-  Camera,
-  Float32BufferAttribute,
-  Mesh,
-  MeshStandardMaterial,
-} from "three";
+import { BoxGeometry, Camera, Mesh, MeshStandardMaterial } from "three";
 import CANNON from "cannon";
 import { Experience } from "../../experience/Experience";
 import { PhysicsWorld, Time } from "../../experience/utils";
@@ -59,27 +53,13 @@ export default class TowerFloor extends EventEmitter {
     this.geometry = new BoxGeometry(
       this.floorSize,
       this.floorSize,
-      this.floorSize,
-      100,
-      100,
-      100
+      this.floorSize
     );
   }
   private setTexture() {
     this.textures = {
       map: this.resources.items.towerFloorColor,
-      normalMap: this.resources.items.towerFloorNormal,
-      displacementScale: 0.02,
-      roughnessMap: this.resources.items.towerFloorRoughness,
-      aoMap: this.resources.items.towerFloorAOM,
-      roughness: 0.2,
     };
-
-    this.geometry.setAttribute(
-      "uv2",
-      //@ts-ignore
-      new Float32BufferAttribute(this.geometry.attributes.uv.array, 2)
-    );
   }
   private setMaterial() {
     this.setTexture();
@@ -90,7 +70,7 @@ export default class TowerFloor extends EventEmitter {
   }
   private setBody() {
     this.body = new CANNON.Body({
-      mass: 1,
+      mass: 10,
       position: new CANNON.Vec3(0, this.positionY + 5, 0),
       shape: new CANNON.Box(
         new CANNON.Vec3(
@@ -108,27 +88,23 @@ export default class TowerFloor extends EventEmitter {
     this.physics.world.addBody(this.body);
   }
   private swingingAnimation() {
-    this.swinging = gsap.timeline({ paused: true, duration: 2 });
+    this.swinging = gsap.timeline({ paused: true });
 
-    this.swinging
-      .from(this.mesh.position, {
+    this.swinging.fromTo(
+      this.mesh.position,
+      {
         x: -this.floorSize / 1.2,
-      })
-      .fromTo(
-        this.mesh.position,
-        {
-          x: -this.floorSize / 1.2,
-          ease: "back",
-        },
-        {
-          x: this.floorSize,
-          repeat: -1,
-          yoyo: true,
-          ease: "none",
-          duration: 1.2,
-        }
-      );
-    this.swinging.progress(0.5);
+        ease: "none",
+      },
+      {
+        x: this.floorSize,
+        repeat: -1,
+        yoyo: true,
+        ease: "none",
+        duration: 1.2,
+      }
+    );
+    // this.swinging.progress(0.5);
     this.swinging.play();
   }
   private createMesh() {

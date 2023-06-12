@@ -19,7 +19,6 @@ export default class IntroState extends GameState {
     this.modal = this.world.modal;
     this.menuIcon = this.world.menuIcon;
     this.stateMachine = this.world.stateMachine;
-    this.modal = this.world.modal;
     this.controllers = this.world.controllers;
   }
 
@@ -30,7 +29,8 @@ export default class IntroState extends GameState {
   public update(): void {}
   public exit(): void {
     this.modal.off("handleGameStartClick");
-    this.modal.off("handleMenuClick");
+    this.menuIcon.off("handleMenuClick");
+    this.controllers.off("controllerMenu");
     this.modal.closeModal();
   }
 

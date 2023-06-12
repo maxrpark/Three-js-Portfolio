@@ -17,7 +17,7 @@ export default class City {
   createModel() {
     // @ts-ignore
     this.model = this.resources.items.model.scene;
-    this.model.position.y = -0.51;
+    this.model.position.y = -0.55;
 
     this.model.traverse((child) => {
       if (

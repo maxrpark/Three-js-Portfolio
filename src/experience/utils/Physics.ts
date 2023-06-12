@@ -1,6 +1,7 @@
 import CANNON from "cannon";
 import { Experience } from "../Experience";
 import { Time } from "./Time";
+import CannonDebugger from "cannon-es-debugger";
 
 export default class PhysicsWorld {
   experience: Experience;
@@ -8,6 +9,11 @@ export default class PhysicsWorld {
   world: CANNON.World;
   defaultMaterial: CANNON.Material;
   defaultContactMaterial: CANNON.ContactMaterial;
+
+  characterMaterial: CANNON.Material;
+  characterContactMaterial: CANNON.ContactMaterial;
+
+  debugger: any;
   constructor() {
     this.experience = new Experience();
     this.time = this.experience.time;
@@ -16,14 +22,15 @@ export default class PhysicsWorld {
   }
 
   createContact() {
-    this.defaultMaterial = new CANNON.Material("concrete");
+    this.defaultMaterial = new CANNON.Material("default");
+    this.characterMaterial = new CANNON.Material("character");
 
     this.defaultContactMaterial = new CANNON.ContactMaterial(
       this.defaultMaterial,
       this.defaultMaterial,
       {
-        friction: 1,
-        restitution: 0,
+        // friction: 1,
+        restitution: 0.1,
       }
     );
   }
@@ -36,10 +43,15 @@ export default class PhysicsWorld {
     this.world.allowSleep = true;
     this.world.gravity.set(0, -9.82, 0);
     this.world.addContactMaterial(this.defaultContactMaterial);
+
     this.world.defaultContactMaterial = this.defaultContactMaterial;
+
+    //@ts-ignore
+    // this.debugger = new CannonDebugger(this.experience.scene, this.world, {});
   }
 
   update() {
-    this.world.step(1 / 120, this.time.delta, 3);
+    this.world.step(1 / 60, this.time.delta, 3);
+    // this.debugger.update();
   }
 }

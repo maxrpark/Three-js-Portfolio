@@ -83,7 +83,7 @@ export default class GroundFloor {
           this.floorSize * 0.5
         )
       ),
-      allowSleep: true, // Enable sleeping
+      allowSleep: true,
       sleepSpeedLimit: 0.1,
     });
 

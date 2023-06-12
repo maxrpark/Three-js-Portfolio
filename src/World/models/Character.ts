@@ -1,178 +1,104 @@
-// import {
-//   Mesh,
-//   Vector3,
-// } from "three";
-// import { Experience } from "../../experience/Experience";
-// import { Camera } from "../../experience/Camera";
-// import { gsap } from "gsap";
-// import Resources from "../../experience/utils/Resources";
-
-// export default class Character {
-//   experience: Experience;
-//   camera: Camera;
-//   mesh: Mesh;
-//   cameraCurrentPosition: Vector3;
-//   cameraCurrentLockAt: Vector3;
-//   model: Mesh;
-//   resources: Resources;
-//   movementSpeed: number = 0.1;
-//   keysPressed: {
-//     ArrowUp: boolean;
-//     ArrowDown: boolean;
-//     ArrowLeft: boolean;
-//     ArrowRight: boolean;
-//   };
-//   canRotate: boolean = true;
-//   canUpdate: boolean = false;
-//   forwardDirection: Vector3;
-
-//   constructor() {
-//     this.experience = new Experience();
-
-//     this.experience = new Experience();
-//     this.resources = this.experience.resources;
-//     this.camera = this.experience.camera;
-
-//     this.cameraCurrentPosition = new Vector3();
-//     this.cameraCurrentLockAt = new Vector3();
-
-//     this.setControllers();
-//     this.setCharacter();
-//   }
-
-//   setCharacter() {
-//     // @ts-ignore
-//     this.model = this.resources.items.male_character.scene;
-//     this.model.position.set(3, 0.3, 0);
-//     this.model.rotateY(Math.PI);
-
-//     this.model.scale.set(0.007, 0.007, 0.007);
-
-//     this.canUpdate = true;
-//   }
-
-//   setControllers() {
-//     this.keysPressed = {
-//       ArrowUp: false,
-//       ArrowDown: false,
-//       ArrowLeft: false,
-//       ArrowRight: false,
-//     };
-
-//     this.forwardDirection = new Vector3(0, 0, 1);
-//     window.addEventListener("keydown", (event) => {
-//       //@ts-ignore
-//       this.keysPressed[event.code] = true;
-//     });
-
-//     window.addEventListener("keyup", (event) => {
-//       if (this.keysPressed.ArrowDown && !this.keysPressed.ArrowUp) {
-//         this.canRotate = true;
-//       }
-//       //@ts-ignore
-//       this.keysPressed[event.code] = false;
-//     });
-//   }
-
-//   updateCamera() {
-//     const idealOffset = new Vector3(0, 2.5, -3);
-//     const idealLookAt = new Vector3(0, 2, 0);
-
-//     const lerp = 0.1;
-
-//     const modelPosition = this.model.position.clone();
-
-//     const idealOffsetWorld = idealOffset
-//       .clone()
-//       .applyQuaternion(this.model.quaternion)
-//       .add(modelPosition);
-//     const idealLookAtWorld = idealLookAt
-//       .clone()
-//       .applyQuaternion(this.model.quaternion)
-//       .add(modelPosition);
-
-//     this.cameraCurrentPosition.lerp(idealOffsetWorld, lerp);
-//     this.cameraCurrentLockAt.lerp(idealLookAtWorld, lerp);
-
-//     this.camera.camera.position.copy(this.cameraCurrentPosition);
-//     this.camera.camera.lookAt(this.cameraCurrentLockAt);
-//   }
-
-//   public update() {
-//     if (!this.canUpdate) return;
-
-//     if (this.keysPressed.ArrowUp) {
-//       const forwardDirection = new Vector3(0, 0, 1);
-//       forwardDirection.applyQuaternion(this.model.quaternion);
-//       forwardDirection.normalize();
-//       this.model.position.add(
-//         forwardDirection.multiplyScalar(this.movementSpeed)
-//       );
-//     }
-
-//     if (this.keysPressed.ArrowDown && !this.keysPressed.ArrowUp) {
-//       if (this.canRotate) {
-//         this.canRotate = false;
-//         gsap.to(this.model.rotation, {
-//           y: `+=${Math.PI}`,
-//         });
-//       }
-//     }
-
-//     if (this.keysPressed.ArrowLeft && !this.keysPressed.ArrowRight) {
-//       this.model.rotation.y -= 0.1;
-//     }
-
-//     if (this.keysPressed.ArrowRight && !this.keysPressed.ArrowLeft) {
-//       this.model.rotation.y += 0.1;
-//     }
-
-//     this.updateCamera();
-//   }
-// }
-
-import { AnimationMixer, Mesh, Vector3 } from "three";
+import { AnimationMixer, Box3, Euler, Mesh, Vector3 } from "three";
 import { Experience } from "../../experience/Experience";
 import { Camera } from "../../experience/Camera";
 import { gsap } from "gsap";
-import { Time } from "../../experience/utils";
+import { PhysicsWorld, Time } from "../../experience/utils";
+import * as CANNON from "cannon";
+import { Draggable } from "gsap/Draggable";
+gsap.registerPlugin(Draggable);
 
 class Model {
+  private experience: Experience;
+  private physics: PhysicsWorld;
   modelAnimations: any; // TODO
   mesh: Mesh;
+  body: CANNON.Body;
+  private pivotOffset: Vector3 | CANNON.Vec3;
+  private meshPositionPivot: Vector3 | CANNON.Vec3;
+  private eulerRotation: Euler;
 
   constructor(mesh: any) {
+    this.experience = new Experience();
+    this.physics = this.experience.physics;
     // @ts-ignore
     this.modelAnimations = mesh.animations;
 
+    const modelScale = new Vector3(0.003, 0.003, 0.003);
     this.mesh = mesh.scene;
-    this.mesh.position.set(3, 0.3, 0);
+
     this.mesh.rotateY(Math.PI);
-    this.mesh.scale.set(0.007, 0.007, 0.007);
+    this.mesh.scale.set(modelScale.x, modelScale.y, modelScale.z);
+
+    this.eulerRotation = new Euler(0, 0, 0, "XYZ");
+
+    const boundingBox = new Box3();
+    boundingBox.setFromObject(this.mesh);
+
+    const size = new Vector3();
+    boundingBox.getSize(size);
+
+    const halfExtents = new CANNON.Vec3(
+      0.5 * size.x,
+      0.5 * size.y,
+      0.5 * size.z
+    );
+
+    this.body = new CANNON.Body({
+      shape: new CANNON.Box(halfExtents),
+      mass: 1,
+      position: new CANNON.Vec3(3, 1, 0),
+      allowSleep: false,
+    });
+
+    this.physics.world.addBody(this.body);
+
+    this.pivotOffset = new CANNON.Vec3(0, -halfExtents.y + 0.2, 0); // Adjust
+    this.meshPositionPivot = new CANNON.Vec3();
   }
 
-  movingDirection(type: "forward" | "backward") {
-    const directionZ = type === "forward" ? 1 : -1;
-    const velocity = 0.03;
+  moveForward(velocity = 1) {
+    const directionZ = 1;
 
-    const direction = new Vector3(0, 0, directionZ);
-    direction.applyQuaternion(this.mesh.quaternion);
-    direction.normalize();
-    this.mesh.position.add(direction.multiplyScalar(velocity));
-  }
+    const forwardDirection = new CANNON.Vec3(0, 0, directionZ);
+    this.body.vectorToWorldFrame(forwardDirection, forwardDirection);
 
-  moveForward() {
-    this.movingDirection("forward");
+    const velocityVector = forwardDirection.scale(velocity);
+    this.body.velocity.copy(velocityVector);
+
+    this.body.angularDamping = 1;
   }
 
   rotateModelBy180Degrees() {
-    gsap.to(this.mesh.rotation, {
+    gsap.to(this.eulerRotation, {
       y: `+=${Math.PI}`,
+      onUpdate: () => {
+        this.body.quaternion.setFromEuler(
+          this.eulerRotation.x,
+          this.eulerRotation.y,
+          this.eulerRotation.z,
+          "XYZ"
+        );
+      },
     });
   }
 
   rotate(rotationAngle: number) {
-    this.mesh.rotation.y += rotationAngle;
+    const quaternion = new CANNON.Quaternion();
+    quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), rotationAngle);
+    this.body.quaternion.mult(quaternion, this.body.quaternion);
+
+    // Update eulerRotation
+    // this.eulerRotation.setFromQuaternion(this.body.quaternion as any, "XYZ");
+  }
+
+  public update() {
+    this.body.position.vadd(
+      this.pivotOffset as any,
+      this.meshPositionPivot as any
+    );
+
+    this.mesh.position.copy(this.meshPositionPivot as any);
+    this.mesh.quaternion.copy(this.body.quaternion as any);
   }
 }
 
@@ -182,9 +108,12 @@ class Controllers {
     ArrowDown: boolean;
     ArrowLeft: boolean;
     ArrowRight: boolean;
+    ShiftLeft: boolean;
   };
 
   canRotate: boolean = true;
+  // Mobile
+  directionalController: HTMLElement;
 
   constructor() {
     this.keysPressed = {
@@ -192,6 +121,7 @@ class Controllers {
       ArrowDown: false,
       ArrowLeft: false,
       ArrowRight: false,
+      ShiftLeft: false,
     };
 
     window.addEventListener("keydown", (event) => {
@@ -205,6 +135,58 @@ class Controllers {
       }
       //@ts-ignore
       this.keysPressed[event.code as string] = false;
+    });
+
+    // MOBILE
+
+    this.directionalController = document.getElementById(
+      "directionalController"
+    )!;
+
+    const self = this;
+
+    Draggable.create(this.directionalController, {
+      bounds: "#directionalControllerWrapper",
+      inertia: false,
+
+      onDrag: function () {
+        if (this.getDirection() === "up") {
+          self.keysPressed.ArrowUp = true;
+          self.keysPressed.ArrowRight = false;
+          self.keysPressed.ArrowLeft = false;
+          self.keysPressed.ArrowDown = false;
+          self.canRotate = true;
+        }
+        if (this.getDirection() === "right") {
+          self.keysPressed.ArrowRight = true;
+          self.keysPressed.ArrowLeft = false;
+        }
+
+        if (this.getDirection() === "left") {
+          self.keysPressed.ArrowLeft = true;
+          self.keysPressed.ArrowRight = false;
+        }
+        if (this.getDirection() === "down") {
+          self.keysPressed.ArrowUp = false;
+          self.keysPressed.ArrowRight = false;
+          self.keysPressed.ArrowLeft = false;
+          self.keysPressed.ArrowDown = true;
+        }
+      },
+      onDragEnd: function () {
+        gsap.set(self.directionalController, {
+          clearProps: "all",
+        });
+
+        self.keysPressed = {
+          ArrowUp: false,
+          ArrowDown: false,
+          ArrowLeft: false,
+          ArrowRight: false,
+          ShiftLeft: false,
+        };
+        self.canRotate = true;
+      },
     });
   }
 }
@@ -241,13 +223,14 @@ class Animations {
     this.animation.actions.walking = this.animation.mixer.clipAction(
       this.model.modelAnimations[0]
     );
+    this.animation.actions.running = this.animation.mixer.clipAction(
+      this.model.modelAnimations[3]
+    );
 
     this.animation.actions.current = this.animation.actions.idle;
     this.animation.actions.current.play();
 
     this.playAnimation("idle");
-
-    // Look_Down;
   }
 
   playAnimation(name: string) {
@@ -274,9 +257,8 @@ export default class Character {
   animations: Animations;
   cameraCurrentPosition: Vector3;
   cameraCurrentLockAt: Vector3;
-  movementSpeed: number = 0.1;
-  forwardDirection: Vector3;
   isWalking: boolean = false;
+  isRunning: boolean = false;
 
   constructor() {
     this.experience = new Experience();
@@ -288,13 +270,11 @@ export default class Character {
 
     this.controllers = new Controllers();
     this.animations = new Animations(this.model);
-
-    this.forwardDirection = new Vector3(0, 0, -1);
   }
 
   updateCamera() {
-    const idealOffset = new Vector3(0, 2.5, -3);
-    const idealLookAt = new Vector3(0, 2, 0);
+    const idealOffset = new Vector3(0, 1.5, -1.5);
+    const idealLookAt = new Vector3(0, 1, 0);
     const lerp = 0.1;
     const modelPosition = this.model.mesh.position.clone();
 
@@ -315,7 +295,6 @@ export default class Character {
   }
 
   update() {
-    this.animations.update();
     if (this.controllers.keysPressed.ArrowUp) {
       this.model.moveForward();
       if (!this.isWalking) {
@@ -323,11 +302,26 @@ export default class Character {
         this.animations.playAnimation("walking");
       }
     }
-    if (!this.controllers.keysPressed.ArrowUp) {
-      if (this.isWalking) {
-        this.isWalking = false;
-        this.animations.playAnimation("idle");
+    if (
+      this.controllers.keysPressed.ArrowUp &&
+      this.controllers.keysPressed.ShiftLeft
+    ) {
+      this.model.moveForward(3);
+
+      if (!this.isRunning) {
+        this.isRunning = true;
+        this.animations.playAnimation("running");
       }
+    }
+    if (!this.controllers.keysPressed.ArrowUp && this.isWalking) {
+      this.isWalking = false;
+      this.isRunning = false;
+      this.animations.playAnimation("idle");
+    }
+
+    if (!this.controllers.keysPressed.ShiftLeft && this.isRunning) {
+      this.isRunning = false;
+      this.animations.playAnimation("walking");
     }
 
     if (
@@ -344,16 +338,20 @@ export default class Character {
       this.controllers.keysPressed.ArrowLeft &&
       !this.controllers.keysPressed.ArrowRight
     ) {
-      this.model.rotate(-0.1);
+      this.model.rotate(0.05);
     }
 
     if (
       this.controllers.keysPressed.ArrowRight &&
       !this.controllers.keysPressed.ArrowLeft
     ) {
-      this.model.rotate(0.1);
+      this.model.rotate(-0.05);
     }
 
+    // Mobile controller
+
     this.updateCamera();
+    this.model.update();
+    this.animations.update();
   }
 }

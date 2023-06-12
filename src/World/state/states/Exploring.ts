@@ -1,16 +1,57 @@
-import GameState from "../GameState";
+import GameState, { StateMachine } from "../GameState";
 
 import { StatesNames } from "../GameState";
+import { Experience } from "../../../experience/Experience";
+import World from "../../World";
+import { Controllers, MenuIcon } from "../../utils";
+import IntroState from "./IntroState";
+import GameOverState from "./GameOverState";
 
 export default class ExploringState extends GameState {
+  experience: Experience;
+  world: World;
+  private stateMachine: StateMachine;
+  private menuIcon: MenuIcon;
+  private controllers: Controllers;
+  states: {};
+  private previousState: IntroState | GameOverState;
   constructor() {
     super(StatesNames.EXPLORING);
+    this.experience = new Experience();
+    this.world = this.experience.world;
+    this.menuIcon = this.world.menuIcon;
+    this.stateMachine = this.world.stateMachine;
+    this.controllers = this.world.controllers;
+
+    this.states = {
+      [StatesNames.INTRO]: IntroState,
+      [StatesNames.GAME_OVER]: GameOverState,
+    };
   }
   public enter(): void {
-    // this.reset();
+    this.world.exploringWorld();
+    //@ts-ignore
+    this.previousState = this.states[this.stateMachine.previousStateName];
+
+    this.menuIcon.on("handleMenuClick", () => {
+      this.exit();
+    });
+    this.controllers.on("controllerMenu", () => {
+      this.exit();
+    });
   }
-  public update(): void {}
-  public exit(): void {}
+
+  public exit(): void {
+    this.menuIcon.off("handleMenuClick");
+    this.controllers.off("controllerMenu");
+
+    setTimeout(() => {
+      //@ts-ignore
+      this.stateMachine.change(new this.previousState());
+    });
+
+    //
+  }
 
   public exploring(): void {}
 }

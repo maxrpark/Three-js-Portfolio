@@ -72,6 +72,9 @@ canvas {
   gap: 1rem;
   padding: 1rem;
 }
+.exploring .controllers-container {
+  top: 0;
+}
 
 .control-btn {
   width: 90px;
@@ -263,4 +266,36 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+/*  Mobile controller */
+
+.mobile-controller-wrapper {
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.282);
+  position: fixed;
+  bottom: 20px;
+  right: 5px;
+  /* transform: translate(-50%); */
+  border-radius: 50%;
+  z-index: 100;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+.visible {
+  display: flex;
+}
+
+.directional-controller {
+  width: 50%;
+  height: 50%;
+  background: white;
+  border-radius: 50%;
+}
+
+@media screen and (min-width: 687px) {
+  .mobile-controller-wrapper {
+    display: none;
+  }
 }

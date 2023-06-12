@@ -1,6 +1,7 @@
 export class StateMachine {
   private currentState: GameState;
   public currentStateName: string;
+  public previousStateName: string;
 
   public change(state: GameState): void {
     if (this.currentState?.stateName === state.stateName) return;
@@ -9,9 +10,11 @@ export class StateMachine {
       this.currentState.exit();
     }
 
+    this.previousStateName = this.currentState?.stateName;
     this.currentState = state;
     this.currentStateName = state.stateName;
     console.log(`STATE NAME: ${state.stateName}`);
+    console.log(`PREVIOUS STATE NAME: ${this.previousStateName}`);
     this.currentState.enter();
   }
 

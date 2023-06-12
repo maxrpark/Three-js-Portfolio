@@ -136,6 +136,6 @@ export default class Water {
   }
 
   update() {
-    this.material.uniforms.uTime.value = this.time.delta;
+    this.material.uniforms.uTime.value = this.time.current;
   }
 }

@@ -29,7 +29,6 @@ export default class Modal extends EventEmitter {
           <h2 class="modal-texts">Intro</h2>
        </div>
       <button id="gameStart" class="btn btn-primary">Start</button>
-      <button id="gameScores" class="btn btn-primary">Scores</button>
       <button id="exploreWorld" class="btn btn-primary">Explore</button>
       </div>
       `;

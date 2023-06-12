@@ -15,6 +15,7 @@ import Water from "./shaders/water/Water";
 import City from "./models/City";
 import LoadingModal from "./utils/LoadingModal";
 import Character from "./models/Character";
+import ExploringState from "./state/states/Exploring";
 
 export default class World {
   private experience: Experience;
@@ -28,7 +29,7 @@ export default class World {
   private world: Group;
   private tower: Group;
   private groundFloor: GroundFloor;
-  private ground: Ground;
+  ground: Ground;
   private floorLevel: Text2D;
   public water: Water;
 
@@ -51,7 +52,7 @@ export default class World {
   private floorY: number = 1;
   public isGameOver: boolean = false;
   public score: number = 0;
-  private floorSize: number = 3;
+  private floorSize: number = 1;
 
   constructor() {
     this.experience = new Experience();
@@ -73,8 +74,10 @@ export default class World {
     this.tower = new Group();
     this.world = new Group();
 
+    this.setLoadingScreen();
+
     this.experience.resources.on("loaded", () => {
-      // this.loadingModal.progressModalOut(); // COMMENTED DURING DEVELOPENT
+      this.loadingModal.progressModalOut(); // COMMENTED DURING DEVELOPENT
       this.stateMachine.change(new WorldCreationState());
     });
   }
@@ -125,7 +128,7 @@ export default class World {
     );
 
     this.experience.scene.add(this.world);
-    this.stateMachine.change(new IntroState()); // DURING DEVELOPENT
+    // this.stateMachine.change(new IntroState()); // DURING DEVELOPENT
   }
 
   private setLoadingScreen() {
@@ -140,9 +143,13 @@ export default class World {
 
     gsap.to(this.experience.camera.camera.position, {
       x: 4,
-      y: 10,
-      z: 20,
+      y: 3,
+      z: 10,
       duration: 1,
+      onUpdate: () =>
+        this.experience.camera.camera.lookAt(
+          this.experience.camera.camera.position
+        ),
     });
   }
 
@@ -150,10 +157,14 @@ export default class World {
     this.floorPositionY = this.floorSize * 1.5; // TODO ELEVATION
 
     gsap.to(this.experience.camera.camera.position, {
-      // x: 2,
+      x: 0.7,
       y: this.floorPositionY + this.floorSize,
-      // z: 8,
+      z: 5,
       duration: 1,
+      onUpdate: () =>
+        this.experience.camera.camera.lookAt(
+          this.experience.camera.camera.position
+        ),
       onComplete: () => this.addFloor(),
     });
 
@@ -216,9 +227,17 @@ export default class World {
     // TODO Create EXPLORE STATE IN THE FUTURE
     // To interact with world model and portfolio
     this.modal.on("handleExploreWorld", () => {
-      this.controllers.showPlayMenu();
-      this.modal.closeModal();
+      this.stateMachine.change(new ExploringState());
     });
+  }
+
+  exploringWorld() {
+    this.controllers.showPlayMenu();
+    this.modal.closeModal();
+    document.body.classList.add("exploring");
+    document.body
+      .querySelector(".mobile-controller-wrapper")
+      ?.classList.add("visible");
   }
 
   public dropFloor() {
@@ -256,7 +275,8 @@ export default class World {
 
   update() {
     this.water.update();
-    if (this.stateMachine.currentStateName !== StatesNames.PLAYING)
+    if (this.stateMachine.currentStateName === StatesNames.EXPLORING) {
       this.character.update();
+    }
   }
 }
