@@ -148,7 +148,6 @@ class Controllers {
     Draggable.create(this.directionalController, {
       bounds: "#directionalControllerWrapper",
       inertia: false,
-      allowEventDefault: true,
 
       onDrag: function () {
         if (this.getDirection() === "up") {
@@ -167,7 +166,7 @@ class Controllers {
           self.keysPressed.ArrowLeft = true;
           self.keysPressed.ArrowRight = false;
         }
-        if (this.getDirection() === "down") {
+        if (this.getDirection() === "down" && !self.keysPressed.ShiftLeft) {
           self.keysPressed.ArrowUp = false;
           self.keysPressed.ArrowRight = false;
           self.keysPressed.ArrowLeft = false;
@@ -180,14 +179,40 @@ class Controllers {
         });
 
         self.keysPressed = {
+          ...self.keysPressed,
           ArrowUp: false,
           ArrowDown: false,
           ArrowLeft: false,
           ArrowRight: false,
-          ShiftLeft: false,
         };
         self.canRotate = true;
       },
+    });
+
+    function ignoreEvent(e: any) {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      if (e.preventManipulation) {
+        e.preventManipulation();
+      }
+      return false;
+    }
+
+    this.directionalController.addEventListener(
+      "touchstart",
+      ignoreEvent,
+      false
+    );
+    this.directionalController.addEventListener("touchend", ignoreEvent, false);
+
+    const runBtn = document.getElementById("runBtn")!;
+    runBtn.addEventListener("touchstart", (event: any) => {
+      event.stopPropagation();
+      this.keysPressed.ShiftLeft = true;
+    });
+    runBtn.addEventListener("touchend", (event: any) => {
+      event.stopPropagation();
+      this.keysPressed.ShiftLeft = false;
     });
   }
 }

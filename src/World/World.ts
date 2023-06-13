@@ -131,12 +131,12 @@ export default class World {
     this.stateMachine.change(new IntroState()); // DURING DEVELOPENT
   }
 
-  private setLoadingScreen() {
-    this.loadingModal = new LoadingModal();
-    this.loadingModal.on("animationCompleted", () => {
-      this.stateMachine.change(new IntroState());
-    });
-  }
+  // private setLoadingScreen() {
+  //   this.loadingModal = new LoadingModal();
+  //   this.loadingModal.on("animationCompleted", () => {
+  //     this.stateMachine.change(new IntroState());
+  //   });
+  // }
 
   public intro() {
     this.modal.intro();

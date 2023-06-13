@@ -73,7 +73,7 @@ canvas {
   padding: 1rem;
 }
 .exploring .controllers-container {
-  bottom: 150px;
+  top: 0;
 }
 
 .control-btn {
@@ -311,6 +311,15 @@ button {
   display: flex;
   justify-content: center;
   align-items: center;
+
+  border: none;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari, Chrome, Opera, Samsung */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Edge, IE */
+  user-select: none; /* Modern browsers */
 }
 
 @media screen and (min-width: 687px) {
