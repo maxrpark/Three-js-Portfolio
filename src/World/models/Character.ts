@@ -84,7 +84,7 @@ class Model {
 
   rotate(rotationAngle: number) {
     const quaternion = new CANNON.Quaternion();
-    quaternion.setFromAxisAngle(new CANNON.Vec3(0, 1, 0), rotationAngle);
+    quaternion.setFromAxisAngle(new CANNON.Vec3(0, 0.6, 0), rotationAngle);
     this.body.quaternion.mult(quaternion, this.body.quaternion);
 
     // Update eulerRotation
@@ -124,6 +124,13 @@ class Controllers {
       ShiftLeft: false,
     };
 
+    this.setDesktopControllers();
+
+    // MOBILE
+    this.setMobileControllers();
+  }
+
+  setDesktopControllers() {
     window.addEventListener("keydown", (event) => {
       //@ts-ignore
       this.keysPressed[event.code] = true;
@@ -136,9 +143,9 @@ class Controllers {
       //@ts-ignore
       this.keysPressed[event.code as string] = false;
     });
+  }
 
-    // MOBILE
-
+  setMobileControllers() {
     this.directionalController = document.getElementById(
       "directionalController"
     )!;
@@ -208,10 +215,12 @@ class Controllers {
     const runBtn = document.getElementById("runBtn")!;
     runBtn.addEventListener("touchstart", (event: any) => {
       event.stopPropagation();
+      runBtn.classList.add("running");
       this.keysPressed.ShiftLeft = true;
     });
     runBtn.addEventListener("touchend", (event: any) => {
       event.stopPropagation();
+      runBtn.classList.remove("running");
       this.keysPressed.ShiftLeft = false;
     });
   }

@@ -1,0 +1,20 @@
+.modal-wrapper {
+  position: fixed;
+  inset: 0 0 0 0;
+  z-index: 10;
+  display: none;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+
+.modal-texts-wrapper {
+  font-size: 2rem;
+}

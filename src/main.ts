@@ -1,4 +1,4 @@
-import "./style.css";
+import "./assets/styles/main.css";
 import { Experience } from "./experience/Experience";
 
 const canvas = document.createElement("canvas");

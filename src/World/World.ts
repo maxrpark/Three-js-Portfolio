@@ -234,10 +234,6 @@ export default class World {
   exploringWorld() {
     this.controllers.showPlayMenu();
     this.modal.closeModal();
-    document.body.classList.add("exploring");
-    document.body
-      .querySelector(".mobile-character-controller")
-      ?.classList.add("visible");
   }
 
   public dropFloor() {
