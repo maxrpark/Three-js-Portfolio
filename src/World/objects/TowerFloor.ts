@@ -20,7 +20,7 @@ export default class TowerFloor extends EventEmitter {
 
   private geometry: BoxGeometry;
   private material: MeshStandardMaterial;
-  public textures: MeshTextureInt; // todo pubic private
+  public textures: MeshTextureInt;
   public mesh: Mesh;
   public body: CANNON.Body;
 

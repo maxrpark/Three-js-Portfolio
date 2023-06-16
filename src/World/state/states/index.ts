@@ -5,6 +5,7 @@ import GameOverState from "./GameOverState";
 import WorldCreationState from "./WorldCreationState";
 import ResetState from "./ResetState";
 import PausedState from "./PauseState";
+import ExploringState from "./Exploring";
 
 export {
   StartGameState,
@@ -14,4 +15,5 @@ export {
   WorldCreationState,
   ResetState,
   PausedState,
+  ExploringState,
 };

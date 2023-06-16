@@ -1,4 +1,11 @@
-import { AnimationMixer, Box3, Euler, Mesh, Vector3 } from "three";
+import {
+  AnimationClip,
+  AnimationMixer,
+  Box3,
+  Euler,
+  Mesh,
+  Vector3,
+} from "three";
 import { Experience } from "../../experience/Experience";
 import { Camera } from "../../experience/Camera";
 import { gsap } from "gsap";
@@ -11,7 +18,7 @@ import { CharacterController } from "../utils";
 class Model {
   private experience: Experience;
   private physics: PhysicsWorld;
-  modelAnimations: any; // TODO
+  modelAnimations: AnimationClip[];
   mesh: Mesh;
   body: CANNON.Body;
   private pivotOffset: Vector3 | CANNON.Vec3;
@@ -47,14 +54,20 @@ class Model {
     this.body = new CANNON.Body({
       shape: new CANNON.Box(halfExtents),
       mass: 1,
-      position: new CANNON.Vec3(1, 1, 0),
+
       allowSleep: false,
     });
+
+    this.position();
 
     this.physics.world.addBody(this.body);
 
     this.pivotOffset = new CANNON.Vec3(0, -halfExtents.y + 0.2, 0); // Adjust
     this.meshPositionPivot = new CANNON.Vec3();
+  }
+
+  position(x = 2, y = 1, z = -2) {
+    this.body.position = new CANNON.Vec3(x, y, z);
   }
 
   moveForward(velocity = 1) {
@@ -102,130 +115,6 @@ class Model {
     this.mesh.quaternion.copy(this.body.quaternion as any);
   }
 }
-
-// class Controllers {
-//   keysPressed: {
-//     ArrowUp: boolean;
-//     ArrowDown: boolean;
-//     ArrowLeft: boolean;
-//     ArrowRight: boolean;
-//     ShiftLeft: boolean;
-//   };
-
-//   canRotate: boolean = true;
-//   // Mobile
-//   directionalController: HTMLElement;
-
-//   constructor() {
-//     this.keysPressed = {
-//       ArrowUp: false,
-//       ArrowDown: false,
-//       ArrowLeft: false,
-//       ArrowRight: false,
-//       ShiftLeft: false,
-//     };
-
-//     this.setDesktopControllers();
-
-//     // MOBILE
-//     this.setMobileControllers();
-//   }
-
-//   setDesktopControllers() {
-//     window.addEventListener("keydown", (event) => {
-//       //@ts-ignore
-//       this.keysPressed[event.code] = true;
-//     });
-
-//     window.addEventListener("keyup", (event) => {
-//       if (this.keysPressed.ArrowDown && !this.keysPressed.ArrowUp) {
-//         this.canRotate = true;
-//       }
-//       //@ts-ignore
-//       this.keysPressed[event.code as string] = false;
-//     });
-//   }
-
-//   setMobileControllers() {
-//     this.directionalController = document.getElementById(
-//       "directionalController"
-//     )!;
-
-//     const self = this;
-
-//     Draggable.create(this.directionalController, {
-//       bounds: "#directionalControllerWrapper",
-//       inertia: false,
-
-//       onDrag: function () {
-//         if (this.getDirection() === "up") {
-//           self.keysPressed.ArrowUp = true;
-//           self.keysPressed.ArrowRight = false;
-//           self.keysPressed.ArrowLeft = false;
-//           self.keysPressed.ArrowDown = false;
-//           self.canRotate = true;
-//         }
-//         if (this.getDirection() === "right") {
-//           self.keysPressed.ArrowRight = true;
-//           self.keysPressed.ArrowLeft = false;
-//         }
-
-//         if (this.getDirection() === "left") {
-//           self.keysPressed.ArrowLeft = true;
-//           self.keysPressed.ArrowRight = false;
-//         }
-//         if (this.getDirection() === "down" && !self.keysPressed.ShiftLeft) {
-//           self.keysPressed.ArrowUp = false;
-//           self.keysPressed.ArrowRight = false;
-//           self.keysPressed.ArrowLeft = false;
-//           self.keysPressed.ArrowDown = true;
-//         }
-//       },
-//       onDragEnd: function () {
-//         gsap.set(self.directionalController, {
-//           clearProps: "all",
-//         });
-
-//         self.keysPressed = {
-//           ...self.keysPressed,
-//           ArrowUp: false,
-//           ArrowDown: false,
-//           ArrowLeft: false,
-//           ArrowRight: false,
-//         };
-//         self.canRotate = true;
-//       },
-//     });
-
-//     function ignoreEvent(e: any) {
-//       e.preventDefault();
-//       e.stopImmediatePropagation();
-//       if (e.preventManipulation) {
-//         e.preventManipulation();
-//       }
-//       return false;
-//     }
-
-//     this.directionalController.addEventListener(
-//       "touchstart",
-//       ignoreEvent,
-//       false
-//     );
-//     this.directionalController.addEventListener("touchend", ignoreEvent, false);
-
-//     const runBtn = document.getElementById("runBtn")!;
-//     runBtn.addEventListener("touchstart", (event: any) => {
-//       event.stopPropagation();
-//       runBtn.classList.add("running");
-//       this.keysPressed.ShiftLeft = true;
-//     });
-//     runBtn.addEventListener("touchend", (event: any) => {
-//       event.stopPropagation();
-//       runBtn.classList.remove("running");
-//       this.keysPressed.ShiftLeft = false;
-//     });
-//   }
-// }
 
 class Animations {
   model: Model;

@@ -1,33 +1,38 @@
 import { Group } from "three";
 import { Experience } from "../experience/Experience";
 import { Environment } from "./Environment";
-import Debug from "../experience/utils/Debug";
+import { Debug, PhysicsWorld } from "../experience/utils";
+
 import GUI from "lil-gui";
 import { gsap } from "gsap";
 
 import { TowerFloor, Ground, GroundFloor, Text2D } from "./objects";
-import { PhysicsWorld } from "../experience/utils";
-import { StateMachine } from "./state/GameState";
-import { GameOverState, IntroState, WorldCreationState } from "./state/states";
-import { Controllers, Modal, MenuIcon } from "./utils/";
-import { StatesNames } from "./state/GameState";
+
+import { StateMachine, StatesNames } from "./state/GameState";
+import {
+  GameOverState,
+  IntroState,
+  WorldCreationState,
+  ExploringState,
+} from "./state/states";
+import { Controllers, Modal, MenuIcon, LoadingModal } from "./utils/";
 // import Water from "./shaders/water/Water";
-import City from "./models/City";
-import LoadingModal from "./utils/LoadingModal";
-import Character from "./models/Character";
-import ExploringState from "./state/states/Exploring";
+
+import { City, Character } from "./models";
 
 export default class World {
   private experience: Experience;
   public environment: Environment;
   private physics: PhysicsWorld;
-  public debug: Debug;
-  public debugFolder: GUI;
   public stateMachine: StateMachine;
 
+  //
+  public debug: Debug;
+  public debugFolder: GUI;
+
   // world elements
-  private world: Group;
-  private tower: Group;
+  private world: Group = new Group();
+  private tower: Group = new Group();
   private groundFloor: GroundFloor;
   ground: Ground;
   private floorLevel: Text2D;
@@ -64,16 +69,6 @@ export default class World {
       castShadow: true,
     });
 
-    this.floorLevel = new Text2D({
-      text: 0,
-      anchorX: -3.5,
-      fontSize: 1,
-      visible: false,
-    });
-
-    this.tower = new Group();
-    this.world = new Group();
-
     // this.setLoadingScreen();
 
     this.experience.resources.on("loaded", () => {
@@ -102,6 +97,8 @@ export default class World {
     return this.score;
   }
 
+  // STATES ACTIONS
+
   public createWorld() {
     if (this.stateMachine.currentStateName !== StatesNames.CREATION) return;
 
@@ -111,7 +108,12 @@ export default class World {
     this.ground = new Ground();
     this.menuIcon = new MenuIcon();
     this.controllers = new Controllers();
-    // this.water = new Water();
+    this.floorLevel = new Text2D({
+      text: 0,
+      anchorX: -1.5,
+      fontSize: 1,
+      visible: false,
+    });
 
     this.createModal();
     this.setupCollisionListeners();
@@ -119,8 +121,6 @@ export default class World {
     this.world.add(
       this.tower,
       this.groundFloor.mesh,
-      // this.ground.mesh,
-      // this.water.mesh,
       // @ts-ignore
       this.floorLevel.instance,
       this.city.model,
@@ -173,6 +173,44 @@ export default class World {
     this.floorLevel.updatePositionY(-1);
   }
 
+  public exploringWorld() {
+    this.controllers.showPlayMenu();
+    this.modal.closeModal();
+  }
+
+  public gameEnded() {
+    this.tower.remove(this.currentFloor!.mesh);
+
+    if (!this.isGameOver) {
+      this.controllers.hidePlayButtons();
+      this.setGameOver = true;
+    }
+
+    this.character.model.position();
+
+    this.modal.gameOver({ score: this.getScore });
+  }
+
+  public resetGame() {
+    for (const object of this.addedObjects) {
+      object.remove();
+      this.physics.world.remove(object.body);
+      this.tower.remove(object.mesh);
+    }
+
+    for (const object of this.tower.children) {
+      this.tower.remove(object);
+    }
+
+    this.currentFloor = null;
+    this.addedObjects.splice(0, this.getScore);
+    this.floorLevel.updateText(0);
+    this.floorLevel.isVisible(false);
+    this.controllers.hidePlayButtons();
+  }
+
+  //// Tower game actions
+
   private addFloor() {
     if (this.currentFloor)
       this.floorPositionY = this.currentFloor.mesh.position.y;
@@ -200,8 +238,6 @@ export default class World {
   private handleCollision(collidedBody: CANNON.Body) {
     if (!collidedBody || this.tower.children.length === 0) return;
 
-    if (!collidedBody || this.tower.children.length === 0) return;
-
     const objectInTower = this.tower.children.find((child) => {
       return child.userData.body === collidedBody;
     });
@@ -220,52 +256,18 @@ export default class World {
     // });
   }
 
+  // Others
+
   createModal() {
     this.modal = new Modal();
 
-    // TODO Create EXPLORE STATE IN THE FUTURE
-    // To interact with world model and portfolio
     this.modal.on("handleExploreWorld", () => {
       this.stateMachine.change(new ExploringState());
     });
   }
 
-  exploringWorld() {
-    this.controllers.showPlayMenu();
-    this.modal.closeModal();
-  }
-
   public dropFloor() {
     this.currentFloor!.drop();
-  }
-
-  gameEnded() {
-    this.tower.remove(this.currentFloor!.mesh);
-
-    if (!this.isGameOver) {
-      this.controllers.hidePlayButtons();
-      this.setGameOver = true;
-    }
-
-    this.modal.gameOver({ score: this.getScore });
-  }
-
-  resetGame() {
-    for (const object of this.addedObjects) {
-      object.remove();
-      this.physics.world.remove(object.body);
-      this.tower.remove(object.mesh);
-    }
-
-    for (const object of this.tower.children) {
-      this.tower.remove(object);
-    }
-
-    this.currentFloor = null;
-    this.addedObjects.splice(0, this.getScore);
-    this.floorLevel.updateText(0);
-    this.floorLevel.isVisible(false);
-    this.controllers.hidePlayButtons();
   }
 
   update() {

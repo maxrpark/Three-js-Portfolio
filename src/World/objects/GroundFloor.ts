@@ -23,7 +23,7 @@ export default class GroundFloor {
   private towerBody: CANNON.Body;
   private physics: PhysicsWorld;
   private resources: Resources;
-  public textures: MeshTextureInt; // todo pubic private
+  public textures: MeshTextureInt;
 
   floorSize: number;
 
@@ -46,7 +46,6 @@ export default class GroundFloor {
   }
 
   private setTexture() {
-    // const color = Math.floor(Math.random() * 16777215).toString(16);
     this.textures = {
       map: this.resources.items.towerFloorColor,
       normalMap: this.resources.items.towerFloorNormal,
@@ -55,7 +54,6 @@ export default class GroundFloor {
       roughnessMap: this.resources.items.towerFloorRoughness,
       aoMap: this.resources.items.towerFloorAOM,
       roughness: 0.2,
-      // color: `#${color}`,
     };
 
     this.geometry.setAttribute(
