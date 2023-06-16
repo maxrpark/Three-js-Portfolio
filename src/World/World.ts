@@ -11,7 +11,7 @@ import { StateMachine } from "./state/GameState";
 import { GameOverState, IntroState, WorldCreationState } from "./state/states";
 import { Controllers, Modal, MenuIcon } from "./utils/";
 import { StatesNames } from "./state/GameState";
-import Water from "./shaders/water/Water";
+// import Water from "./shaders/water/Water";
 import City from "./models/City";
 import LoadingModal from "./utils/LoadingModal";
 import Character from "./models/Character";
@@ -31,7 +31,7 @@ export default class World {
   private groundFloor: GroundFloor;
   ground: Ground;
   private floorLevel: Text2D;
-  public water: Water;
+  // public water: Water;
 
   private addedObjects: TowerFloor[] = [];
 
@@ -111,7 +111,7 @@ export default class World {
     this.ground = new Ground();
     this.menuIcon = new MenuIcon();
     this.controllers = new Controllers();
-    this.water = new Water();
+    // this.water = new Water();
 
     this.createModal();
     this.setupCollisionListeners();
@@ -120,7 +120,7 @@ export default class World {
       this.tower,
       this.groundFloor.mesh,
       // this.ground.mesh,
-      this.water.mesh,
+      // this.water.mesh,
       // @ts-ignore
       this.floorLevel.instance,
       this.city.model,
@@ -212,13 +212,12 @@ export default class World {
   }
 
   setupCollisionListeners() {
-    this.ground.infiniteGroundBody.addEventListener("collide", (event: any) => {
-      this.handleCollision(event.body);
-    });
-
-    this.ground.groundBody.addEventListener("collide", (event: any) => {
-      this.handleCollision(event.body);
-    });
+    // this.ground.infiniteGroundBody.addEventListener("collide", (event: any) => {
+    //   this.handleCollision(event.body);
+    // });
+    // this.ground.groundBody.addEventListener("collide", (event: any) => {
+    //   this.handleCollision(event.body);
+    // });
   }
 
   createModal() {
@@ -270,7 +269,7 @@ export default class World {
   }
 
   update() {
-    this.water.update();
+    // this.water.update();
     if (this.stateMachine.currentStateName === StatesNames.EXPLORING) {
       this.character.update();
     }

@@ -18,9 +18,9 @@ export default [
     ],
   },
   {
-    name: "model",
+    name: "city",
     type: "gltfLoader",
-    path: "models/model.glb",
+    path: "models/city/city.glb",
   },
   {
     name: "concreteColor",

@@ -75,7 +75,8 @@ export class Experience implements ExperienceInt {
   }
   update() {
     this.physics.update();
-    if (this.world.water) this.world.update();
+    // if (this.world.water)
+    this.world.update();
     this.camera.update();
 
     this.renderer.update();

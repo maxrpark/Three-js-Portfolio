@@ -46,7 +46,7 @@ class Model {
     this.body = new CANNON.Body({
       shape: new CANNON.Box(halfExtents),
       mass: 1,
-      position: new CANNON.Vec3(3, 1, 0),
+      position: new CANNON.Vec3(1, 1, 0),
       allowSleep: false,
     });
 
