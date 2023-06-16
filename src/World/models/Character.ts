@@ -2,10 +2,11 @@ import { AnimationMixer, Box3, Euler, Mesh, Vector3 } from "three";
 import { Experience } from "../../experience/Experience";
 import { Camera } from "../../experience/Camera";
 import { gsap } from "gsap";
+
 import { PhysicsWorld, Time } from "../../experience/utils";
 import * as CANNON from "cannon";
-import { Draggable } from "gsap/Draggable";
-gsap.registerPlugin(Draggable);
+
+import { CharacterController } from "../utils";
 
 class Model {
   private experience: Experience;
@@ -102,129 +103,129 @@ class Model {
   }
 }
 
-class Controllers {
-  keysPressed: {
-    ArrowUp: boolean;
-    ArrowDown: boolean;
-    ArrowLeft: boolean;
-    ArrowRight: boolean;
-    ShiftLeft: boolean;
-  };
+// class Controllers {
+//   keysPressed: {
+//     ArrowUp: boolean;
+//     ArrowDown: boolean;
+//     ArrowLeft: boolean;
+//     ArrowRight: boolean;
+//     ShiftLeft: boolean;
+//   };
 
-  canRotate: boolean = true;
-  // Mobile
-  directionalController: HTMLElement;
+//   canRotate: boolean = true;
+//   // Mobile
+//   directionalController: HTMLElement;
 
-  constructor() {
-    this.keysPressed = {
-      ArrowUp: false,
-      ArrowDown: false,
-      ArrowLeft: false,
-      ArrowRight: false,
-      ShiftLeft: false,
-    };
+//   constructor() {
+//     this.keysPressed = {
+//       ArrowUp: false,
+//       ArrowDown: false,
+//       ArrowLeft: false,
+//       ArrowRight: false,
+//       ShiftLeft: false,
+//     };
 
-    this.setDesktopControllers();
+//     this.setDesktopControllers();
 
-    // MOBILE
-    this.setMobileControllers();
-  }
+//     // MOBILE
+//     this.setMobileControllers();
+//   }
 
-  setDesktopControllers() {
-    window.addEventListener("keydown", (event) => {
-      //@ts-ignore
-      this.keysPressed[event.code] = true;
-    });
+//   setDesktopControllers() {
+//     window.addEventListener("keydown", (event) => {
+//       //@ts-ignore
+//       this.keysPressed[event.code] = true;
+//     });
 
-    window.addEventListener("keyup", (event) => {
-      if (this.keysPressed.ArrowDown && !this.keysPressed.ArrowUp) {
-        this.canRotate = true;
-      }
-      //@ts-ignore
-      this.keysPressed[event.code as string] = false;
-    });
-  }
+//     window.addEventListener("keyup", (event) => {
+//       if (this.keysPressed.ArrowDown && !this.keysPressed.ArrowUp) {
+//         this.canRotate = true;
+//       }
+//       //@ts-ignore
+//       this.keysPressed[event.code as string] = false;
+//     });
+//   }
 
-  setMobileControllers() {
-    this.directionalController = document.getElementById(
-      "directionalController"
-    )!;
+//   setMobileControllers() {
+//     this.directionalController = document.getElementById(
+//       "directionalController"
+//     )!;
 
-    const self = this;
+//     const self = this;
 
-    Draggable.create(this.directionalController, {
-      bounds: "#directionalControllerWrapper",
-      inertia: false,
+//     Draggable.create(this.directionalController, {
+//       bounds: "#directionalControllerWrapper",
+//       inertia: false,
 
-      onDrag: function () {
-        if (this.getDirection() === "up") {
-          self.keysPressed.ArrowUp = true;
-          self.keysPressed.ArrowRight = false;
-          self.keysPressed.ArrowLeft = false;
-          self.keysPressed.ArrowDown = false;
-          self.canRotate = true;
-        }
-        if (this.getDirection() === "right") {
-          self.keysPressed.ArrowRight = true;
-          self.keysPressed.ArrowLeft = false;
-        }
+//       onDrag: function () {
+//         if (this.getDirection() === "up") {
+//           self.keysPressed.ArrowUp = true;
+//           self.keysPressed.ArrowRight = false;
+//           self.keysPressed.ArrowLeft = false;
+//           self.keysPressed.ArrowDown = false;
+//           self.canRotate = true;
+//         }
+//         if (this.getDirection() === "right") {
+//           self.keysPressed.ArrowRight = true;
+//           self.keysPressed.ArrowLeft = false;
+//         }
 
-        if (this.getDirection() === "left") {
-          self.keysPressed.ArrowLeft = true;
-          self.keysPressed.ArrowRight = false;
-        }
-        if (this.getDirection() === "down" && !self.keysPressed.ShiftLeft) {
-          self.keysPressed.ArrowUp = false;
-          self.keysPressed.ArrowRight = false;
-          self.keysPressed.ArrowLeft = false;
-          self.keysPressed.ArrowDown = true;
-        }
-      },
-      onDragEnd: function () {
-        gsap.set(self.directionalController, {
-          clearProps: "all",
-        });
+//         if (this.getDirection() === "left") {
+//           self.keysPressed.ArrowLeft = true;
+//           self.keysPressed.ArrowRight = false;
+//         }
+//         if (this.getDirection() === "down" && !self.keysPressed.ShiftLeft) {
+//           self.keysPressed.ArrowUp = false;
+//           self.keysPressed.ArrowRight = false;
+//           self.keysPressed.ArrowLeft = false;
+//           self.keysPressed.ArrowDown = true;
+//         }
+//       },
+//       onDragEnd: function () {
+//         gsap.set(self.directionalController, {
+//           clearProps: "all",
+//         });
 
-        self.keysPressed = {
-          ...self.keysPressed,
-          ArrowUp: false,
-          ArrowDown: false,
-          ArrowLeft: false,
-          ArrowRight: false,
-        };
-        self.canRotate = true;
-      },
-    });
+//         self.keysPressed = {
+//           ...self.keysPressed,
+//           ArrowUp: false,
+//           ArrowDown: false,
+//           ArrowLeft: false,
+//           ArrowRight: false,
+//         };
+//         self.canRotate = true;
+//       },
+//     });
 
-    function ignoreEvent(e: any) {
-      e.preventDefault();
-      e.stopImmediatePropagation();
-      if (e.preventManipulation) {
-        e.preventManipulation();
-      }
-      return false;
-    }
+//     function ignoreEvent(e: any) {
+//       e.preventDefault();
+//       e.stopImmediatePropagation();
+//       if (e.preventManipulation) {
+//         e.preventManipulation();
+//       }
+//       return false;
+//     }
 
-    this.directionalController.addEventListener(
-      "touchstart",
-      ignoreEvent,
-      false
-    );
-    this.directionalController.addEventListener("touchend", ignoreEvent, false);
+//     this.directionalController.addEventListener(
+//       "touchstart",
+//       ignoreEvent,
+//       false
+//     );
+//     this.directionalController.addEventListener("touchend", ignoreEvent, false);
 
-    const runBtn = document.getElementById("runBtn")!;
-    runBtn.addEventListener("touchstart", (event: any) => {
-      event.stopPropagation();
-      runBtn.classList.add("running");
-      this.keysPressed.ShiftLeft = true;
-    });
-    runBtn.addEventListener("touchend", (event: any) => {
-      event.stopPropagation();
-      runBtn.classList.remove("running");
-      this.keysPressed.ShiftLeft = false;
-    });
-  }
-}
+//     const runBtn = document.getElementById("runBtn")!;
+//     runBtn.addEventListener("touchstart", (event: any) => {
+//       event.stopPropagation();
+//       runBtn.classList.add("running");
+//       this.keysPressed.ShiftLeft = true;
+//     });
+//     runBtn.addEventListener("touchend", (event: any) => {
+//       event.stopPropagation();
+//       runBtn.classList.remove("running");
+//       this.keysPressed.ShiftLeft = false;
+//     });
+//   }
+// }
 
 class Animations {
   model: Model;
@@ -288,7 +289,7 @@ export default class Character {
   experience: Experience;
   camera: Camera;
   model: Model;
-  controllers: Controllers;
+  controllers: CharacterController;
   animations: Animations;
   cameraCurrentPosition: Vector3;
   cameraCurrentLockAt: Vector3;
@@ -303,7 +304,7 @@ export default class Character {
 
     this.model = new Model(this.experience.resources.items.male_character);
 
-    this.controllers = new Controllers();
+    this.controllers = new CharacterController();
     this.animations = new Animations(this.model);
   }
 

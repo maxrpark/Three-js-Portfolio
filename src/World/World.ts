@@ -212,9 +212,9 @@ export default class World {
   }
 
   setupCollisionListeners() {
-    // this.ground.infiniteGroundBody.addEventListener("collide", (event: any) => {
-    //   this.handleCollision(event.body);
-    // });
+    this.ground.infiniteGroundBody.addEventListener("collide", (event: any) => {
+      this.handleCollision(event.body);
+    });
     // this.ground.groundBody.addEventListener("collide", (event: any) => {
     //   this.handleCollision(event.body);
     // });
