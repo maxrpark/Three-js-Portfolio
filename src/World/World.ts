@@ -222,8 +222,8 @@ export default class World {
     this.currentFloor.on("handleHasCollided", () => {
       this.addedObjects.push(this.currentFloor!);
       this.setScore = this.addedObjects.length;
-      this.updateFloorLevelText();
       this.addFloor();
+      this.updateFloorLevelText();
     });
 
     this.tower.add(this.currentFloor.mesh);

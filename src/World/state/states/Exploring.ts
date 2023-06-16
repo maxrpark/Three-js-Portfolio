@@ -50,7 +50,9 @@ export default class ExploringState extends GameState {
     this.menuIcon.off("handleMenuClick");
     this.controllers.off("controllerMenu");
 
-    document.body.classList.remove("exploring");
+    setTimeout(() => {
+      document.body.classList.remove("exploring");
+    }, 500);
     document.body
       .querySelector(".mobile-character-controller")
       ?.classList.remove("visible");

@@ -64,12 +64,19 @@ export default class CharacterController {
           self.keysPressed.ArrowDown = false;
           self.canRotate = true;
         }
-        if (this.getDirection() === "right") {
+
+        if (
+          this.getDirection() === "right" ||
+          this.getDirection() === "right-up"
+        ) {
           self.keysPressed.ArrowRight = true;
           self.keysPressed.ArrowLeft = false;
         }
 
-        if (this.getDirection() === "left") {
+        if (
+          this.getDirection() === "left" ||
+          this.getDirection() === "left-up"
+        ) {
           self.keysPressed.ArrowLeft = true;
           self.keysPressed.ArrowRight = false;
         }

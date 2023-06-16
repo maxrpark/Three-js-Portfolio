@@ -37,7 +37,7 @@ class Model {
     this.mesh.rotateY(Math.PI);
     this.mesh.scale.set(modelScale.x, modelScale.y, modelScale.z);
 
-    this.eulerRotation = new Euler(0, 0, 0, "XYZ");
+    this.eulerRotation = new Euler(0, -10, 0, "XYZ");
 
     const boundingBox = new Box3();
     boundingBox.setFromObject(this.mesh);
@@ -58,6 +58,13 @@ class Model {
       allowSleep: false,
     });
 
+    this.body.quaternion.setFromEuler(
+      this.eulerRotation.x,
+      this.eulerRotation.y,
+      this.eulerRotation.z,
+      "XYZ"
+    );
+
     this.position();
 
     this.physics.world.addBody(this.body);
@@ -66,7 +73,7 @@ class Model {
     this.meshPositionPivot = new CANNON.Vec3();
   }
 
-  position(x = 2, y = 1, z = -2) {
+  position(x = -2, y = 1, z = 1) {
     this.body.position = new CANNON.Vec3(x, y, z);
   }
 
@@ -263,14 +270,22 @@ export default class Character {
       this.controllers.keysPressed.ArrowLeft &&
       !this.controllers.keysPressed.ArrowRight
     ) {
-      this.model.rotate(0.05);
+      if (this.isRunning) {
+        this.model.rotate(0.04);
+      } else {
+        this.model.rotate(0.05);
+      }
     }
 
     if (
       this.controllers.keysPressed.ArrowRight &&
       !this.controllers.keysPressed.ArrowLeft
     ) {
-      this.model.rotate(-0.05);
+      if (this.isRunning) {
+        this.model.rotate(-0.04);
+      } else {
+        this.model.rotate(-0.05);
+      }
     }
 
     // Mobile controller
