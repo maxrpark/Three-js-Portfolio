@@ -1,7 +1,7 @@
 import CANNON from "cannon";
 import { Experience } from "../Experience";
 import { Time } from "./Time";
-// import CannonDebugger from "cannon-es-debugger";
+import CannonDebugger from "cannon-es-debugger";
 
 export default class PhysicsWorld {
   experience: Experience;
@@ -29,8 +29,8 @@ export default class PhysicsWorld {
       this.defaultMaterial,
       this.defaultMaterial,
       {
-        // friction: 1,
-        // restitution: 0.1,
+        friction: 1,
+        restitution: 0.1,
       }
     );
   }
@@ -46,12 +46,17 @@ export default class PhysicsWorld {
 
     this.world.defaultContactMaterial = this.defaultContactMaterial;
 
-    //@ts-ignore
-    // this.debugger = new CannonDebugger(this.experience.scene, this.world, {});
+    if (this.experience.debug.active) {
+      //@ts-ignore
+      this.debugger = new CannonDebugger(this.experience.scene, this.world, {});
+    }
   }
 
   update() {
     this.world.step(1 / 60, this.time.delta, 3);
-    // this.debugger.update();
+
+    if (this.experience.debug.active) {
+      this.debugger.update();
+    }
   }
 }

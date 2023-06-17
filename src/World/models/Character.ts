@@ -69,7 +69,7 @@ class Model {
 
     this.physics.world.addBody(this.body);
 
-    this.pivotOffset = new CANNON.Vec3(0, -halfExtents.y + 0.2, 0); // Adjust
+    this.pivotOffset = new CANNON.Vec3(0, -halfExtents.y + 0.05, 0); // Adjust
     this.meshPositionPivot = new CANNON.Vec3();
   }
 
