@@ -1,7 +1,7 @@
 import Resources from "../../experience/utils/Resources";
 import { Experience } from "../../experience/Experience";
 import { Mesh, MeshStandardMaterial } from "three";
-import { PhysicBody } from "../objects/PhysicBody";
+// import { PhysicBody } from "../objects/PhysicBody";
 import * as CANNON from "cannon";
 
 export default class City {
