@@ -1,4 +1,4 @@
-import { Group, Vector3 } from "three";
+import { Group } from "three";
 import { Experience } from "../experience/Experience";
 import { Environment } from "./Environment";
 import { Debug, PhysicsWorld } from "../experience/utils";
