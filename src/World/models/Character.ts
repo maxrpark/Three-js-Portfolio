@@ -46,7 +46,7 @@ class Model {
     boundingBox.getSize(size);
 
     const halfExtents = new CANNON.Vec3(
-      0.5 * size.x,
+      0.3 * size.x,
       0.5 * size.y,
       0.5 * size.z
     );

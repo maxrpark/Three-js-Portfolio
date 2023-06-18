@@ -1,13 +1,15 @@
-import Resources from "../../experience/utils/Resources";
-import { Experience } from "../../experience/Experience";
+import Resources from "../../../experience/utils/Resources";
+import { Experience } from "../../../experience/Experience";
 import { Mesh, MeshStandardMaterial } from "three";
 // import { PhysicBody } from "../objects/PhysicBody";
+import { BlockCenterRight } from "./block";
 import * as CANNON from "cannon";
 
 export default class City {
   private experience: Experience;
   private resources: Resources;
   public model: Mesh;
+  blockCenterRight: BlockCenterRight;
   constructor() {
     this.experience = new Experience();
     this.resources = this.experience.resources;
@@ -48,6 +50,8 @@ export default class City {
     //   position: new CANNON.Vec3(xDirection, height * 0.5, zDirection),
     // });
 
+    this.blockCenterRight = new BlockCenterRight();
+
     const shape = new CANNON.Box(
       new CANNON.Vec3(width * 0.5, height * 0.5, depth * 0.5)
     );
@@ -75,11 +79,7 @@ export default class City {
       mass: 0,
       position: new CANNON.Vec3(-xDirection, height * 0.5, 0),
     });
-    const centerRight = new CANNON.Body({
-      shape,
-      mass: 0,
-      position: new CANNON.Vec3(xDirection, height * 0.5, 0),
-    });
+
     // END
     const topRight = new CANNON.Body({
       shape,
@@ -101,7 +101,7 @@ export default class City {
     this.experience.physics.world.addBody(bottomRight);
     this.experience.physics.world.addBody(bottomCenter);
     this.experience.physics.world.addBody(centerLeft);
-    this.experience.physics.world.addBody(centerRight);
+    // this.experience.physics.world.addBody(centerRight);
     this.experience.physics.world.addBody(topLeft);
     this.experience.physics.world.addBody(topRight);
     this.experience.physics.world.addBody(topCenter);

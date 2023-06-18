@@ -1,4 +1,4 @@
-import { Group } from "three";
+import { Group, Vector3 } from "three";
 import { Experience } from "../experience/Experience";
 import { Environment } from "./Environment";
 import { Debug, PhysicsWorld } from "../experience/utils";
@@ -176,6 +176,20 @@ export default class World {
   public exploringWorld() {
     this.controllers.showPlayMenu();
     this.modal.closeModal();
+
+    // DuringDevelopment
+
+    gsap.to(this.experience.camera.camera.position, {
+      x: 8,
+      y: 5,
+      z: 2,
+      duration: 1,
+      onUpdate: () =>
+        this.experience.camera.camera.lookAt(
+          new Vector3(8, 0, 0)
+          // this.experience.camera.camera.position
+        ),
+    });
   }
 
   public gameEnded() {
@@ -273,7 +287,7 @@ export default class World {
   update() {
     // this.water.update();
     if (this.stateMachine.currentStateName === StatesNames.EXPLORING) {
-      this.character.update();
+      // this.character.update();
     }
   }
 }

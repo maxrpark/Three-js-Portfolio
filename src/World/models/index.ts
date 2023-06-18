@@ -1,4 +1,4 @@
 import Character from "./Character";
-import City from "./City";
+import City from "./city/City";
 
 export { Character, City };
