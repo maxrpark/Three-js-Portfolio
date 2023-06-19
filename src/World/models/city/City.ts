@@ -1,6 +1,6 @@
 import Resources from "../../../experience/utils/Resources";
 import { Experience } from "../../../experience/Experience";
-import { Mesh, MeshStandardMaterial } from "three";
+import { Mesh, MeshStandardMaterial, Vector3 } from "three";
 // import { PhysicBody } from "../objects/PhysicBody";
 import { BlockCenterRight } from "./block";
 import * as CANNON from "cannon";
@@ -28,7 +28,35 @@ export default class City {
         child instanceof Mesh &&
         child.material instanceof MeshStandardMaterial
       ) {
-        // child.material.envMap = env
+        if (child.name === "max-text") {
+          const boundingBox = child.geometry.boundingBox;
+          const scale = child.scale;
+
+          console.log(child.scale);
+
+          const size = new CANNON.Vec3(
+            boundingBox.max.x - boundingBox.min.x,
+            boundingBox.max.y - boundingBox.min.y,
+            boundingBox.max.z - boundingBox.min.z
+          );
+
+          const shape = new CANNON.Box(new CANNON.Vec3().copy(size).scale(0.5));
+
+          const body = new CANNON.Body({
+            shape,
+            mass: 0,
+          });
+
+          const position = child.position.clone();
+          position.z -= boundingBox.min.z * scale.z; // Adjust z position
+
+          //@ts-ignore
+          body.position.set(position.x, position.y * 0.5, position.z);
+          //@ts-ignore
+          body.quaternion.copy(child.quaternion);
+
+          this.experience.physics.world.addBody(body);
+        }
 
         child.castShadow = true;
         child.receiveShadow = true;
@@ -99,9 +127,8 @@ export default class City {
 
     this.experience.physics.world.addBody(bottomLeft);
     this.experience.physics.world.addBody(bottomRight);
-    this.experience.physics.world.addBody(bottomCenter);
+    // this.experience.physics.world.addBody(bottomCenter);
     this.experience.physics.world.addBody(centerLeft);
-    // this.experience.physics.world.addBody(centerRight);
     this.experience.physics.world.addBody(topLeft);
     this.experience.physics.world.addBody(topRight);
     this.experience.physics.world.addBody(topCenter);

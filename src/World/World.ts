@@ -176,20 +176,6 @@ export default class World {
   public exploringWorld() {
     this.controllers.showPlayMenu();
     this.modal.closeModal();
-
-    // DuringDevelopment
-
-    // gsap.to(this.experience.camera.camera.position, {
-    //   x: 8,
-    //   y: 5,
-    //   z: 2,
-    //   duration: 1,
-    //   onUpdate: () =>
-    //     this.experience.camera.camera.lookAt(
-    //       new Vector3(8, 0, 0)
-    //       // this.experience.camera.camera.position
-    //     ),
-    // });
   }
 
   public gameEnded() {
