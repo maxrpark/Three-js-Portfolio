@@ -1,6 +1,6 @@
 import Resources from "../../../experience/utils/Resources";
 import { Experience } from "../../../experience/Experience";
-import { Mesh, MeshStandardMaterial, Vector3 } from "three";
+import { Mesh, MeshStandardMaterial } from "three";
 // import { PhysicBody } from "../objects/PhysicBody";
 import { BlockCenterRight } from "./block";
 import * as CANNON from "cannon";
@@ -90,11 +90,11 @@ export default class City {
       position: new CANNON.Vec3(xDirection, height * 0.5, zDirection),
     });
 
-    const bottomCenter = new CANNON.Body({
-      shape: new CANNON.Box(new CANNON.Vec3(3.8 * 0.5, 0.5 * 0.5, 0.8 * 0.5)),
-      mass: 0,
-      position: new CANNON.Vec3(0, 0.5 * 0.5, zDirection),
-    });
+    // const bottomCenter = new CANNON.Body({
+    //   shape: new CANNON.Box(new CANNON.Vec3(3.8 * 0.5, 0.5 * 0.5, 0.8 * 0.5)),
+    //   mass: 0,
+    //   position: new CANNON.Vec3(0, 0.5 * 0.5, zDirection),
+    // });
 
     const bottomLeft = new CANNON.Body({
       shape,
