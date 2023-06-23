@@ -8,13 +8,12 @@ import {
 } from "three";
 import { Experience } from "../../experience/Experience";
 import { Camera } from "../../experience/Camera";
-import { gsap } from "gsap";
 
 import { PhysicsWorld, Time } from "../../experience/utils";
 import * as CANNON from "cannon";
 
 import { CharacterController } from "../utils";
-import Vehicle from "./Vehicle";
+// import Character from "./Character";
 
 class Model {
   private experience: Experience;
@@ -30,15 +29,15 @@ class Model {
     this.experience = new Experience();
     this.physics = this.experience.physics;
     // @ts-ignore
-    this.modelAnimations = mesh.animations;
-
-    const modelScale = new Vector3(0.003, 0.003, 0.003);
+    this.modelAnimations = mesh?.animations;
+    const modelScale = new Vector3(0.5, 0.5, 0.5);
     this.mesh = mesh.scene;
 
-    this.mesh.rotateY(Math.PI);
     this.mesh.scale.set(modelScale.x, modelScale.y, modelScale.z);
+    this.mesh.position.set(2, 0, 0);
+    this.mesh.name = "vehicle";
 
-    this.eulerRotation = new Euler(0, -10, 0, "XYZ");
+    this.eulerRotation = new Euler(0, 0, 0, "XYZ");
 
     const boundingBox = new Box3();
     boundingBox.setFromObject(this.mesh);
@@ -46,11 +45,7 @@ class Model {
     const size = new Vector3();
     boundingBox.getSize(size);
 
-    const halfExtents = new CANNON.Vec3(
-      0.3 * size.x,
-      0.5 * size.y,
-      0.5 * size.z
-    );
+    const halfExtents = new CANNON.Vec3(size.x, size.y, size.z);
 
     this.body = new CANNON.Body({
       shape: new CANNON.Box(halfExtents),
@@ -74,11 +69,11 @@ class Model {
     this.meshPositionPivot = new CANNON.Vec3();
   }
 
-  position(x = -2, y = 1, z = 1) {
+  position(x = 2, y = 0.2, z = 1) {
     this.body.position = new CANNON.Vec3(x, y, z);
   }
 
-  moveForward(velocity = 1) {
+  moveVehicle(velocity = 3) {
     const directionZ = 1;
 
     const forwardDirection = new CANNON.Vec3(0, 0, directionZ);
@@ -90,27 +85,10 @@ class Model {
     this.body.angularDamping = 1;
   }
 
-  rotateModelBy180Degrees() {
-    gsap.to(this.eulerRotation, {
-      y: `+=${Math.PI}`,
-      onUpdate: () => {
-        this.body.quaternion.setFromEuler(
-          this.eulerRotation.x,
-          this.eulerRotation.y,
-          this.eulerRotation.z,
-          "XYZ"
-        );
-      },
-    });
-  }
-
   rotate(rotationAngle: number) {
     const quaternion = new CANNON.Quaternion();
     quaternion.setFromAxisAngle(new CANNON.Vec3(0, 0.6, 0), rotationAngle);
     this.body.quaternion.mult(quaternion, this.body.quaternion);
-
-    // Update eulerRotation
-    // this.eulerRotation.setFromQuaternion(this.body.quaternion as any, "XYZ");
   }
 
   public update() {
@@ -182,38 +160,30 @@ class Animations {
   }
 }
 
-export default class Character {
+export default class Vehicle {
   experience: Experience;
   camera: Camera;
   model: Model;
-  vehicle: Vehicle;
   controllers: CharacterController;
   animations: Animations;
   cameraCurrentPosition: Vector3;
   cameraCurrentLockAt: Vector3;
 
-  isWalking: boolean = false;
-  isRunning: boolean = false;
-
-  canDrive: boolean = false;
-  isDriving: boolean = false;
-
   constructor() {
     this.experience = new Experience();
     this.camera = this.experience.camera;
-    this.vehicle = this.experience.world.vehicle;
-    this.controllers = this.experience.world.characterControllers;
-
     this.cameraCurrentPosition = new Vector3();
     this.cameraCurrentLockAt = new Vector3();
 
-    this.model = new Model(this.experience.resources.items.male_character);
+    this.model = new Model(this.experience.resources.items.Car);
 
-    this.animations = new Animations(this.model);
+    this.controllers = this.experience.world.characterControllers;
+    // this.animations = new Animations(this.model);
   }
 
   updateCamera() {
-    const idealOffset = new Vector3(0, 2.4, -2.5);
+    // TODO CREATE A CLASS
+    const idealOffset = new Vector3(0, 2, -2.5);
     const idealLookAt = new Vector3(0, 1, 0);
     const lerp = 0.1;
     const modelPosition = this.model.mesh.position.clone();
@@ -234,54 +204,32 @@ export default class Character {
     this.camera.camera.lookAt(this.cameraCurrentLockAt);
   }
 
-  characterController() {
+  drivingControllers() {
     if (this.controllers.keysPressed.ArrowUp) {
-      this.model.moveForward();
-      if (!this.isWalking) {
-        this.isWalking = true;
-        this.animations.playAnimation("walking");
-      }
+      this.model.moveVehicle();
     }
     if (
       this.controllers.keysPressed.ArrowUp &&
       this.controllers.keysPressed.ShiftLeft
     ) {
-      this.model.moveForward(3);
-
-      if (!this.isRunning) {
-        this.isRunning = true;
-        this.animations.playAnimation("running");
-      }
-    }
-    if (!this.controllers.keysPressed.ArrowUp && this.isWalking) {
-      this.isWalking = false;
-      this.isRunning = false;
-      this.animations.playAnimation("idle");
-    }
-
-    if (!this.controllers.keysPressed.ShiftLeft && this.isRunning) {
-      this.isRunning = false;
-      this.animations.playAnimation("walking");
+      this.model.moveVehicle(6);
     }
 
     if (
       this.controllers.keysPressed.ArrowDown &&
       !this.controllers.keysPressed.ArrowUp
     ) {
-      if (this.controllers.canRotate) {
-        this.model.rotateModelBy180Degrees();
-        this.controllers.canRotate = false;
-      }
+      this.model.moveVehicle(-2);
     }
 
     if (
       this.controllers.keysPressed.ArrowLeft &&
       !this.controllers.keysPressed.ArrowRight
     ) {
-      if (this.isRunning) {
+      if (this.controllers.keysPressed.ArrowUp) {
         this.model.rotate(0.04);
-      } else {
-        this.model.rotate(0.05);
+      } else if (this.controllers.keysPressed.ArrowDown) {
+        this.model.rotate(-0.04);
       }
     }
 
@@ -289,60 +237,28 @@ export default class Character {
       this.controllers.keysPressed.ArrowRight &&
       !this.controllers.keysPressed.ArrowLeft
     ) {
-      if (this.isRunning) {
+      if (this.controllers.keysPressed.ArrowUp) {
         this.model.rotate(-0.04);
-      } else {
-        this.model.rotate(-0.05);
+      } else if (this.controllers.keysPressed.ArrowDown) {
+        this.model.rotate(0.04);
       }
     }
 
     if (this.controllers.keysPressed.Enter) {
       // if (this.canDrive && this.controllers.keysPressed.Enter) {
-      if (!this.isDriving) {
-        this.setDrivingMode();
-      }
+      this.experience.world.character.setWalkingMode();
     }
-  }
-
-  checkCanDrive() {
-    if (
-      this.model.mesh.position.distanceTo(this.vehicle.model.mesh.position) <= 1
-    ) {
-      document.getElementById("driveBtn")!.style.display = "block";
-      // this.isDriving = true;
-    } else {
-      // document.getElementById("driveBtn")!.style.display = "none";
-      // this.isDriving = false;
-    }
-  }
-
-  setDrivingMode() {
-    this.controllers.keysPressed.Enter = false;
-    this.model.mesh.visible = false;
-    this.isDriving = true;
-  }
-  setWalkingMode() {
-    this.controllers.keysPressed.Enter = false;
-    this.model.mesh.visible = true;
-    this.isDriving = false;
-    this.model.position(
-      this.vehicle.model.mesh.position.x + 0.5,
-      this.vehicle.model.mesh.position.y + 0.5,
-      this.vehicle.model.mesh.position.z
-    );
   }
 
   update() {
     // Mobile controller
 
-    this.checkCanDrive();
-
-    if (!this.isDriving) {
+    if (this.experience.world.character.isDriving) {
+      this.drivingControllers();
       this.updateCamera();
-      this.characterController();
-      this.animations.update();
     }
 
     this.model.update();
+    // this.animations.update();
   }
 }

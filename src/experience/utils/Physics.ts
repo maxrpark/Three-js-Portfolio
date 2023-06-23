@@ -29,8 +29,8 @@ export default class PhysicsWorld {
       this.defaultMaterial,
       this.defaultMaterial,
       {
-        friction: 1,
-        restitution: 0.1,
+        friction: 0.1,
+        // restitution: 0.1,
       }
     );
   }

@@ -15,10 +15,16 @@ import {
   WorldCreationState,
   ExploringState,
 } from "./state/states";
-import { Controllers, Modal, MenuIcon, LoadingModal } from "./utils/";
+import {
+  Controllers,
+  Modal,
+  MenuIcon,
+  LoadingModal,
+  CharacterController,
+} from "./utils/";
 // import Water from "./shaders/water/Water";
 
-import { City, Character } from "./models";
+import { City, Character, Vehicle } from "./models";
 
 export default class World {
   private experience: Experience;
@@ -46,9 +52,11 @@ export default class World {
 
   // 3D Model
   private city: City;
-  private character: Character;
+  character: Character;
+  vehicle: Vehicle;
 
   // Controls and Icons
+  public characterControllers: CharacterController;
   public menuIcon: MenuIcon;
   public controllers: Controllers;
   public currentFloor: TowerFloor | null;
@@ -102,8 +110,10 @@ export default class World {
   public createWorld() {
     if (this.stateMachine.currentStateName !== StatesNames.CREATION) return;
 
-    this.city = new City();
+    this.characterControllers = new CharacterController();
+    this.vehicle = new Vehicle();
     this.character = new Character();
+    this.city = new City();
     this.groundFloor = new GroundFloor({ floorSize: this.floorSize });
     this.ground = new Ground();
     this.menuIcon = new MenuIcon();
@@ -124,7 +134,8 @@ export default class World {
       // @ts-ignore
       this.floorLevel.instance,
       this.city.model,
-      this.character.model.mesh
+      this.character.model.mesh,
+      this.vehicle.model.mesh
     );
 
     this.experience.scene.add(this.world);
@@ -274,6 +285,8 @@ export default class World {
     // this.water.update();
     if (this.stateMachine.currentStateName === StatesNames.EXPLORING) {
       this.character.update();
+      this.city.update();
+      this.vehicle.update();
     }
   }
 }

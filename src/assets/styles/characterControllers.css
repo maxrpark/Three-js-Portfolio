@@ -31,7 +31,7 @@
   border-radius: 50%;
 }
 
-.run-btn {
+.action-btn {
   width: 70px;
   height: 70px;
   background: white;
@@ -50,6 +50,10 @@
   user-select: none; /* Modern browsers */
   transition: all 0.1s linear;
   position: relative;
+}
+
+#driveBtn {
+  display: none;
 }
 
 .running {

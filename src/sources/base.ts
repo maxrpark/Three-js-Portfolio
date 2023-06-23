@@ -23,6 +23,11 @@ export default [
     path: "models/city/city.glb",
   },
   {
+    name: "Car",
+    type: "gltfLoader",
+    path: "models/car/car.glb",
+  },
+  {
     name: "concreteColor",
     type: "textureLoader",
     path: "textures/concrete/color.jpg",
@@ -76,11 +81,6 @@ export default [
     name: "mapCap8",
     type: "textureLoader",
     path: "textures/mapCaps/8.png",
-  },
-  {
-    name: "foxModel",
-    type: "gltfLoader",
-    path: "models/fox/Fox.gltf",
   },
   {
     name: "male_character",

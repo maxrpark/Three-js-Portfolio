@@ -9,9 +9,11 @@ export default class CharacterController {
     ArrowLeft: boolean;
     ArrowRight: boolean;
     ShiftLeft: boolean;
+    Enter: boolean;
   };
 
   canRotate: boolean = true;
+  blocked: boolean = false;
   // Mobile
   directionalController: HTMLElement;
 
@@ -22,6 +24,7 @@ export default class CharacterController {
       ArrowLeft: false,
       ArrowRight: false,
       ShiftLeft: false,
+      Enter: false,
     };
 
     this.setDesktopControllers();
@@ -129,6 +132,16 @@ export default class CharacterController {
       event.stopPropagation();
       runBtn.classList.remove("running");
       this.keysPressed.ShiftLeft = false;
+    });
+
+    const driveBtn = document.getElementById("driveBtn")!;
+    driveBtn.addEventListener("touchstart", (event: any) => {
+      event.stopPropagation();
+      this.keysPressed.Enter = true;
+    });
+    driveBtn.addEventListener("touchend", (event: any) => {
+      event.stopPropagation();
+      this.keysPressed.Enter = false;
     });
   }
 }
