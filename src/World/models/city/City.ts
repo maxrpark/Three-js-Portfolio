@@ -53,6 +53,7 @@ export default class City {
     this.blockCenterRight = new BlockCenterRight();
 
     this.physicsBodies.forEach((item) => {
+      item.visible = false;
       const boundingBox = item.geometry.boundingBox!;
 
       const size = new CANNON.Vec3(
