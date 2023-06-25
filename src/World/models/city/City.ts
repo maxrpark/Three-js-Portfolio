@@ -85,24 +85,7 @@ export default class City {
     });
   }
 
-  checkCollectables() {
-    this.collectables.forEach((item) => {
-      if (
-        item.visible &&
-        this.character.model.mesh.position.distanceTo(item.position) <= 0.4
-      ) {
-        var selectedObject = this.model.getObjectById(item.id);
-        this.collectables = this.collectables.filter(
-          (object) => object.id !== item.id
-        );
-
-        this.model.remove(selectedObject!);
-      }
-    });
-  }
-
   update() {
     if (!this.character) return;
-    if (this.collectables.length > 0) this.checkCollectables();
   }
 }

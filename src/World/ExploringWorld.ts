@@ -1,5 +1,6 @@
+import { Mesh } from "three";
 import { Experience } from "../experience/Experience";
-import { Character, Vehicle } from "./models";
+import { Character, City, Vehicle } from "./models";
 import { StateMachine, StatesNames } from "./state/GameState";
 import { CharacterController } from "./utils";
 
@@ -10,6 +11,9 @@ export class ExploringWorld {
   character: Character;
   vehicle: Vehicle;
 
+  city: City;
+  collectables: Mesh[];
+
   //
   canDrive: boolean = false;
   isDriving: boolean = false;
@@ -17,6 +21,8 @@ export class ExploringWorld {
   constructor() {
     this.experience = new Experience();
     this.stateMachine = this.experience.stateMachine;
+    this.city = this.experience.world.city;
+    this.collectables = this.city.collectables;
 
     this.setExploration();
   }
@@ -62,6 +68,22 @@ export class ExploringWorld {
     }
   }
 
+  checkCollectables() {
+    this.collectables.forEach((item) => {
+      if (
+        item.visible &&
+        this.character.model.mesh.position.distanceTo(item.position) <= 0.4
+      ) {
+        var selectedObject = this.city.model.getObjectById(item.id);
+        this.collectables = this.collectables.filter(
+          (object) => object.id !== item.id
+        );
+
+        this.city.model.remove(selectedObject!);
+      }
+    });
+  }
+
   update() {
     this.checkCanDrive();
     if (this.stateMachine.currentStateName === StatesNames.EXPLORING) {
@@ -69,7 +91,6 @@ export class ExploringWorld {
         this.vehicle.update();
 
         if (this.controllers.keysPressed.Enter) {
-          console.log("culo");
           this.setWalkingMode();
         }
       } else {
@@ -79,6 +100,9 @@ export class ExploringWorld {
           this.setDrivingMode();
         }
       }
+    }
+    if (this.collectables.length) {
+      this.checkCollectables();
     }
   }
 }

@@ -40,7 +40,7 @@ export default class World {
   public modal: Modal;
 
   // 3D Model
-  private city: City;
+  city: City;
   character: Character;
   vehicle: Vehicle;
 
