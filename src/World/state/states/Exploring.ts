@@ -29,7 +29,7 @@ export default class ExploringState extends GameState {
     };
   }
   public enter(): void {
-    this.world.exploringWorld();
+    this.world.setExploringWorld();
     //@ts-ignore
     this.previousState = this.states[this.stateMachine.previousStateName];
 

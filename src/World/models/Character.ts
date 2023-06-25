@@ -14,7 +14,6 @@ import { PhysicsWorld, Time } from "../../experience/utils";
 import * as CANNON from "cannon";
 
 import { CharacterController } from "../utils";
-import Vehicle from "./Vehicle";
 
 class Model {
   private experience: Experience;
@@ -108,9 +107,6 @@ class Model {
     const quaternion = new CANNON.Quaternion();
     quaternion.setFromAxisAngle(new CANNON.Vec3(0, 0.6, 0), rotationAngle);
     this.body.quaternion.mult(quaternion, this.body.quaternion);
-
-    // Update eulerRotation
-    // this.eulerRotation.setFromQuaternion(this.body.quaternion as any, "XYZ");
   }
 
   public update() {
@@ -186,8 +182,6 @@ export default class Character {
   experience: Experience;
   camera: Camera;
   model: Model;
-  vehicle: Vehicle;
-  controllers: CharacterController;
   animations: Animations;
   cameraCurrentPosition: Vector3;
   cameraCurrentLockAt: Vector3;
@@ -195,14 +189,12 @@ export default class Character {
   isWalking: boolean = false;
   isRunning: boolean = false;
 
-  canDrive: boolean = false;
-  isDriving: boolean = false;
+  controllers: CharacterController;
 
-  constructor() {
+  constructor(controllers: CharacterController) {
     this.experience = new Experience();
     this.camera = this.experience.camera;
-    this.vehicle = this.experience.world.vehicle;
-    this.controllers = this.experience.world.characterControllers;
+    this.controllers = controllers;
 
     this.cameraCurrentPosition = new Vector3();
     this.cameraCurrentLockAt = new Vector3();
@@ -295,53 +287,14 @@ export default class Character {
         this.model.rotate(-0.05);
       }
     }
-
-    if (this.controllers.keysPressed.Enter) {
-      // if (this.canDrive && this.controllers.keysPressed.Enter) {
-      if (!this.isDriving) {
-        this.setDrivingMode();
-      }
-    }
-  }
-
-  checkCanDrive() {
-    if (
-      this.model.mesh.position.distanceTo(this.vehicle.model.mesh.position) <= 1
-    ) {
-      document.getElementById("driveBtn")!.style.display = "block";
-      // this.isDriving = true;
-    } else {
-      // document.getElementById("driveBtn")!.style.display = "none";
-      // this.isDriving = false;
-    }
-  }
-
-  setDrivingMode() {
-    this.controllers.keysPressed.Enter = false;
-    this.model.mesh.visible = false;
-    this.isDriving = true;
-  }
-  setWalkingMode() {
-    this.controllers.keysPressed.Enter = false;
-    this.model.mesh.visible = true;
-    this.isDriving = false;
-    this.model.position(
-      this.vehicle.model.mesh.position.x + 0.5,
-      this.vehicle.model.mesh.position.y + 0.5,
-      this.vehicle.model.mesh.position.z
-    );
   }
 
   update() {
     // Mobile controller
 
-    this.checkCanDrive();
-
-    if (!this.isDriving) {
-      this.updateCamera();
-      this.characterController();
-      this.animations.update();
-    }
+    this.updateCamera();
+    this.characterController();
+    this.animations.update();
 
     this.model.update();
   }

@@ -13,7 +13,6 @@ import { PhysicsWorld, Time } from "../../experience/utils";
 import * as CANNON from "cannon";
 
 import { CharacterController } from "../utils";
-// import Character from "./Character";
 
 class Model {
   private experience: Experience;
@@ -169,7 +168,7 @@ export default class Vehicle {
   cameraCurrentPosition: Vector3;
   cameraCurrentLockAt: Vector3;
 
-  constructor() {
+  constructor(controllers: CharacterController) {
     this.experience = new Experience();
     this.camera = this.experience.camera;
     this.cameraCurrentPosition = new Vector3();
@@ -177,8 +176,7 @@ export default class Vehicle {
 
     this.model = new Model(this.experience.resources.items.Car);
 
-    this.controllers = this.experience.world.characterControllers;
-    // this.animations = new Animations(this.model);
+    this.controllers = controllers;
   }
 
   updateCamera() {
@@ -243,20 +241,11 @@ export default class Vehicle {
         this.model.rotate(0.04);
       }
     }
-
-    if (this.controllers.keysPressed.Enter) {
-      // if (this.canDrive && this.controllers.keysPressed.Enter) {
-      this.experience.world.character.setWalkingMode();
-    }
   }
 
   update() {
-    // Mobile controller
-
-    if (this.experience.world.character.isDriving) {
-      this.drivingControllers();
-      this.updateCamera();
-    }
+    this.drivingControllers();
+    this.updateCamera();
 
     this.model.update();
     // this.animations.update();

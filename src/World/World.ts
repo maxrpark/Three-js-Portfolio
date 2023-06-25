@@ -22,9 +22,9 @@ import {
   LoadingModal,
   CharacterController,
 } from "./utils/";
-// import Water from "./shaders/water/Water";
 
 import { City, Character, Vehicle } from "./models";
+import { ExploringWorld } from "./ExploringWorld";
 
 export default class World {
   private experience: Experience;
@@ -54,6 +54,10 @@ export default class World {
   private city: City;
   character: Character;
   vehicle: Vehicle;
+
+  // Exploring world
+
+  exploringWorld: ExploringWorld;
 
   // Controls and Icons
   public characterControllers: CharacterController;
@@ -110,14 +114,12 @@ export default class World {
   public createWorld() {
     if (this.stateMachine.currentStateName !== StatesNames.CREATION) return;
 
-    this.characterControllers = new CharacterController();
-    this.vehicle = new Vehicle();
-    this.character = new Character();
     this.city = new City();
     this.groundFloor = new GroundFloor({ floorSize: this.floorSize });
     this.ground = new Ground();
     this.menuIcon = new MenuIcon();
     this.controllers = new Controllers();
+    this.exploringWorld = new ExploringWorld();
     this.floorLevel = new Text2D({
       text: 0,
       anchorX: -1.5,
@@ -133,9 +135,7 @@ export default class World {
       this.groundFloor.mesh,
       // @ts-ignore
       this.floorLevel.instance,
-      this.city.model,
-      this.character.model.mesh,
-      this.vehicle.model.mesh
+      this.city.model
     );
 
     this.experience.scene.add(this.world);
@@ -184,7 +184,7 @@ export default class World {
     this.floorLevel.updatePositionY(-1);
   }
 
-  public exploringWorld() {
+  public setExploringWorld() {
     this.controllers.showPlayMenu();
     this.modal.closeModal();
   }
@@ -262,9 +262,6 @@ export default class World {
     this.ground.infiniteGroundBody.addEventListener("collide", (event: any) => {
       this.handleCollision(event.body);
     });
-    // this.ground.groundBody.addEventListener("collide", (event: any) => {
-    //   this.handleCollision(event.body);
-    // });
   }
 
   // Others
@@ -284,9 +281,9 @@ export default class World {
   update() {
     // this.water.update();
     if (this.stateMachine.currentStateName === StatesNames.EXPLORING) {
-      this.character.update();
+      this.exploringWorld.update();
       this.city.update();
-      this.vehicle.update();
+      // this.vehicle.update();
     }
   }
 }
