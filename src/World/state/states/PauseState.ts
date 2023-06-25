@@ -31,7 +31,7 @@ export default class PausedState extends GameState {
 
   public createWorld(): void {}
   public intro(): void {
-    this.world.resetGame();
+    this.world.towerStack.resetGame();
     this.stateMachine.change(new IntroState());
   }
   public start(): void {}
