@@ -28,7 +28,7 @@ export default class ResetState extends GameState {
   public paused(): void {}
   public gameOver(): void {}
   public reset(): void {
-    this.world.resetGame();
+    this.world.towerStack.resetGame();
     this.stateMachine.change(new StartGameState());
   }
 }

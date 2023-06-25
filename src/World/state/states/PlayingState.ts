@@ -25,7 +25,7 @@ export default class PlayingState extends GameState {
   private keyEventListeners(event: KeyboardEvent) {
     switch (event.code) {
       case "Space":
-        this.world.currentFloor!.drop();
+        this.world.towerStack.currentFloor!.drop();
         break;
       default:
         break;
@@ -52,7 +52,7 @@ export default class PlayingState extends GameState {
     window.addEventListener("keydown", this.keyEventListener);
 
     this.controllers.on("controllerDrop", () => {
-      this.world.dropFloor();
+      this.world.towerStack.dropFloor();
     });
 
     this.menuIcon.on("handleMenuClick", () => this.paused());

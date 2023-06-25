@@ -49,6 +49,8 @@ export default class City {
       }
     });
     this.cityPhysicBodies();
+
+    this.experience.scene.add(this.model);
   }
 
   cityPhysicBodies() {

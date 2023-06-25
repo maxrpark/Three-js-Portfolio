@@ -37,7 +37,7 @@ export default class GameOverState extends GameState {
 
   public createWorld(): void {}
   public intro(): void {
-    this.world.resetGame();
+    this.world.towerStack.resetGame();
     this.stateMachine.change(new IntroState());
   }
 
@@ -45,7 +45,7 @@ export default class GameOverState extends GameState {
   public playing(): void {}
   public paused(): void {}
   public gameOver(): void {
-    this.world.gameEnded();
+    this.world.towerStack.gameEnded();
 
     this.modal.on("handleExit", () => this.intro());
     this.modal.on("handleGameRestart", () => this.reset());
