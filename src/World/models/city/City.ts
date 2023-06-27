@@ -3,8 +3,8 @@ import { Experience } from "../../../experience/Experience";
 import { Mesh, MeshStandardMaterial } from "three";
 import { BlockCenterRight } from "./block";
 import * as CANNON from "cannon";
-import Character from "../Character";
 import { PhysicsWorld } from "../../../experience/utils";
+import { Item } from "../../../ts/globalnterfaces";
 
 export default class City {
   private experience: Experience;
@@ -14,12 +14,10 @@ export default class City {
   collectables: Mesh[] = [];
   keys: Mesh[] = [];
   physicsBodies: Mesh[] = [];
-  character: Character;
   physics: PhysicsWorld;
   constructor() {
     this.experience = new Experience();
     this.resources = this.experience.resources;
-    this.character = this.experience.world.character;
     this.physics = this.experience.physics;
 
     this.createModel();
@@ -53,6 +51,20 @@ export default class City {
     this.experience.scene.add(this.model);
   }
 
+  removeItemFound(name: string) {
+    this.model.remove(this.model.getObjectByName(name)!);
+  }
+
+  onLoadRemoveCollectedItems(array: Item[]) {
+    [...this.collectables, ...this.keys].map((item) => {
+      if (array.find((el) => el.name === item.name && el.isCollected)) {
+        item.visible = false;
+        this.model.remove(item!);
+      }
+      return item;
+    });
+  }
+
   cityPhysicBodies() {
     this.blockCenterRight = new BlockCenterRight();
 
@@ -83,9 +95,5 @@ export default class City {
 
       this.physics.world.addBody(body);
     });
-  }
-
-  update() {
-    if (!this.character) return;
   }
 }

@@ -3,16 +3,20 @@ import { Experience } from "../experience/Experience";
 import { Character, City, Vehicle } from "./models";
 import { StateMachine, StatesNames } from "./state/GameState";
 import { CharacterController } from "./utils";
+import UserProgress from "./UserProgress";
+import { ItemType, ItemTypes } from "../ts/globalnterfaces";
 
-export class ExploringWorld {
+export default class ExploringWorld {
   public controllers: CharacterController;
   private experience: Experience;
   private stateMachine: StateMachine;
+  private userProgress: UserProgress;
   character: Character;
   vehicle: Vehicle;
 
   city: City;
   collectables: Mesh[];
+  keys: Mesh[];
 
   //
   canDrive: boolean = false;
@@ -23,6 +27,8 @@ export class ExploringWorld {
     this.stateMachine = this.experience.stateMachine;
     this.city = this.experience.world.city;
     this.collectables = this.city.collectables;
+    this.keys = this.city.keys;
+    this.userProgress = this.experience.world.userProgress;
 
     this.setExploration();
   }
@@ -68,18 +74,26 @@ export class ExploringWorld {
     }
   }
 
-  checkCollectables() {
-    this.collectables.forEach((item) => {
+  // checkCollectables() {
+  //   this.collectables.forEach((item) => {
+  //     if (
+  //       item.visible &&
+  //       this.character.model.mesh.position.distanceTo(item.position) <= 0.4
+  //     ) {
+  //       this.city.removeItemFound(item.name);
+  //       this.userProgress.itemCollected("fruit", item.name);
+  //     }
+  //   });
+  // }
+
+  checkItems(array: Mesh[], type: ItemType) {
+    array.forEach((item) => {
       if (
         item.visible &&
         this.character.model.mesh.position.distanceTo(item.position) <= 0.4
       ) {
-        var selectedObject = this.city.model.getObjectById(item.id);
-        this.collectables = this.collectables.filter(
-          (object) => object.id !== item.id
-        );
-
-        this.city.model.remove(selectedObject!);
+        this.city.removeItemFound(item.name);
+        this.userProgress.itemCollected(type, item.name);
       }
     });
   }
@@ -102,7 +116,10 @@ export class ExploringWorld {
       }
     }
     if (this.collectables.length) {
-      this.checkCollectables();
+      this.checkItems(this.collectables, ItemTypes.FRUIT);
+    }
+    if (this.keys.length) {
+      this.checkItems(this.keys, ItemTypes.KEY);
     }
   }
 }

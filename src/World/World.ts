@@ -5,21 +5,16 @@ import { Debug, PhysicsWorld } from "../experience/utils";
 import GUI from "lil-gui";
 import { gsap } from "gsap";
 
-import { TowerFloor, Ground } from "./objects";
+import { Ground } from "./objects";
 
 import { StateMachine, StatesNames } from "./state/GameState";
 import { IntroState, WorldCreationState, ExploringState } from "./state/states";
-import {
-  Controllers,
-  Modal,
-  MenuIcon,
-  LoadingModal,
-  CharacterController,
-} from "./utils/";
+import { Controllers, Modal, MenuIcon, LoadingModal } from "./utils/";
 
-import { City, Character, Vehicle } from "./models";
-import { ExploringWorld } from "./ExploringWorld";
+import { City } from "./models";
+import ExploringWorld from "./ExploringWorld";
 import TowerStack from "./TowerStackGame";
+import UserProgress from "./UserProgress";
 
 export default class World {
   private experience: Experience;
@@ -41,19 +36,15 @@ export default class World {
 
   // 3D Model
   city: City;
-  character: Character;
-  vehicle: Vehicle;
 
   // Main States
 
   exploringWorld: ExploringWorld;
   towerStack: TowerStack;
+  userProgress: UserProgress;
 
   // Controls and Icons
-  public characterControllers: CharacterController;
   public menuIcon: MenuIcon;
-
-  public currentFloor: TowerFloor | null;
 
   // Variables
   public score: number = 0;
@@ -87,6 +78,7 @@ export default class World {
     this.towerStack = new TowerStack();
     this.ground = new Ground();
     this.menuIcon = new MenuIcon();
+    this.userProgress = new UserProgress();
     this.exploringWorld = new ExploringWorld();
 
     this.createModal();
@@ -131,7 +123,6 @@ export default class World {
   update() {
     if (this.stateMachine.currentStateName === StatesNames.EXPLORING) {
       this.exploringWorld.update();
-      this.city.update();
     }
   }
 }
