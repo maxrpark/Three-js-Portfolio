@@ -34,9 +34,9 @@ export default class ToastNotification {
   createUI() {
     this.toastWrapper = document.createElement("div");
     this.toastWrapper.classList.add("toast-wrapper");
-
+    // <img src='src/static/images/fruit.jpeg' alt='' class='toast-img' />;
     this.toastWrapper.innerHTML = /*html*/ `
-        <img src="src/static/images/fruit.jpeg" alt="" class="toast-img" />
+        <div></div>
         <div>
           <p class="toast-title">${this.title}</p>
           <p class="toast-message">
