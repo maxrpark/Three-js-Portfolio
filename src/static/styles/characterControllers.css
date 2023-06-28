@@ -1,0 +1,68 @@
+.mobile-character-controller {
+  position: fixed;
+  bottom: 20px;
+  right: 5px;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  display: none;
+  padding: 0 1rem;
+}
+
+.mobile-directional-wrapper {
+  width: 120px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.282);
+
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.visible {
+  display: flex;
+}
+
+.directional-controller {
+  width: 50%;
+  height: 50%;
+  background: white;
+  border-radius: 50%;
+}
+
+.action-btn {
+  width: 70px;
+  height: 70px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border: none;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari, Chrome, Opera, Samsung */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Edge, IE */
+  user-select: none; /* Modern browsers */
+  transition: all 0.1s linear;
+  position: relative;
+}
+
+#driveBtn {
+  display: none;
+}
+
+.running {
+  scale: 1.5;
+  opacity: 0.3;
+}
+
+@media screen and (min-width: 687px) {
+  .mobile-character-controller {
+    display: none;
+  }
+}

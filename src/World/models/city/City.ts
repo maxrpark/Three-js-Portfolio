@@ -4,7 +4,8 @@ import { Mesh, MeshStandardMaterial } from "three";
 import { BlockCenterRight } from "./block";
 import * as CANNON from "cannon";
 import { PhysicsWorld } from "../../../experience/utils";
-import { Item } from "../../../ts/globalnterfaces";
+import { Item, ItemType, ItemTypes } from "../../../ts/globalnterfaces";
+import { gsap } from "gsap";
 
 export default class City {
   private experience: Experience;
@@ -51,8 +52,51 @@ export default class City {
     this.experience.scene.add(this.model);
   }
 
-  removeItemFound(name: string) {
-    this.model.remove(this.model.getObjectByName(name)!);
+  removeItemFound(item: Mesh, type: ItemType) {
+    let tl = gsap.timeline({});
+    tl.to(item.position, {
+      y: 1,
+    })
+      .to(
+        item.scale,
+        {
+          x: 2,
+          z: 2,
+          y: 2,
+        },
+        0
+      )
+      .to(
+        item.rotation,
+        {
+          y: 180,
+
+          duration: 1,
+        },
+        0
+      )
+      .to(item.scale, {
+        x: 0,
+        z: 0,
+        y: 0,
+        onComplete: () => {
+          this.model.remove(this.model.getObjectByName(item.name)!);
+        },
+      });
+
+    switch (type) {
+      case ItemTypes.FRUIT:
+        this.collectables = this.collectables.filter(
+          (object) => object.name !== item.name
+        );
+        break;
+      case ItemTypes.KEY:
+        this.keys = this.keys.filter((object) => object.name !== item.name);
+        break;
+
+      default:
+        break;
+    }
   }
 
   onLoadRemoveCollectedItems(array: Item[]) {

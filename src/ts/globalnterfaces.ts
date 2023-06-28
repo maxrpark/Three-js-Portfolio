@@ -20,8 +20,17 @@ export interface Item {
 }
 
 export interface ProgressStorage {
-  collectables: Item[];
-  keys: Item[];
+  fruits: {
+    total: number;
+    collected: number;
+    items: Item[];
+  };
+
+  keys: {
+    total: number;
+    collected: number;
+    items: Item[];
+  };
 }
 
 export enum ItemTypes {

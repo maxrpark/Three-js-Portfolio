@@ -15,6 +15,7 @@ import { City } from "./models";
 import ExploringWorld from "./ExploringWorld";
 import TowerStack from "./TowerStackGame";
 import UserProgress from "./UserProgress";
+import ToastNotification from "./utils/ToastNotification";
 
 export default class World {
   private experience: Experience;
@@ -42,6 +43,9 @@ export default class World {
   exploringWorld: ExploringWorld;
   towerStack: TowerStack;
   userProgress: UserProgress;
+
+  // ToastNotification
+  toastNotification: ToastNotification;
 
   // Controls and Icons
   public menuIcon: MenuIcon;
@@ -74,6 +78,7 @@ export default class World {
   public createWorld() {
     if (this.stateMachine.currentStateName !== StatesNames.CREATION) return;
 
+    this.toastNotification = new ToastNotification();
     this.city = new City();
     this.towerStack = new TowerStack();
     this.ground = new Ground();

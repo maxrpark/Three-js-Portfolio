@@ -15,10 +15,7 @@ export default class ExploringWorld {
   vehicle: Vehicle;
 
   city: City;
-  collectables: Mesh[];
-  keys: Mesh[];
 
-  //
   canDrive: boolean = false;
   isDriving: boolean = false;
 
@@ -26,11 +23,17 @@ export default class ExploringWorld {
     this.experience = new Experience();
     this.stateMachine = this.experience.stateMachine;
     this.city = this.experience.world.city;
-    this.collectables = this.city.collectables;
-    this.keys = this.city.keys;
+
     this.userProgress = this.experience.world.userProgress;
 
     this.setExploration();
+  }
+
+  get collectables() {
+    return this.city.collectables;
+  }
+  get keys() {
+    return this.city.keys;
   }
 
   setExploration() {
@@ -74,25 +77,14 @@ export default class ExploringWorld {
     }
   }
 
-  // checkCollectables() {
-  //   this.collectables.forEach((item) => {
-  //     if (
-  //       item.visible &&
-  //       this.character.model.mesh.position.distanceTo(item.position) <= 0.4
-  //     ) {
-  //       this.city.removeItemFound(item.name);
-  //       this.userProgress.itemCollected("fruit", item.name);
-  //     }
-  //   });
-  // }
-
   checkItems(array: Mesh[], type: ItemType) {
     array.forEach((item) => {
       if (
         item.visible &&
         this.character.model.mesh.position.distanceTo(item.position) <= 0.4
       ) {
-        this.city.removeItemFound(item.name);
+        this.city.removeItemFound(item, type);
+
         this.userProgress.itemCollected(type, item.name);
       }
     });
