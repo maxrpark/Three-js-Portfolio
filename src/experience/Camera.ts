@@ -43,7 +43,7 @@ export class Camera implements CameraInt {
       75,
       this.sizes.width / this.sizes.height,
       0.1,
-      200
+      100
     );
     this.camera.position.set(2, 20, 8);
 

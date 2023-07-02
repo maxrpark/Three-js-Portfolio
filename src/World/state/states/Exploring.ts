@@ -32,6 +32,8 @@ export default class ExploringState extends GameState {
     this.world.setExploringWorld();
     //@ts-ignore
     this.previousState = this.states[this.stateMachine.previousStateName];
+    this.experience.camera.camera.fov = 45;
+    this.experience.camera.camera.updateProjectionMatrix();
 
     this.menuIcon.on("handleMenuClick", () => {
       this.exit();
@@ -61,6 +63,9 @@ export default class ExploringState extends GameState {
       //@ts-ignore
       this.stateMachine.change(new this.previousState());
     });
+
+    this.experience.camera.camera.fov = 75;
+    this.experience.camera.camera.updateProjectionMatrix();
 
     //
   }

@@ -28,14 +28,16 @@ export default class Modal extends EventEmitter {
       <div class="modal-texts-wrapper">
           <h2 class="modal-texts">Intro</h2>
        </div>
-      <button id="gameStart" class="btn btn-primary">Start</button>
+      <button id="gameStart" class="btn btn-primary">Tower Stack</button>
       <button id="exploreWorld" class="btn btn-primary">Explore</button>
+      <button id="progressModal" class="btn btn-primary">My Progress</button>
       </div>
       `;
 
     // Modal Events
     const gameStart = document.getElementById("gameStart")!;
     const exploreWorld = document.getElementById("exploreWorld")!;
+    const progressModal = this.modalWrapper.querySelector("#progressModal")!;
 
     gameStart.addEventListener("click", () =>
       this.trigger("handleGameStartClick")
@@ -44,6 +46,11 @@ export default class Modal extends EventEmitter {
     exploreWorld.addEventListener("click", () =>
       this.trigger("handleExploreWorld")
     );
+
+    progressModal.addEventListener("click", () =>
+      this.trigger("handleProgressModal")
+    );
+
     this.animation();
   }
   public gameOver({ score }: gameOverParams) {
@@ -54,15 +61,17 @@ export default class Modal extends EventEmitter {
           <h2 class="modal-texts">Game Over</h2>
           <h3 class="modal-texts-wrapper">Your score is ${score}</h3>
        </div>
-      <button id="gameRestart" class="btn btn-primary">Play Again</button>
-      <button id="exitGame" class="btn btn-primary">Exit</button>
+      <button id="gameRestart" class="btn btn-primary">Try Again</button>
       <button id="exploreWorld" class="btn btn-primary">Explore</button>
+      <button id="progressModal" class="btn btn-primary">My Progress</button>
+      <button id="exitGame" class="btn btn-primary">Exit</button>
     </div>
     `;
 
     // Modal Events
     const gameRestart = this.modalWrapper.querySelector("#gameRestart")!;
     const exploreWorld = this.modalWrapper.querySelector("#exploreWorld")!;
+    const progressModal = this.modalWrapper.querySelector("#progressModal")!;
 
     const exitGame = this.modalWrapper.querySelector("#exitGame")!;
 
@@ -74,6 +83,9 @@ export default class Modal extends EventEmitter {
 
     exploreWorld.addEventListener("click", () =>
       this.trigger("handleExploreWorld")
+    );
+    progressModal.addEventListener("click", () =>
+      this.trigger("handleProgressModal")
     );
 
     // animation

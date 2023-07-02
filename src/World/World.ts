@@ -16,6 +16,7 @@ import ExploringWorld from "./ExploringWorld";
 import TowerStack from "./TowerStackGame";
 import UserProgress from "./UserProgress";
 import ToastNotification from "./utils/ToastNotification";
+import ModalProgress from "./utils/ModalProgress";
 
 export default class World {
   private experience: Experience;
@@ -46,6 +47,7 @@ export default class World {
 
   // ToastNotification
   toastNotification: ToastNotification;
+  modalProgress: ModalProgress;
 
   // Controls and Icons
   public menuIcon: MenuIcon;
@@ -63,10 +65,10 @@ export default class World {
       castShadow: true,
     });
 
-    this.setLoadingScreen();
+    // this.setLoadingScreen();
 
     this.experience.resources.on("loaded", () => {
-      this.loadingModal.progressModalOut(); // COMMENTED DURING DEVELOPENT
+      // this.loadingModal.progressModalOut(); // COMMENTED DURING DEVELOPENT
       this.stateMachine.change(new WorldCreationState());
     });
   }
@@ -85,18 +87,19 @@ export default class World {
     this.menuIcon = new MenuIcon();
     this.userProgress = new UserProgress();
     this.exploringWorld = new ExploringWorld();
+    this.modalProgress = new ModalProgress();
 
     this.createModal();
 
-    // this.stateMachine.change(new IntroState()); // DURING DEVELOPENT
+    this.stateMachine.change(new IntroState()); // DURING DEVELOPENT
   }
 
-  private setLoadingScreen() {
-    this.loadingModal = new LoadingModal();
-    this.loadingModal.on("animationCompleted", () => {
-      this.stateMachine.change(new IntroState());
-    });
-  }
+  // private setLoadingScreen() {
+  //   this.loadingModal = new LoadingModal();
+  //   this.loadingModal.on("animationCompleted", () => {
+  //     this.stateMachine.change(new IntroState());
+  //   });
+  // }
 
   public intro() {
     this.modal.intro();

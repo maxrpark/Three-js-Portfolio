@@ -205,7 +205,7 @@ export default class Character {
   }
 
   updateCamera() {
-    const idealOffset = new Vector3(0, 2.4, -2.5);
+    const idealOffset = new Vector3(0, 1.4, -3.5);
     const idealLookAt = new Vector3(0, 1, 0);
     const lerp = 0.1;
     const modelPosition = this.model.mesh.position.clone();

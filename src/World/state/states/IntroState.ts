@@ -29,6 +29,7 @@ export default class IntroState extends GameState {
   public update(): void {}
   public exit(): void {
     this.modal.off("handleGameStartClick");
+    this.modal.off("handleProgressModal");
     this.menuIcon.off("handleMenuClick");
     this.controllers.off("controllerMenu");
     this.modal.closeModal();
@@ -42,6 +43,9 @@ export default class IntroState extends GameState {
 
     this.modal.on("handleGameStartClick", async () => {
       this.stateMachine.change(new StartGameState());
+    });
+    this.modal.on("handleProgressModal", async () => {
+      this.world.modalProgress.openModal();
     });
 
     this.menuIcon.on("handleMenuClick", () => this.modal.intro());

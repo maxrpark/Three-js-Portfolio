@@ -1,0 +1,40 @@
+.my-progress-modal {
+  /* width: 100%;
+  height: 100%; */
+  position: fixed;
+  inset: 0 0 0 0;
+  background: var(--primary-color);
+  z-index: 100;
+}
+
+.progress-badges-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+  /* padding: 1rem; */
+}
+
+.single-badge {
+  width: 100%;
+  height: 70px;
+  max-width: 500px;
+  background: var(--primary-white);
+  border-radius: var(--border-radius-2);
+}
+
+.progress-container {
+  height: 20px;
+  width: 100%;
+  background: blue;
+  position: relative;
+}
+
+.progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: pink;
+}

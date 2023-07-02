@@ -5,6 +5,7 @@
 @import "./characterControllers.css";
 @import "./menuActionButtons.css";
 @import "./toastNotification.css";
+@import "./progressModal.css";
 
 * {
   margin: 0;
@@ -17,6 +18,10 @@
   --primary-white: #ffffff;
   --primary-color: rgb(255, 56, 86);
   --primary-font: "Roboto", sans-serif;
+  --border-radius-1: 5px;
+  --border-radius-2: 10px;
+  --border-radius-3: 15px;
+  --border-radius-4: 20px;
 }
 html,
 body {
