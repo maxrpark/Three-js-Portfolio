@@ -2,6 +2,7 @@ import { gsap } from "gsap";
 export interface ToastMessage {
   title: string;
   text: string;
+  type: string;
 }
 
 export default class ToastNotification {
@@ -9,6 +10,7 @@ export default class ToastNotification {
   imgName: string = "";
   private _title: string = "";
   private _text: string = "";
+  private _type: string = "";
   constructor() {
     this.createUI();
   }
@@ -31,25 +33,41 @@ export default class ToastNotification {
     this.toastWrapper.querySelector(".toast-message")!.textContent = value;
   }
 
+  set type(value: string) {
+    this._type = value;
+    // this.toastWrapper.querySelector(".toast-message")!.textContent = value;
+  }
+
   createUI() {
     this.toastWrapper = document.createElement("div");
     this.toastWrapper.classList.add("toast-wrapper");
     // <img src='src/static/images/fruit.jpeg' alt='' class='toast-img' />;
     this.toastWrapper.innerHTML = /*html*/ `
-        <div></div>
-        <div>
-          <p class="toast-title">${this.title}</p>
-          <p class="toast-message">
-            ${this.text}
-          </p>
-        </div>
+      <div class='toast-content ${this.type}'>
+          <div
+          class="toast-img">
+          
+          </div>
+          <div class='toast-description'>
+            <p class="toast-description__title">${this.title}
+            Some title</p>
+            <p class="toast-description__message">
+            lorem20 max luci. Perro undia lorem20 max luci. Perro undia lorem20 max luci. Perro undia lorem20 max luci. Perro undia
+              ${this.text}
+            </p>
+          </div>
+      </div>
   `;
 
     document.getElementById("app")?.appendChild(this.toastWrapper);
 
-    gsap.set(this.toastWrapper, { xPercent: -50, left: "50%", yPercent: -100 });
+    gsap.set(this.toastWrapper, {
+      xPercent: -50,
+      left: "50%",
+      // yPercent: -100
+    });
   }
-  showToast({ title, text }: ToastMessage) {
+  showToast({ title, text, type }: ToastMessage) {
     this.title = title;
     this.text = text;
     let tl = gsap.timeline({});

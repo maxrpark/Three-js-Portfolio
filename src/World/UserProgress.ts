@@ -14,6 +14,7 @@ const badges = [
   {
     id: 1,
     src: "",
+    isCollected: false,
     name: "Urban Wanderer",
     text: "Take a walk around the city", /// Walk around the city first time
     experience: 5, // something
@@ -25,6 +26,7 @@ const badges = [
   {
     id: 2,
     src: "",
+    isCollected: false,
     name: "Skyward Adventurer", // Play tower stack first time
     experience: 5,
     text: "Explanation", // something
@@ -36,6 +38,7 @@ const badges = [
   {
     id: 3,
     src: "",
+    isCollected: false,
     name: "Treasure Hunter", // Collect one item
     experience: 5,
     text: "Explanation", // something
@@ -47,6 +50,7 @@ const badges = [
   {
     id: 4,
     src: "",
+    isCollected: false,
     name: "Collect them all", // collect all 5 items
     experience: 5,
     text: "Explanation",
@@ -58,6 +62,7 @@ const badges = [
   {
     id: 5,
     src: "",
+    isCollected: false,
     name: "Key Hunter", // Collect one key
     experience: 5,
     text: "Explanation", // something
@@ -69,6 +74,44 @@ const badges = [
   {
     id: 6,
     src: "",
+    isCollected: false,
+    name: "The lord of the keys", // collect all 3 keys
+    experience: 5,
+    text: "Explanation", // something
+    typeCollection: true,
+    totalToCollect: 3,
+    hasCollected: 0,
+    type: ItemTypes.KEY,
+  },
+  //// REPETIDO
+  {
+    id: 7,
+    src: "",
+    isCollected: false,
+    name: "Collect them all", // collect all 5 items
+    experience: 5,
+    text: "Explanation",
+    typeCollection: true, // something
+    totalToCollect: 5,
+    hasCollected: 0,
+    type: ItemTypes.FRUIT,
+  },
+  {
+    id: 8,
+    src: "",
+    isCollected: false,
+    name: "Key Hunter", // Collect one key
+    experience: 5,
+    text: "Explanation", // something
+    typeCollection: true,
+    totalToCollect: 1,
+    hasCollected: 0,
+    type: ItemTypes.KEY,
+  },
+  {
+    id: 9,
+    src: "",
+    isCollected: false,
     name: "The lord of the keys", // collect all 3 keys
     experience: 5,
     text: "Explanation", // something
@@ -198,10 +241,12 @@ export default class UserProgress {
       ++hasCollected;
       if (totalToCollect === hasCollected) {
         this.showCompletedBadgeNotification(badge);
+        badge.isCollected = true;
       } else {
         this.toastNotification.showToast({
           title: `${type}. `,
           text: `You had collected ${collected} out of ${total}`,
+          type: `${type}-toast`,
         });
       }
 
@@ -216,6 +261,7 @@ export default class UserProgress {
     this.toastNotification.showToast({
       title: `${badge.name}. ${badge.hasCollected} out of ${badge.totalToCollect}`,
       text: badge.text,
+      type: "completed",
     });
   }
 
@@ -228,7 +274,8 @@ export default class UserProgress {
 
     localStorage.setItem(LOCAL_STORAGE, JSON.stringify(progress));
   }
-  getResetProgress() {
+  resetProgress() {
     localStorage.removeItem(LOCAL_STORAGE);
+    window.location.reload();
   }
 }

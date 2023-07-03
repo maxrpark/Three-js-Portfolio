@@ -16,7 +16,7 @@ export default class TimeLineSlider {
     document.body.appendChild(this.sliderWrapper);
 
     this.sliderWrapper.innerHTML = `
-      <button id="pause">pause</button>
+      <button class="button-gsap-animation" id="pause">pause</button>
        <input id="progressSlider" type="range" min="0" max="1" value="0" step="0.001" />
       <div id="time">0.00</div>
    `;

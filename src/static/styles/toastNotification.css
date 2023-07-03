@@ -2,17 +2,41 @@
   width: 90%;
   max-width: 600px;
   position: fixed;
+
+  z-index: 100;
+}
+
+.toast-content {
   background: var(--primary-color);
   display: flex;
   align-items: center;
   padding: 1rem;
   gap: 1rem;
   border-radius: 14px;
-  z-index: 100;
+}
+
+.completed {
+  background: yellow;
+}
+.tower-toast {
+  background: green;
+}
+.explorer-toast {
+  background: blue;
 }
 
 .toast-img {
-  height: 100%;
+  height: 50px;
+  width: 50px;
   object-fit: contain;
-  max-height: 50px;
+  background: gray;
+}
+
+.toast-description {
+  width: calc(100% - 50px);
+}
+
+.toast-description__title {
+}
+.toast-description__message {
 }

@@ -30,6 +30,7 @@ export default class GameOverState extends GameState {
 
   public exit(): void {
     this.modal.off("handleGameRestart");
+    this.modal.off("handleProgressModal");
     this.modal.off("handleExit");
     this.menuIcon.off("handleMenuClick");
     this.controllers.off("controllerMenu");
@@ -52,6 +53,10 @@ export default class GameOverState extends GameState {
 
     this.menuIcon.on("handleMenuClick", () => this.closeModal());
     this.controllers.on("controllerMenu", () => this.closeModal());
+
+    this.modal.on("handleProgressModal", async () => {
+      this.world.modalProgress.openModal();
+    });
   }
   public reset(): void {
     this.modal.closeModal();

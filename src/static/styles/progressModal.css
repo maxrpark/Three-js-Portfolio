@@ -1,10 +1,16 @@
 .my-progress-modal {
-  /* width: 100%;
-  height: 100%; */
   position: fixed;
   inset: 0 0 0 0;
-  background: var(--primary-color);
+  /* background: var(--primary-color); */
   z-index: 100;
+  padding: 1rem;
+  overflow: auto;
+}
+
+.modal-title {
+  text-align: center;
+  margin: 2rem auto;
+  font-size: 2rem;
 }
 
 .progress-badges-wrapper {
@@ -12,23 +18,66 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0.3rem;
-  /* padding: 1rem; */
+  gap: 1rem;
 }
 
 .single-badge {
   width: 100%;
-  height: 70px;
+  min-height: 100px;
   max-width: 500px;
   background: var(--primary-white);
-  border-radius: var(--border-radius-2);
+  border-radius: var(--border-radius-3);
+  padding: 0.7rem 1rem;
+  position: relative;
+  opacity: 0.7;
+}
+
+.badge-collected {
+  opacity: 1;
+}
+
+.single-badge__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.single-badge__top-title {
+  font-size: 1.25rem;
+  font-weight: 700px;
+  text-transform: capitalize;
+  margin-bottom: 0.2rem;
+}
+.single-badge__top-experience {
+  background: var(--primary-white);
+  border: 2px solid var(--primary-color);
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--border-radius-3);
+  opacity: 0.2;
+}
+
+.badge-collected .single-badge__top-experience {
+  background: var(--primary-color);
+  color: var(--primary-white);
+  opacity: 1;
+}
+
+.single-badge__progress {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
 }
 
 .progress-container {
-  height: 20px;
+  height: 30px;
   width: 100%;
-  background: blue;
+
+  background: var(--primary-white);
   position: relative;
+  border-radius: var(--border-radius-4);
+  border: 2px solid var(--primary-color);
+  overflow: hidden;
 }
 
 .progress-bar {
@@ -36,5 +85,29 @@
   top: 0;
   left: 0;
   height: 100%;
-  background: pink;
+  background: var(--primary-color);
+}
+
+.my-progress-modal__buttons-wrapper-btn {
+  display: block;
+  margin: 2rem auto;
+  border: none;
+  background: var(--primary-black);
+  color: var(--primary-white);
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+.my-progress-modal__buttons-wrapper-btn-close {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  top: 30px;
+  right: 30px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
 }
