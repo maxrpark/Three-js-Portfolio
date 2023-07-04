@@ -21,7 +21,8 @@ export default class ToastNotification {
 
   set title(value: string) {
     this._title = value;
-    this.toastWrapper.querySelector(".toast-title")!.textContent = value;
+    this.toastWrapper.querySelector(".toast-description__title")!.textContent =
+      value;
   }
 
   get text(): string {
@@ -30,7 +31,9 @@ export default class ToastNotification {
 
   set text(value: string) {
     this._text = value;
-    this.toastWrapper.querySelector(".toast-message")!.textContent = value;
+    this.toastWrapper.querySelector(
+      ".toast-description__message"
+    )!.textContent = value;
   }
 
   get className() {
@@ -39,7 +42,9 @@ export default class ToastNotification {
   }
   set className(value: string) {
     this._className = value;
-    // this.toastWrapper.querySelector(".toast-message")!.textContent = value;
+    this.toastWrapper
+      .querySelector(".toast-content")!
+      .setAttribute("id", this.className);
   }
 
   createUI() {
@@ -47,7 +52,7 @@ export default class ToastNotification {
     this.toastWrapper.classList.add("toast-wrapper");
     // <img src='src/static/images/fruit.jpeg' alt='' class='toast-img' />;
     this.toastWrapper.innerHTML = /*html*/ `
-      <div class='toast-content ${this.className}'>
+      <div class='toast-content'>
           <div
           class="toast-img">
           

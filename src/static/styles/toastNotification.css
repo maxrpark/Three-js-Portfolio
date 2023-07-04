@@ -15,13 +15,13 @@
   border-radius: 14px;
 }
 
-.completed {
+#completed {
   background: yellow;
 }
-.tower-toast {
+#tower-toast {
   background: green;
 }
-.explorer-toast {
+#explore-toast {
   background: blue;
 }
 

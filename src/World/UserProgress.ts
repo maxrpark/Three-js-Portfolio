@@ -55,7 +55,7 @@ const badges = [
     experience: 5,
     text: "Explanation",
     typeCollection: true, // something
-    totalToCollect: 5,
+    totalToCollect: 4,
     hasCollected: 0,
     type: ItemTypes.FRUIT,
   },
@@ -231,6 +231,8 @@ export default class UserProgress {
     collected: number,
     total: number
   ) {
+    let hasEarnABadge = false;
+    let earnedBadge = {};
     this.badges = this.badges.map((badge: any) => {
       let { totalToCollect, hasCollected } = badge;
 
@@ -239,15 +241,12 @@ export default class UserProgress {
       }
 
       ++hasCollected;
+
       if (totalToCollect === hasCollected) {
-        this.showCompletedBadgeNotification(badge);
         badge.isCollected = true;
-      } else {
-        this.toastNotification.showToast({
-          title: `${type}. `,
-          text: `You had collected ${collected} out of ${total}`,
-          className: `${type}-toast`,
-        });
+        hasEarnABadge = true;
+
+        earnedBadge = badge;
       }
 
       return {
@@ -255,6 +254,16 @@ export default class UserProgress {
         hasCollected,
       };
     });
+    if (hasEarnABadge) {
+      this.showCompletedBadgeNotification(earnedBadge);
+    }
+    {
+      this.toastNotification.showToast({
+        title: `${type}. `,
+        text: `You had collected ${collected} out of ${total}`,
+        className: `explore-toast`,
+      });
+    }
   }
 
   showCompletedBadgeNotification(badge: any) {

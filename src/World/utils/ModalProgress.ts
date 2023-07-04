@@ -140,10 +140,14 @@ export default class ModalProgress extends EventEmitter {
         },
         0
       )
-      .to(this.modalProgressWrapper, {
-        rotate: 0,
-        transformOrigin: "bottom right",
-      });
+      .to(
+        this.modalProgressWrapper,
+        {
+          rotate: 0,
+          transformOrigin: "bottom right",
+        },
+        "-=.5"
+      );
   }
   closeModal() {
     let tl = gsap.timeline({});
