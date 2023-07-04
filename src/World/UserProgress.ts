@@ -246,7 +246,7 @@ export default class UserProgress {
         this.toastNotification.showToast({
           title: `${type}. `,
           text: `You had collected ${collected} out of ${total}`,
-          type: `${type}-toast`,
+          className: `${type}-toast`,
         });
       }
 
@@ -261,7 +261,7 @@ export default class UserProgress {
     this.toastNotification.showToast({
       title: `${badge.name}. ${badge.hasCollected} out of ${badge.totalToCollect}`,
       text: badge.text,
-      type: "completed",
+      className: "completed",
     });
   }
 

@@ -2,7 +2,7 @@ import { gsap } from "gsap";
 export interface ToastMessage {
   title: string;
   text: string;
-  type: string;
+  className: string;
 }
 
 export default class ToastNotification {
@@ -10,7 +10,7 @@ export default class ToastNotification {
   imgName: string = "";
   private _title: string = "";
   private _text: string = "";
-  private _type: string = "";
+  private _className: string = "";
   constructor() {
     this.createUI();
   }
@@ -33,8 +33,12 @@ export default class ToastNotification {
     this.toastWrapper.querySelector(".toast-message")!.textContent = value;
   }
 
-  set type(value: string) {
-    this._type = value;
+  get className() {
+    return this._className;
+    // this.toastWrapper.querySelector(".toast-message")!.textContent = value;
+  }
+  set className(value: string) {
+    this._className = value;
     // this.toastWrapper.querySelector(".toast-message")!.textContent = value;
   }
 
@@ -43,7 +47,7 @@ export default class ToastNotification {
     this.toastWrapper.classList.add("toast-wrapper");
     // <img src='src/static/images/fruit.jpeg' alt='' class='toast-img' />;
     this.toastWrapper.innerHTML = /*html*/ `
-      <div class='toast-content ${this.type}'>
+      <div class='toast-content ${this.className}'>
           <div
           class="toast-img">
           
@@ -64,12 +68,13 @@ export default class ToastNotification {
     gsap.set(this.toastWrapper, {
       xPercent: -50,
       left: "50%",
-      // yPercent: -100
+      yPercent: -100,
     });
   }
-  showToast({ title, text, type }: ToastMessage) {
+  showToast({ title, text, className }: ToastMessage) {
     this.title = title;
     this.text = text;
+    this.className = className;
     let tl = gsap.timeline({});
     tl.set(this.toastWrapper, { xPercent: -50, left: "50%", yPercent: -100 })
       .to(this.toastWrapper, { yPercent: 0, opacity: 1 })
