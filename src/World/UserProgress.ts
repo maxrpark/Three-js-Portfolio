@@ -83,43 +83,6 @@ const badges = [
     hasCollected: 0,
     type: ItemTypes.KEY,
   },
-  //// REPETIDO
-  {
-    id: 7,
-    src: "",
-    isCollected: false,
-    name: "Collect them all", // collect all 5 items
-    experience: 5,
-    text: "Explanation",
-    typeCollection: true, // something
-    totalToCollect: 5,
-    hasCollected: 0,
-    type: ItemTypes.FRUIT,
-  },
-  {
-    id: 8,
-    src: "",
-    isCollected: false,
-    name: "Key Hunter", // Collect one key
-    experience: 5,
-    text: "Explanation", // something
-    typeCollection: true,
-    totalToCollect: 1,
-    hasCollected: 0,
-    type: ItemTypes.KEY,
-  },
-  {
-    id: 9,
-    src: "",
-    isCollected: false,
-    name: "The lord of the keys", // collect all 3 keys
-    experience: 5,
-    text: "Explanation", // something
-    typeCollection: true,
-    totalToCollect: 3,
-    hasCollected: 0,
-    type: ItemTypes.KEY,
-  },
 ];
 
 export interface Collectables {
@@ -261,10 +224,12 @@ export default class UserProgress {
         hasCollected,
       };
     });
+
     if (hasEarnABadge) {
+      console.log("MAX");
+
       this.showCompletedBadgeNotification(earnedBadge);
-    }
-    {
+    } else {
       this.toastNotification.showToast({
         title: `${type}. `,
         text: `You had collected ${collected} out of ${total}`,
@@ -275,7 +240,7 @@ export default class UserProgress {
 
   showCompletedBadgeNotification(badge: any) {
     this.toastNotification.showToast({
-      title: `${badge.name}. ${badge.hasCollected} out of ${badge.totalToCollect}`,
+      title: `${badge.name}. Earned ${badge.badge}XP`,
       text: badge.text,
       className: "completed",
     });

@@ -14,29 +14,13 @@
   gap: 1rem;
   border-radius: 14px;
   color: white;
-
-  /* Explore
-  background: #228b22;
-  border: 2px solid #006400; */
-
-  /* tower */
-  /* background: #ffa500;
-  border: 2px solid #ff8c00; */
-
-  /* earn */
-  /* background: #ffd700;
-  border: 2px solid #cdad00;
-  color: #000000; */
 }
 
-#completed {
-  background: yellow;
-}
 #tower-toast {
-  background: green;
+  background: rgba(255, 166, 0, 0.8);
 }
 #explore-toast {
-  background: blue;
+  background: rgba(34, 139, 34, 0.8);
 }
 
 .toast-img {

@@ -3,15 +3,18 @@
   inset: 0 0 0 0;
   z-index: 100;
   padding: 1rem;
+  padding-top: 5rem;
   overflow: auto;
 }
 
 .experience-wrapper {
   display: flex;
   align-items: center;
+  flex-direction: column;
   justify-content: space-between;
   max-width: 500px;
   margin: 0 auto;
+  gap: 1rem;
 
   margin-bottom: 2rem;
   margin-top: 0.5rem;
@@ -27,6 +30,7 @@
   background: var(--primary-color);
   color: var(--primary-white);
   opacity: 1;
+  order: 1;
 }
 .experience-earned {
   font-size: 14px;
@@ -132,4 +136,14 @@
   background: transparent;
   border: none;
   cursor: pointer;
+}
+
+@media screen and (min-width: 678px) {
+  .experience-wrapper {
+    flex-direction: row;
+    gap: 0;
+  }
+  .experience-pill {
+    order: unset;
+  }
 }

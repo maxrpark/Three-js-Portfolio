@@ -38,7 +38,6 @@ export default class ToastNotification {
 
   get className() {
     return this._className;
-    // this.toastWrapper.querySelector(".toast-message")!.textContent = value;
   }
   set className(value: string) {
     this._className = value;
@@ -52,7 +51,7 @@ export default class ToastNotification {
     this.toastWrapper.classList.add("toast-wrapper");
     // <img src='src/static/images/fruit.jpeg' alt='' class='toast-img' />;
     this.toastWrapper.innerHTML = /*html*/ `
-      <div class='toast-content'>
+      <div class='toast-content' id="">
           <div
           class="toast-img">
           
