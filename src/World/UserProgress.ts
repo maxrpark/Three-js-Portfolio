@@ -126,7 +126,7 @@ export default class UserProgress {
   }
 
   getLocalStorage() {
-    localStorage.deleteItem("MAX_R_PARK");
+    localStorage.removeItem("MAX_R_PARK");
     if (localStorage.getItem(LOCAL_STORAGE)) {
       Object.assign(this, JSON.parse(localStorage.getItem(LOCAL_STORAGE)!));
 
