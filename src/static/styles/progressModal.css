@@ -1,16 +1,42 @@
 .my-progress-modal {
   position: fixed;
   inset: 0 0 0 0;
-  /* background: var(--primary-color); */
   z-index: 100;
   padding: 1rem;
   overflow: auto;
 }
 
-.modal-title {
-  text-align: center;
-  margin: 2rem auto;
-  font-size: 2rem;
+.experience-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 500px;
+  margin: 0 auto;
+
+  margin-bottom: 2rem;
+  margin-top: 0.5rem;
+}
+
+.experience-pill {
+  background: var(--primary-white);
+  border: 2px solid var(--primary-color);
+  padding: 0.3rem 0.7rem;
+  border-radius: var(--border-radius-3);
+  opacity: 0.2;
+  width: fit-content;
+  background: var(--primary-color);
+  color: var(--primary-white);
+  opacity: 1;
+}
+.experience-earned {
+  font-size: 14px;
+}
+
+.experience-total {
+  font-size: 14px;
+  background: var(--primary-white);
+  color: var(--primary-color);
+  border: none;
 }
 
 .progress-badges-wrapper {
@@ -49,10 +75,6 @@
   margin-bottom: 0.2rem;
 }
 .single-badge__top-experience {
-  background: var(--primary-white);
-  border: 2px solid var(--primary-color);
-  padding: 0.3rem 0.7rem;
-  border-radius: var(--border-radius-3);
   opacity: 0.2;
 }
 

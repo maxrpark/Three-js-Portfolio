@@ -20,6 +20,14 @@ export default class ModalProgress extends EventEmitter {
     return this.userProgress.badges;
   }
 
+  get totalExperience() {
+    return this.userProgress.totalExperience;
+  }
+
+  get earnedExperience() {
+    return this.userProgress.earnedExperience;
+  }
+
   get isModalVisible() {
     return this._isModalVisible;
   }
@@ -41,9 +49,19 @@ export default class ModalProgress extends EventEmitter {
   }
 
   modalContent() {
+    // <div class="modal-title">
+    //
+    // </div>
     this.modalProgressWrapper.innerHTML = /*html*/ `
-      <div class="modal-title">
-      <h2>My Progress</h2>
+ 
+      <div class='experience-wrapper'>
+        <p class="experience-earned experience-pill">Earned: ${
+          this.earnedExperience
+        } XP</p>
+        <h2 class="modal-title">My Progress</h2>
+        <p class="experience-total experience-pill">
+          Total: ${this.totalExperience} XP
+        </p>
       </div>
       <div class="progress-badges-wrapper">
       ${this.badges
@@ -72,7 +90,9 @@ export default class ModalProgress extends EventEmitter {
 
             <div class='single-badge__top'>
             <p class='single-badge__top-title'>${badge.name}</p>
-            <p class="single-badge__top-experience">${badge.experience} XP</p>
+            <p class="single-badge__top-experience experience-pill">${
+              badge.experience
+            } XP</p>
             </div>
             <p class='single-badge__text'>${badge.text}</p>
             ${

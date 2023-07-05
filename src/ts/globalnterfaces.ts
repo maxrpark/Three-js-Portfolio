@@ -32,6 +32,8 @@ export interface ProgressStorage {
     items: Item[];
   };
   badges: any;
+  totalExperience: number;
+  earnedExperience: number;
 }
 
 export enum ItemTypes {

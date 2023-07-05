@@ -134,6 +134,8 @@ export default class UserProgress {
   toastNotification: ToastNotification;
 
   badges: any;
+  totalExperience: number;
+  earnedExperience: number;
 
   fruits: Collectables;
 
@@ -186,6 +188,11 @@ export default class UserProgress {
         };
       });
       this.badges = badges;
+      this.totalExperience = this.badges.reduce((acc: number, current: any) => {
+        return acc + current.experience;
+      }, 0);
+
+      this.earnedExperience = 0;
       this.updateProgress();
     }
   }
@@ -245,7 +252,7 @@ export default class UserProgress {
       if (totalToCollect === hasCollected) {
         badge.isCollected = true;
         hasEarnABadge = true;
-
+        this.earnedExperience += badge.experience;
         earnedBadge = badge;
       }
 
@@ -279,6 +286,8 @@ export default class UserProgress {
       fruits: this.fruits,
       keys: this.keys,
       badges: this.badges,
+      totalExperience: this.totalExperience,
+      earnedExperience: this.earnedExperience,
     };
 
     localStorage.setItem(LOCAL_STORAGE, JSON.stringify(progress));

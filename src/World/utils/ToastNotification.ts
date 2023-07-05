@@ -73,6 +73,7 @@ export default class ToastNotification {
     gsap.set(this.toastWrapper, {
       xPercent: -50,
       left: "50%",
+      // yPercent: 10,
       yPercent: -100,
     });
   }
@@ -82,7 +83,7 @@ export default class ToastNotification {
     this.className = className;
     let tl = gsap.timeline({});
     tl.set(this.toastWrapper, { xPercent: -50, left: "50%", yPercent: -100 })
-      .to(this.toastWrapper, { yPercent: 0, opacity: 1 })
+      .to(this.toastWrapper, { yPercent: 10, opacity: 1 })
       .to(this.toastWrapper, {
         delay: 3,
         opacity: 0,
