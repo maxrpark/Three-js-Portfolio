@@ -8,7 +8,7 @@ import {
 import { City } from "./models";
 import ToastNotification from "./utils/ToastNotification";
 
-const LOCAL_STORAGE = "MAX_R_PARK";
+const LOCAL_STORAGE = "MAX_R_PARK_1";
 
 const badges = [
   {
@@ -126,6 +126,7 @@ export default class UserProgress {
   }
 
   getLocalStorage() {
+    localStorage.deleteItem("MAX_R_PARK");
     if (localStorage.getItem(LOCAL_STORAGE)) {
       Object.assign(this, JSON.parse(localStorage.getItem(LOCAL_STORAGE)!));
 
