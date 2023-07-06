@@ -91,6 +91,7 @@ class Model {
     if (meshSavedPosition) {
       const { x, y, z } = meshSavedPosition;
       this.body.position = new CANNON.Vec3(x, y, z);
+      this.mesh.position.set(x, y, z);
     } else {
       this.position();
     }

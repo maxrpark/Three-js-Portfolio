@@ -13,6 +13,11 @@ import { PhysicsWorld, Time } from "../../experience/utils";
 import * as CANNON from "cannon";
 
 import { CharacterController } from "../utils";
+import { LocalStorageKeys } from "../../ts/globalTs";
+import {
+  getLocalStorageItem,
+  setLocalStorageItem,
+} from "../utils/helperFunctions";
 
 class Model {
   private experience: Experience;
@@ -23,6 +28,7 @@ class Model {
   private pivotOffset: Vector3 | CANNON.Vec3;
   private meshPositionPivot: Vector3 | CANNON.Vec3;
   private eulerRotation: Euler;
+  positionSaved: boolean;
 
   constructor(mesh: any) {
     this.experience = new Experience();
@@ -60,7 +66,7 @@ class Model {
       "XYZ"
     );
 
-    this.position();
+    this.setInitialPosition();
 
     this.physics.world.addBody(this.body);
 
@@ -70,6 +76,29 @@ class Model {
 
   position(x = 2, y = 0.2, z = 1) {
     this.body.position = new CANNON.Vec3(x, y, z);
+  }
+
+  savePlayerPosition() {
+    const positions = getLocalStorageItem(LocalStorageKeys.POSITIONS);
+
+    positions.vehicle = this.body.position;
+
+    setLocalStorageItem(LocalStorageKeys.POSITIONS, positions);
+    this.positionSaved = true;
+  }
+
+  setInitialPosition() {
+    const meshSavedPosition = getLocalStorageItem(
+      LocalStorageKeys.POSITIONS
+    ).vehicle;
+
+    if (meshSavedPosition) {
+      const { x, y, z } = meshSavedPosition;
+      this.body.position = new CANNON.Vec3(x, y, z);
+      this.mesh.position.set(x, y, z);
+    } else {
+      this.position();
+    }
   }
 
   moveVehicle(velocity = 3) {
@@ -205,12 +234,14 @@ export default class Vehicle {
   drivingControllers() {
     if (this.controllers.keysPressed.ArrowUp) {
       this.model.moveVehicle();
+      this.model.positionSaved = false;
     }
     if (
       this.controllers.keysPressed.ArrowUp &&
       this.controllers.keysPressed.ShiftLeft
     ) {
       this.model.moveVehicle(6);
+      this.model.positionSaved = false;
     }
 
     if (
@@ -244,6 +275,13 @@ export default class Vehicle {
   }
 
   update() {
+    if (
+      !this.controllers.keysPressed.ArrowUp &&
+      !this.controllers.keysPressed.ShiftLeft
+    ) {
+      if (!this.model.positionSaved) this.model.savePlayerPosition();
+    }
+
     this.drivingControllers();
     this.updateCamera();
 
