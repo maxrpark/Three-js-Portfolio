@@ -229,7 +229,7 @@ export default class UserProgress {
     localStorage.setItem(LOCAL_STORAGE, JSON.stringify(progress));
   }
   resetProgress() {
-    localStorage.removeItem(LOCAL_STORAGE);
+    localStorage.clear();
     window.location.reload();
   }
 }
