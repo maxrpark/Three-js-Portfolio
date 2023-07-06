@@ -64,6 +64,6 @@ export default class GameOverState extends GameState {
   }
 
   closeModal() {
-    this.modal.gameOver({ score: this.world.getScore });
+    this.modal.gameOver({ score: this.world.towerStack.getScore });
   }
 }
