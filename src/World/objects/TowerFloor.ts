@@ -5,7 +5,7 @@ import { PhysicsWorld, Time } from "../../experience/utils";
 import { gsap } from "gsap";
 import EventEmitter from "../../experience/utils/EventEmitter";
 import Resources from "../../experience/utils/Resources";
-import { MeshTextureInt } from "../../ts/globalnterfaces";
+import { MeshTextureInt } from "../../ts/globalTs";
 
 interface Props {
   positionY: number;

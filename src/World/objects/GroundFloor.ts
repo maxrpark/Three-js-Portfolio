@@ -8,7 +8,7 @@ import CANNON from "cannon";
 import { Experience } from "../../experience/Experience";
 import { PhysicsWorld } from "../../experience/utils";
 import Resources from "../../experience/utils/Resources";
-import { MeshTextureInt } from "../../ts/globalnterfaces";
+import { MeshTextureInt } from "../../ts/globalTs";
 
 interface Props {
   floorSize: number;

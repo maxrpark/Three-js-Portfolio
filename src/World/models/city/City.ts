@@ -4,11 +4,7 @@ import { Mesh, MeshStandardMaterial } from "three";
 import { BlockCenterRight } from "./block";
 import * as CANNON from "cannon";
 import { PhysicsWorld } from "../../../experience/utils";
-import {
-  Item,
-  ItemTypeCollectable,
-  ItemTypes,
-} from "../../../ts/globalnterfaces";
+import { Item, ItemTypeCollectable, ItemTypes } from "../../../ts/globalTs";
 import { gsap } from "gsap";
 
 export default class City {

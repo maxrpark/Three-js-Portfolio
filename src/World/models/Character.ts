@@ -14,6 +14,11 @@ import { PhysicsWorld, Time } from "../../experience/utils";
 import * as CANNON from "cannon";
 
 import { CharacterController } from "../utils";
+import {
+  getLocalStorageItem,
+  setLocalStorageItem,
+} from "../utils/helperFunctions";
+import { LocalStorageKeys } from "../../ts/globalTs";
 
 class Model {
   private experience: Experience;
@@ -24,6 +29,7 @@ class Model {
   private pivotOffset: Vector3 | CANNON.Vec3;
   private meshPositionPivot: Vector3 | CANNON.Vec3;
   private eulerRotation: Euler;
+  positionSaved: boolean;
 
   constructor(mesh: any) {
     this.experience = new Experience();
@@ -65,7 +71,7 @@ class Model {
       "XYZ"
     );
 
-    this.position();
+    this.setInitialPosition();
 
     this.physics.world.addBody(this.body);
 
@@ -75,6 +81,27 @@ class Model {
 
   position(x = -2, y = 1, z = 1) {
     this.body.position = new CANNON.Vec3(x, y, z);
+  }
+
+  setInitialPosition() {
+    const meshSavedPosition = getLocalStorageItem(
+      LocalStorageKeys.POSITIONS
+    ).character;
+
+    if (meshSavedPosition) {
+      const { x, y, z } = meshSavedPosition;
+      this.body.position = new CANNON.Vec3(x, y, z);
+    } else {
+      this.position();
+    }
+  }
+
+  savePlayerPosition() {
+    const positions = getLocalStorageItem(LocalStorageKeys.POSITIONS);
+
+    positions.character = this.body.position;
+    setLocalStorageItem(LocalStorageKeys.POSITIONS, positions);
+    this.positionSaved = true;
   }
 
   moveForward(velocity = 1) {
@@ -231,6 +258,7 @@ export default class Character {
       this.model.moveForward();
       if (!this.isWalking) {
         this.isWalking = true;
+        this.model.positionSaved = false;
         this.animations.playAnimation("walking");
       }
     }
@@ -242,6 +270,7 @@ export default class Character {
 
       if (!this.isRunning) {
         this.isRunning = true;
+        this.model.positionSaved = false;
         this.animations.playAnimation("running");
       }
     }
@@ -291,6 +320,10 @@ export default class Character {
 
   update() {
     // Mobile controller
+
+    if (!this.isRunning && !this.isWalking) {
+      if (!this.model.positionSaved) this.model.savePlayerPosition();
+    }
 
     this.updateCamera();
     this.characterController();

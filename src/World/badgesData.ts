@@ -1,4 +1,4 @@
-import { Badge, ItemTypes } from "../ts/globalnterfaces";
+import { Badge, ItemTypes } from "../ts/globalTs";
 
 const badges: Badge[] = [
   {

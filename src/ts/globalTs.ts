@@ -62,3 +62,9 @@ export type ItemTypeAll =
   | ItemTypeCollectable
   | ItemTypes.TOWER_GAME
   | ItemTypes.ACTIONS;
+
+export enum LocalStorageKeys {
+  POSITIONS = "POSITIONS",
+}
+
+export type LocalStorageTypes = LocalStorageKeys.POSITIONS;

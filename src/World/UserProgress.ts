@@ -5,7 +5,7 @@ import {
   ItemTypeCollectable,
   ItemTypes,
   ProgressStorage,
-} from "../ts/globalnterfaces";
+} from "../ts/globalTs";
 import badges from "./badgesData";
 import { City } from "./models";
 import ToastNotification from "./utils/ToastNotification";

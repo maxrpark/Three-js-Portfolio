@@ -4,7 +4,7 @@ import { Character, City, Vehicle } from "./models";
 import { StateMachine, StatesNames } from "./state/GameState";
 import { CharacterController } from "./utils";
 import UserProgress from "./UserProgress";
-import { ItemTypeCollectable, ItemTypes } from "../ts/globalnterfaces";
+import { ItemTypeCollectable, ItemTypes } from "../ts/globalTs";
 
 export default class ExploringWorld {
   public controllers: CharacterController;
