@@ -12,10 +12,22 @@ export interface MeshTextureInt {
   metalness?: number;
   matcap?: any;
 }
+export interface Badge {
+  id: number;
+  src: string;
+  isCollected: boolean;
+  name: string; // collect all 3 keys
+  experience: number;
+  text: string; // something
+  typeCollection: boolean;
+  totalToCollect: number;
+  hasCollected: number;
+  type: ItemTypeAll;
+}
 
 export interface Item {
   name: string;
-  type: ItemType;
+  type: ItemTypeCollectable;
   isCollected: boolean;
 }
 
@@ -34,11 +46,19 @@ export interface ProgressStorage {
   badges: any;
   totalExperience: number;
   earnedExperience: number;
+  maxTowerLevel: number;
 }
 
 export enum ItemTypes {
   FRUIT = "fruit",
   KEY = "key",
+  TOWER_GAME = "tower_game",
+  ACTIONS = "actions",
 }
 
-export type ItemType = ItemTypes.FRUIT | ItemTypes.KEY;
+export type ItemTypeCollectable = ItemTypes.FRUIT | ItemTypes.KEY;
+
+export type ItemTypeAll =
+  | ItemTypeCollectable
+  | ItemTypes.TOWER_GAME
+  | ItemTypes.ACTIONS;

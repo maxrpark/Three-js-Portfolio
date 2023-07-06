@@ -52,9 +52,6 @@ export default class World {
   // Controls and Icons
   public menuIcon: MenuIcon;
 
-  // Variables
-  public score: number = 0;
-
   constructor() {
     this.experience = new Experience();
     this.stateMachine = this.experience.stateMachine;
@@ -73,19 +70,15 @@ export default class World {
     });
   }
 
-  public get getScore(): number {
-    return this.score;
-  }
-
   public createWorld() {
     if (this.stateMachine.currentStateName !== StatesNames.CREATION) return;
 
     this.toastNotification = new ToastNotification();
     this.city = new City();
+    this.userProgress = new UserProgress();
     this.towerStack = new TowerStack();
     this.ground = new Ground();
     this.menuIcon = new MenuIcon();
-    this.userProgress = new UserProgress();
     this.exploringWorld = new ExploringWorld();
     this.modalProgress = new ModalProgress();
 
@@ -119,6 +112,7 @@ export default class World {
   public setExploringWorld() {
     this.controllers.showPlayMenu();
     this.modal.closeModal();
+    this.userProgress.checkBadgesByID(1);
   }
 
   createModal() {

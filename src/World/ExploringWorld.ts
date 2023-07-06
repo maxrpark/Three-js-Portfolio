@@ -4,7 +4,7 @@ import { Character, City, Vehicle } from "./models";
 import { StateMachine, StatesNames } from "./state/GameState";
 import { CharacterController } from "./utils";
 import UserProgress from "./UserProgress";
-import { ItemType, ItemTypes } from "../ts/globalnterfaces";
+import { ItemTypeCollectable, ItemTypes } from "../ts/globalnterfaces";
 
 export default class ExploringWorld {
   public controllers: CharacterController;
@@ -77,7 +77,7 @@ export default class ExploringWorld {
     }
   }
 
-  checkItems(array: Mesh[], type: ItemType) {
+  checkItems(array: Mesh[], type: ItemTypeCollectable) {
     array.forEach((item) => {
       if (
         item.visible &&

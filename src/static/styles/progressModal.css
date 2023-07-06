@@ -10,7 +10,7 @@
 .experience-wrapper {
   display: flex;
   align-items: center;
-  flex-direction: column;
+  flex-direction: row-reverse;
   justify-content: space-between;
   max-width: 500px;
   margin: 0 auto;
@@ -30,7 +30,6 @@
   background: var(--primary-color);
   color: var(--primary-white);
   opacity: 1;
-  order: 1;
 }
 .experience-earned {
   font-size: 14px;
@@ -53,11 +52,10 @@
 
 .single-badge {
   width: 100%;
-  min-height: 100px;
   max-width: 500px;
   background: var(--primary-white);
   border-radius: var(--border-radius-3);
-  padding: 0.7rem 1rem;
+  padding: 1rem;
   position: relative;
   opacity: 0.7;
 }
@@ -138,7 +136,7 @@
   cursor: pointer;
 }
 
-@media screen and (min-width: 678px) {
+/* @media screen and (min-width: 678px) {
   .experience-wrapper {
     flex-direction: row;
     gap: 0;
@@ -146,4 +144,4 @@
   .experience-pill {
     order: unset;
   }
-}
+} */

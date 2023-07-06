@@ -1,89 +1,16 @@
 import { Experience } from "../experience/Experience";
 import {
+  Badge,
   Item,
-  ItemType,
+  ItemTypeCollectable,
   ItemTypes,
   ProgressStorage,
 } from "../ts/globalnterfaces";
+import badges from "./badgesData";
 import { City } from "./models";
 import ToastNotification from "./utils/ToastNotification";
 
 const LOCAL_STORAGE = "MAX_R_PARK_1";
-
-const badges = [
-  {
-    id: 1,
-    src: "",
-    isCollected: false,
-    name: "Urban Wanderer",
-    text: "Take a walk around the city", /// Walk around the city first time
-    experience: 5, // something
-    typeCollection: false,
-    totalToCollect: 0,
-    hasCollected: 0,
-    type: "tower",
-  },
-  {
-    id: 2,
-    src: "",
-    isCollected: false,
-    name: "Skyward Adventurer", // Play tower stack first time
-    experience: 5,
-    text: "Explanation", // something
-    typeCollection: false,
-    totalToCollect: 0,
-    hasCollected: 0,
-    type: "explorer",
-  },
-  {
-    id: 3,
-    src: "",
-    isCollected: false,
-    name: "Treasure Hunter", // Collect one item
-    experience: 5,
-    text: "Explanation", // something
-    typeCollection: true,
-    totalToCollect: 1,
-    hasCollected: 0,
-    type: ItemTypes.FRUIT,
-  },
-  {
-    id: 4,
-    src: "",
-    isCollected: false,
-    name: "Collect them all", // collect all 5 items
-    experience: 5,
-    text: "Explanation",
-    typeCollection: true, // something
-    totalToCollect: 4,
-    hasCollected: 0,
-    type: ItemTypes.FRUIT,
-  },
-  {
-    id: 5,
-    src: "",
-    isCollected: false,
-    name: "Key Hunter", // Collect one key
-    experience: 5,
-    text: "Explanation", // something
-    typeCollection: true,
-    totalToCollect: 1,
-    hasCollected: 0,
-    type: ItemTypes.KEY,
-  },
-  {
-    id: 6,
-    src: "",
-    isCollected: false,
-    name: "The lord of the keys", // collect all 3 keys
-    experience: 5,
-    text: "Explanation", // something
-    typeCollection: true,
-    totalToCollect: 3,
-    hasCollected: 0,
-    type: ItemTypes.KEY,
-  },
-];
 
 export interface Collectables {
   total: number;
@@ -96,7 +23,7 @@ export default class UserProgress {
   city: City;
   toastNotification: ToastNotification;
 
-  badges: any;
+  badges: Badge[];
   totalExperience: number;
   earnedExperience: number;
 
@@ -105,6 +32,10 @@ export default class UserProgress {
   keys: Collectables;
   numberOfCollectables: number;
   numberOfKeys: number;
+
+  ///
+
+  towerMaxLevel: number;
 
   constructor() {
     this.experience = new Experience();
@@ -126,7 +57,7 @@ export default class UserProgress {
   }
 
   getLocalStorage() {
-    localStorage.removeItem("MAX_R_PARK");
+    // localStorage.removeItem("MAX_R_PARK");
     if (localStorage.getItem(LOCAL_STORAGE)) {
       Object.assign(this, JSON.parse(localStorage.getItem(LOCAL_STORAGE)!));
 
@@ -156,6 +87,7 @@ export default class UserProgress {
         return acc + current.experience;
       }, 0);
 
+      this.towerMaxLevel = 0;
       this.earnedExperience = 0;
       this.updateProgress();
     }
@@ -169,7 +101,7 @@ export default class UserProgress {
       return item;
     });
   }
-  itemCollected(type: ItemType, name: string) {
+  itemCollected(type: ItemTypeCollectable, name: string) {
     let collectedItem = {} as Collectables;
     switch (type) {
       case ItemTypes.FRUIT:
@@ -198,13 +130,13 @@ export default class UserProgress {
   }
 
   checkCollectableItemsBadges(
-    type: ItemType,
+    type: ItemTypeCollectable,
     collected: number,
     total: number
   ) {
     let hasEarnABadge = false;
-    let earnedBadge = {};
-    this.badges = this.badges.map((badge: any) => {
+    let earnedBadge = {} as Badge;
+    this.badges = this.badges.map((badge: Badge) => {
       let { totalToCollect, hasCollected } = badge;
 
       if (badge.type !== type || totalToCollect === hasCollected) {
@@ -227,8 +159,6 @@ export default class UserProgress {
     });
 
     if (hasEarnABadge) {
-      console.log("MAX");
-
       this.showCompletedBadgeNotification(earnedBadge);
     } else {
       this.toastNotification.showToast({
@@ -239,9 +169,48 @@ export default class UserProgress {
     }
   }
 
-  showCompletedBadgeNotification(badge: any) {
+  // Tower
+
+  checkTowerBadges(towerLevel: number) {
+    this.badges = this.badges.map((badge) => {
+      if (badge.type !== ItemTypes.TOWER_GAME || badge.isCollected) {
+        return badge;
+      }
+
+      if (this.towerMaxLevel < towerLevel) {
+        this.towerMaxLevel = towerLevel;
+        badge.hasCollected = this.towerMaxLevel;
+      }
+      if (badge.totalToCollect === badge.hasCollected) {
+        badge.isCollected = true;
+        this.earnedExperience += badge.experience;
+        this.showCompletedBadgeNotification(badge);
+      }
+
+      return badge;
+    });
+
+    this.updateProgress();
+  }
+
+  checkBadgesByID(id: number) {
+    this.badges = this.badges.map((badge) => {
+      if (badge.id === id && !badge.isCollected) {
+        badge.isCollected = true;
+        this.earnedExperience += badge.experience;
+        this.showCompletedBadgeNotification(badge);
+      }
+
+      return badge;
+    });
+
+    this.updateProgress();
+  }
+
+  //
+  showCompletedBadgeNotification(badge: Badge) {
     this.toastNotification.showToast({
-      title: `${badge.name}. Earned ${badge.badge}XP`,
+      title: `${badge.name}. Earned ${badge.experience}XP`,
       text: badge.text,
       className: "completed",
     });
@@ -254,6 +223,7 @@ export default class UserProgress {
       badges: this.badges,
       totalExperience: this.totalExperience,
       earnedExperience: this.earnedExperience,
+      maxTowerLevel: this.towerMaxLevel,
     };
 
     localStorage.setItem(LOCAL_STORAGE, JSON.stringify(progress));

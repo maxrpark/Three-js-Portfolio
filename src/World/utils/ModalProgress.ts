@@ -49,9 +49,9 @@ export default class ModalProgress extends EventEmitter {
   }
 
   modalContent() {
-    // <div class="modal-title">
-    //
-    // </div>
+    // <p class='experience-total experience-pill'>
+    //   Total Available: ${this.totalExperience} XP
+    // </p>;
     this.modalProgressWrapper.innerHTML = /*html*/ `
  
       <div class='experience-wrapper'>
@@ -59,9 +59,7 @@ export default class ModalProgress extends EventEmitter {
           this.earnedExperience
         } XP</p>
         <h2 class="modal-title">My Progress</h2>
-        <p class="experience-total experience-pill">
-          Total: ${this.totalExperience} XP
-        </p>
+
       </div>
       <div class="progress-badges-wrapper">
       ${this.badges

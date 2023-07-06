@@ -4,7 +4,11 @@ import { Mesh, MeshStandardMaterial } from "three";
 import { BlockCenterRight } from "./block";
 import * as CANNON from "cannon";
 import { PhysicsWorld } from "../../../experience/utils";
-import { Item, ItemType, ItemTypes } from "../../../ts/globalnterfaces";
+import {
+  Item,
+  ItemTypeCollectable,
+  ItemTypes,
+} from "../../../ts/globalnterfaces";
 import { gsap } from "gsap";
 
 export default class City {
@@ -54,7 +58,7 @@ export default class City {
     this.experience.scene.add(this.model);
   }
 
-  removeItemFound(item: Mesh, type: ItemType) {
+  removeItemFound(item: Mesh, type: ItemTypeCollectable) {
     let tl = gsap.timeline({});
     tl.to(item.position, {
       y: 1,

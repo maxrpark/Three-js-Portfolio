@@ -7,12 +7,14 @@ import { Controllers } from "./utils";
 import World from "./World";
 import { GameOverState } from "./state/states";
 import { gsap } from "gsap";
+import UserProgress from "./UserProgress";
 
 export default class TowerStack {
   private experience: Experience;
   public world: World;
   private physics: PhysicsWorld;
   public stateMachine: StateMachine;
+  public userProgress: UserProgress;
 
   //
   controllers: Controllers;
@@ -39,6 +41,8 @@ export default class TowerStack {
     this.world = this.experience.world;
     this.physics = this.experience.physics;
     this.controllers = this.world.controllers;
+
+    this.userProgress = this.experience.world.userProgress;
 
     this.setTowerStack();
   }
@@ -73,10 +77,16 @@ export default class TowerStack {
       visible: false,
     });
 
-    this.experience.scene.add(this.groundFloor.mesh, this.tower);
+    this.experience.scene.add(
+      this.groundFloor.mesh,
+      this.tower,
+      //@ts-ignore
+      this.floorLevel.instance
+    );
   }
 
   public setGameStart(): void {
+    this.userProgress.checkBadgesByID(2);
     this.floorPositionY = this.floorSize * 1.5; // TODO ELEVATION
 
     gsap.to(this.experience.camera.camera.position, {
@@ -155,6 +165,7 @@ export default class TowerStack {
     this.floorLevel.updateText(this.getScore);
     this.floorLevel.updatePositionY(-this.currentFloor!.mesh.position.y - 0.5);
     this.floorLevel.isVisible(this.getScore > 0);
+    this.userProgress.checkTowerBadges(this.getScore);
   }
 
   private handleCollision(collidedBody: CANNON.Body) {
