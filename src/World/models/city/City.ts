@@ -1,6 +1,6 @@
 import Resources from "../../../experience/utils/Resources";
 import { Experience } from "../../../experience/Experience";
-import { Mesh, MeshStandardMaterial } from "three";
+import { Box3, Mesh, MeshStandardMaterial } from "three";
 import { BlockCenterRight } from "./block";
 import * as CANNON from "cannon";
 import { PhysicsWorld } from "../../../experience/utils";
@@ -16,6 +16,7 @@ export default class City {
   keys: Mesh[] = [];
   physicsBodies: Mesh[] = [];
   physics: PhysicsWorld;
+  mazeBox3: Box3;
   constructor() {
     this.experience = new Experience();
     this.resources = this.experience.resources;
@@ -41,6 +42,10 @@ export default class City {
         }
         if (child.name.includes("key_")) {
           this.keys.push(child);
+        }
+        if (child.name.includes("maze")) {
+          this.mazeBox3 = new Box3().setFromObject(child);
+          // this.keys.push(child);
         }
 
         child.castShadow = true;

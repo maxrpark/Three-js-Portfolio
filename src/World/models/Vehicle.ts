@@ -78,7 +78,7 @@ class Model {
     this.body.position = new CANNON.Vec3(x, y, z);
   }
 
-  savePlayerPosition() {
+  saveModelPosition() {
     const positions = getLocalStorageItem(LocalStorageKeys.POSITIONS);
 
     positions.vehicle = this.body.position;
@@ -93,9 +93,9 @@ class Model {
     ).vehicle;
 
     if (meshSavedPosition) {
-      const { x, y, z } = meshSavedPosition;
-      this.body.position = new CANNON.Vec3(x, y, z);
-      this.mesh.position.set(x, y, z);
+      const { x, z } = meshSavedPosition;
+      this.body.position = new CANNON.Vec3(x, 0, z);
+      this.mesh.position.set(x, 0, z);
     } else {
       this.position();
     }
@@ -279,7 +279,7 @@ export default class Vehicle {
       !this.controllers.keysPressed.ArrowUp &&
       !this.controllers.keysPressed.ShiftLeft
     ) {
-      if (!this.model.positionSaved) this.model.savePlayerPosition();
+      if (!this.model.positionSaved) this.model.saveModelPosition();
     }
 
     this.drivingControllers();

@@ -60,7 +60,6 @@ export class Renderer implements RendererInt {
     this.renderer.setClearColor("#557edd");
     this.renderer.setSize(this.sizes.width, this.sizes.height);
     this.renderer.setPixelRatio(Math.min(this.sizes.pixelRatio, 2));
-    this.renderer.shadowMap.enabled = true;
 
     this.renderer.outputEncoding = sRGBEncoding;
     this.renderer.toneMapping = LinearToneMapping;

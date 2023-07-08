@@ -216,6 +216,7 @@ export default class Character {
 
   isWalking: boolean = false;
   isRunning: boolean = false;
+  isAroundMaze: boolean = false;
 
   controllers: CharacterController;
 
@@ -233,8 +234,13 @@ export default class Character {
   }
 
   updateCamera() {
-    const idealOffset = new Vector3(0, 1.4, -3.5);
-    const idealLookAt = new Vector3(0, 1, 0);
+    let idealOffset = new Vector3(0, 1, -2.5);
+    let idealLookAt = new Vector3(0, 0.7, 0);
+
+    if (this.isAroundMaze) {
+      idealOffset = new Vector3(0, 6, -2.5);
+    }
+
     const lerp = 0.1;
     const modelPosition = this.model.mesh.position.clone();
 
@@ -252,6 +258,18 @@ export default class Character {
 
     this.camera.camera.position.copy(this.cameraCurrentPosition);
     this.camera.camera.lookAt(this.cameraCurrentLockAt);
+  }
+
+  checkIsInsideMaze() {
+    const isCharacterNear =
+      this.experience.world.city.mazeBox3.distanceToPoint(
+        this.model.mesh.position
+      ) <= 0.4;
+    if (isCharacterNear) {
+      this.isAroundMaze = true;
+    } else {
+      this.isAroundMaze = false;
+    }
   }
 
   characterController() {
@@ -331,5 +349,6 @@ export default class Character {
     this.animations.update();
 
     this.model.update();
+    this.checkIsInsideMaze();
   }
 }
