@@ -17,6 +17,7 @@ export default class City {
   physicsBodies: Mesh[] = [];
   physics: PhysicsWorld;
   mazeBox3: Box3;
+  garageDoor: Mesh;
   constructor() {
     this.experience = new Experience();
     this.resources = this.experience.resources;
@@ -46,6 +47,9 @@ export default class City {
         if (child.name.includes("maze")) {
           this.mazeBox3 = new Box3().setFromObject(child);
           // this.keys.push(child);
+        }
+        if (child.name.includes("garage_door")) {
+          this.garageDoor = child;
         }
 
         child.castShadow = true;

@@ -43,10 +43,11 @@ export interface ProgressStorage {
     collected: number;
     items: Item[];
   };
-  badges: any;
+  badges: Badge[];
   totalExperience: number;
   earnedExperience: number;
   maxTowerLevel: number;
+  canDrive: boolean;
 }
 
 export enum ItemTypes {

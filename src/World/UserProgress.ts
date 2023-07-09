@@ -6,6 +6,7 @@ import {
   ItemTypes,
   ProgressStorage,
 } from "../ts/globalTs";
+import ExploringWorld from "./ExploringWorld";
 import badges from "./badgesData";
 import { City } from "./models";
 import ToastNotification from "./utils/ToastNotification";
@@ -22,6 +23,7 @@ export default class UserProgress {
   experience: Experience;
   city: City;
   toastNotification: ToastNotification;
+  exploringWorld: ExploringWorld;
 
   badges: Badge[];
   totalExperience: number;
@@ -32,6 +34,7 @@ export default class UserProgress {
   keys: Collectables;
   numberOfCollectables: number;
   numberOfKeys: number;
+  canDrive: boolean;
 
   ///
 
@@ -114,6 +117,12 @@ export default class UserProgress {
       case ItemTypes.KEY:
         this.keys.items = this.updateItemCollection(this.keys.items, name);
         this.keys.collected++;
+
+        if (this.keys.collected === this.keys.total) {
+          this.experience.world.exploringWorld.userCanDrive();
+          this.canDrive = true;
+        }
+
         collectedItem = this.keys;
         break;
 
@@ -224,6 +233,7 @@ export default class UserProgress {
       totalExperience: this.totalExperience,
       earnedExperience: this.earnedExperience,
       maxTowerLevel: this.towerMaxLevel,
+      canDrive: this.canDrive,
     };
 
     localStorage.setItem(LOCAL_STORAGE, JSON.stringify(progress));

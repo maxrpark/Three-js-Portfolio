@@ -5,6 +5,7 @@ import { StateMachine, StatesNames } from "./state/GameState";
 import { CharacterController } from "./utils";
 import UserProgress from "./UserProgress";
 import { ItemTypeCollectable, ItemTypes } from "../ts/globalTs";
+import { gsap } from "gsap";
 
 export default class ExploringWorld {
   public controllers: CharacterController;
@@ -16,19 +17,23 @@ export default class ExploringWorld {
 
   city: City;
 
-  canDrive: boolean = false;
   isDriving: boolean = false;
+  garageDoor: Mesh;
 
   constructor() {
     this.experience = new Experience();
     this.stateMachine = this.experience.stateMachine;
     this.city = this.experience.world.city;
+    this.garageDoor = this.city.garageDoor;
 
     this.userProgress = this.experience.world.userProgress;
 
     this.setExploration();
   }
 
+  get canDrive() {
+    return this.userProgress.canDrive;
+  }
   get collectables() {
     return this.city.collectables;
   }
@@ -90,6 +95,47 @@ export default class ExploringWorld {
     });
   }
 
+  checkIsInsideMaze() {
+    const isCharacterNear =
+      this.city.mazeBox3.distanceToPoint(this.character.model.mesh.position) <=
+      0.4;
+    if (isCharacterNear) {
+      this.character.isAroundMaze = true;
+    } else {
+      this.character.isAroundMaze = false;
+    }
+  }
+  checkCharacterNearGarage() {
+    if (this.isDriving)
+      if (
+        this.vehicle.model.mesh.position.distanceTo(
+          this.city.garageDoor.position
+        ) <= 4
+      ) {
+        gsap.to(this.city.garageDoor.position, { y: 2.2 });
+      } else {
+        gsap.to(this.city.garageDoor.position, { y: 0.93 });
+      }
+    else {
+      if (
+        this.character.model.mesh.position.distanceTo(
+          this.city.garageDoor.position
+        ) <= 4
+      ) {
+        gsap.to(this.city.garageDoor.position, { y: 2.2 });
+      } else {
+        gsap.to(this.city.garageDoor.position, { y: 0.93 });
+      }
+    }
+  }
+
+  userCanDrive() {
+    this.character.model.position(-0.85, 0, -12);
+    this.character.model.body.quaternion.copy(
+      this.vehicle.model.body.quaternion
+    );
+  }
+
   update() {
     this.checkCanDrive();
     if (this.stateMachine.currentStateName === StatesNames.EXPLORING) {
@@ -101,12 +147,14 @@ export default class ExploringWorld {
         }
       } else {
         this.character.update();
+        this.checkIsInsideMaze();
 
         if (this.controllers.keysPressed.Enter) {
           this.setDrivingMode();
         }
       }
     }
+    if (this.canDrive) this.checkCharacterNearGarage();
     if (this.collectables.length) {
       this.checkItems(this.collectables, ItemTypes.FRUIT);
     }

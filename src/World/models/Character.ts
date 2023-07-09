@@ -260,18 +260,6 @@ export default class Character {
     this.camera.camera.lookAt(this.cameraCurrentLockAt);
   }
 
-  checkIsInsideMaze() {
-    const isCharacterNear =
-      this.experience.world.city.mazeBox3.distanceToPoint(
-        this.model.mesh.position
-      ) <= 0.4;
-    if (isCharacterNear) {
-      this.isAroundMaze = true;
-    } else {
-      this.isAroundMaze = false;
-    }
-  }
-
   characterController() {
     if (this.controllers.keysPressed.ArrowUp) {
       this.model.moveForward();
@@ -349,6 +337,5 @@ export default class Character {
     this.animations.update();
 
     this.model.update();
-    this.checkIsInsideMaze();
   }
 }
