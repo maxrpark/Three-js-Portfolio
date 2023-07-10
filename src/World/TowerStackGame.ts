@@ -111,14 +111,10 @@ export default class TowerStack {
   public gameEnded() {
     this.tower.remove(this.currentFloor!.mesh);
 
-    console.log("hey");
-
     if (!this.isGameOver) {
       this.controllers.hidePlayButtons();
       this.setGameOver = true;
     }
-
-    // this.character.model.position();
 
     this.world.modal.gameOver({ score: this.getScore });
   }

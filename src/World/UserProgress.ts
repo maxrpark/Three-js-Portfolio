@@ -178,8 +178,6 @@ export default class UserProgress {
     }
   }
 
-  // Tower
-
   checkTowerBadges(towerLevel: number) {
     this.badges = this.badges.map((badge) => {
       if (badge.type !== ItemTypes.TOWER_GAME || badge.isCollected) {

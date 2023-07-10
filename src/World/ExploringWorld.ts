@@ -64,6 +64,8 @@ export default class ExploringWorld {
   }
 
   setDrivingMode() {
+    this.userProgress.checkBadgesByID(11);
+
     this.controllers.keysPressed.Enter = false;
     this.character.model.mesh.visible = false;
     this.isDriving = true;
