@@ -62,10 +62,10 @@ export default class World {
       castShadow: true,
     });
 
-    // this.setLoadingScreen();
+    this.setLoadingScreen();
 
     this.experience.resources.on("loaded", () => {
-      // this.loadingModal.progressModalOut(); // COMMENTED DURING DEVELOPENT
+      this.loadingModal.progressModalOut(); // COMMENTED DURING DEVELOPENT
       this.stateMachine.change(new WorldCreationState());
     });
   }
@@ -84,15 +84,15 @@ export default class World {
 
     this.createModal();
 
-    this.stateMachine.change(new IntroState()); // DURING DEVELOPENT
+    // this.stateMachine.change(new IntroState()); // DURING DEVELOPENT
   }
 
-  // private setLoadingScreen() {
-  //   this.loadingModal = new LoadingModal();
-  //   this.loadingModal.on("animationCompleted", () => {
-  //     this.stateMachine.change(new IntroState());
-  //   });
-  // }
+  private setLoadingScreen() {
+    this.loadingModal = new LoadingModal();
+    this.loadingModal.on("animationCompleted", () => {
+      this.stateMachine.change(new IntroState());
+    });
+  }
 
   public intro() {
     this.modal.intro();
