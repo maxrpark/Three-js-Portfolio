@@ -39,7 +39,7 @@ class Model {
     this.mesh = mesh.scene;
 
     this.mesh.scale.set(modelScale.x, modelScale.y, modelScale.z);
-    this.mesh.position.set(-0.85, 0, -8.9);
+    this.mesh.position.set(-1, 0, -6.9);
     this.mesh.name = "vehicle";
 
     this.eulerRotation = new Euler(0, 0, 0, "XYZ");
@@ -73,7 +73,8 @@ class Model {
     this.pivotOffset = new CANNON.Vec3(0, -halfExtents.y + 0.05, 0); // Adjust
     this.meshPositionPivot = new CANNON.Vec3();
   }
-  position(x = -0.85, y = 0, z = -8.9) {
+
+  position(x = -1, y = 0, z = -6.9) {
     this.body.position = new CANNON.Vec3(x, y, z);
   }
 

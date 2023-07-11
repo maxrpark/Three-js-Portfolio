@@ -57,6 +57,7 @@ export default class UserProgress {
     };
 
     this.getLocalStorage();
+    if (this.canDrive) this.city.removeBody();
   }
 
   getLocalStorage() {
@@ -121,6 +122,7 @@ export default class UserProgress {
         if (this.keys.collected === this.keys.total) {
           this.experience.world.exploringWorld.userCanDrive();
           this.canDrive = true;
+          this.city.removeBody();
         }
 
         collectedItem = this.keys;

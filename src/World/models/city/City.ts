@@ -18,6 +18,7 @@ export default class City {
   physics: PhysicsWorld;
   mazeBox3: Box3;
   garageDoor: Mesh;
+  garageBody: CANNON.Body;
   constructor() {
     this.experience = new Experience();
     this.resources = this.experience.resources;
@@ -50,6 +51,9 @@ export default class City {
         }
         if (child.name.includes("garage_door")) {
           this.garageDoor = child;
+        }
+        if (child.name.includes("garage_door")) {
+          console.log(child);
         }
 
         child.castShadow = true;
@@ -110,6 +114,10 @@ export default class City {
     }
   }
 
+  removeBody(body = this.garageBody) {
+    this.physics.world.remove(body);
+  }
+
   onLoadRemoveCollectedItems(array: Item[]) {
     [...this.collectables, ...this.keys].map((item) => {
       if (array.find((el) => el.name === item.name && el.isCollected)) {
@@ -149,6 +157,10 @@ export default class City {
       body.quaternion.copy(item.quaternion);
 
       this.physics.world.addBody(body);
+
+      if (item.name === "body_door_garage") {
+        this.garageBody = body;
+      }
     });
   }
 }

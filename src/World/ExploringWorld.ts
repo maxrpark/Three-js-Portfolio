@@ -114,9 +114,9 @@ export default class ExploringWorld {
           this.city.garageDoor.position
         ) <= 4
       ) {
-        gsap.to(this.city.garageDoor.position, { y: 2.2 });
+        gsap.to(this.city.garageDoor.position, { y: 2 });
       } else {
-        gsap.to(this.city.garageDoor.position, { y: 0.93 });
+        gsap.to(this.city.garageDoor.position, { y: 0.7 });
       }
     else {
       if (
@@ -124,9 +124,9 @@ export default class ExploringWorld {
           this.city.garageDoor.position
         ) <= 4
       ) {
-        gsap.to(this.city.garageDoor.position, { y: 2.2 });
+        gsap.to(this.city.garageDoor.position, { y: 2 });
       } else {
-        gsap.to(this.city.garageDoor.position, { y: 0.93 });
+        gsap.to(this.city.garageDoor.position, { y: 0.7 });
       }
     }
   }
