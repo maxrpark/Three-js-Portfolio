@@ -79,7 +79,7 @@ class Model {
     this.meshPositionPivot = new CANNON.Vec3();
   }
 
-  position(x = -2, y = 1, z = 1) {
+  position(x = 0, y = 1, z = 10.5) {
     this.body.position = new CANNON.Vec3(x, y, z);
   }
 
