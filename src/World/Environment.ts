@@ -76,9 +76,9 @@ export class Environment implements EnvironmentInt {
   }
 
   setDirectionalLight() {
-    this.directionalLight = new THREE.DirectionalLight("#FBFFCE", 0.6);
+    this.directionalLight = new THREE.DirectionalLight("#FBFFCE", 0.658);
 
-    this.directionalLight.position.set(4.223, 4.715, 0.659);
+    this.directionalLight.position.set(6.804, 2.7, 2.3);
 
     this.directionalLight.shadow.mapSize.width = 512;
     this.directionalLight.shadow.mapSize.height = 512;
