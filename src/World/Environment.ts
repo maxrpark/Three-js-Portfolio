@@ -1,7 +1,9 @@
 import * as THREE from "three";
+import { GroundProjectedEnv } from "three/examples/jsm/objects/GroundProjectedEnv.js";
 import { Experience } from "../experience/Experience";
 import { Debug } from "../experience/utils";
 import GUI from "lil-gui";
+
 interface IProps {
   environmentMapTexture?: any;
   hasAmbientLight?: boolean;
@@ -155,22 +157,13 @@ export class Environment implements EnvironmentInt {
     this.environmentMap.texture = envMap;
     this.environmentMap.texture.encoding = THREE.sRGBEncoding;
 
-    this.scene.background = envMap;
+    const skybox = new GroundProjectedEnv(envMap);
+    this.scene.add(skybox);
+
+    // this.scene.background = envMap;
     this.scene.environment = envMap;
 
-    // this.environmentMap.updateMaterial = () => {
-    //   this.scene.traverse((child) => {
-    //     if (
-    //       child instanceof THREE.Mesh &&
-    //       child.material instanceof THREE.MeshStandardMaterial
-    //     ) {
-    //       child.material.envMap = this.environmentMap.texture;
-    //       // child.material.envMapIntensity = this.environmentMap.intensity;
-    //       child.material.needsUpdate = true;
-    //     }
-    //   });
-    // };
-    // this.environmentMap.updateMaterial();
+    skybox.scale.setScalar(50);
 
     // Debug
 
@@ -183,6 +176,9 @@ export class Environment implements EnvironmentInt {
         .max(4)
         .step(0.001)
         .onChange(this.environmentMap.updateMaterial);
+
+      this.debugFolder.add(skybox, "radius", 1, 200, 0.1).name("skyboxRadius");
+      this.debugFolder.add(skybox, "height", 1, 100, 0.1).name("skyboxHeight");
     }
   }
 }
