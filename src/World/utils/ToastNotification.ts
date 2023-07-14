@@ -13,8 +13,20 @@ export default class ToastNotification {
   private _img: string = "";
   private _text: string = "";
   private _className: string = "";
+
+  private descriptionMessage: HTMLElement;
+  private toastTitle: HTMLElement;
+  private imageTag: HTMLImageElement;
+
   constructor() {
     this.createUI();
+    this.toastTitle = this.toastWrapper.querySelector(
+      ".toast-description__title"
+    )!;
+    this.descriptionMessage = this.toastWrapper.querySelector(
+      ".toast-description__message"
+    )!;
+    this.imageTag = this.toastWrapper.querySelector(".toast-img-icon")!;
   }
 
   get title(): string {
@@ -23,8 +35,8 @@ export default class ToastNotification {
 
   set title(value: string) {
     this._title = value;
-    this.toastWrapper.querySelector(".toast-description__title")!.textContent =
-      value;
+
+    this.toastTitle.textContent = value;
   }
 
   get text(): string {
@@ -33,16 +45,14 @@ export default class ToastNotification {
 
   set text(value: string) {
     this._text = value;
-    this.toastWrapper.querySelector(
-      ".toast-description__message"
-    )!.textContent = value;
+    this.descriptionMessage.textContent = value;
   }
 
   set img(value: string) {
     this._img = value;
-    (
-      this.toastWrapper.querySelector(".toast-img-icon") as HTMLImageElement
-    ).src = value;
+
+    this.imageTag.src = value;
+    this.imageTag.style.visibility = value ? "visible" : "hidden";
   }
 
   get img(): string {
@@ -66,8 +76,10 @@ export default class ToastNotification {
     this.toastWrapper.innerHTML = /*html*/ `
       <div class='toast-content' id="">
           <div
-          class="toast-img">
-          <img src="${this.img}" alt='' class='toast-img-icon' />
+          class="toast-img">      
+          <img 
+            src="${this.img}" alt='${this.title}'
+             class='toast-img-icon' />      
           </div>
           <div class='toast-description'>
             <p class="toast-description__title">${this.title}

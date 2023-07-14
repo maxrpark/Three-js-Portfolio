@@ -86,6 +86,12 @@ export default class ModalProgress extends EventEmitter {
               badge.isCollected ? "badge-collected" : ""
             }">
 
+            <div class="badge-img-wrapper ${
+              badge.isCollected ? "show-icon" : ""
+            }">
+              <img src="${badge.src}"/>
+            </div>
+
             <div class='single-badge__top'>
             <p class='single-badge__top-title'>${badge.name}</p>
             <p class="single-badge__top-experience experience-pill">${
@@ -98,9 +104,7 @@ export default class ModalProgress extends EventEmitter {
                 ? `
             <div class="single-badge__progress">
                 <div class="progress-container">
-                <div class="progress-bar" style="width:${
-                  (badge.hasCollected * 100) / badge.totalToCollect
-                }%"></div>   
+                <div class="progress-bar" style="width:${badge.isCollected}%"></div>   
                 </div> 
       
               <small>${badge.hasCollected}/${badge.totalToCollect}</small>

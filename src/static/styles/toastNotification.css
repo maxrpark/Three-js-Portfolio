@@ -27,7 +27,6 @@
   height: 50px;
   width: 50px;
   object-fit: contain;
-  background: gray;
 }
 
 .toast-img-icon {
@@ -43,6 +42,4 @@
 .toast-description__title {
   font-size: 1.25rem;
   margin-bottom: 0.2rem;
-}
-.toast-description__message {
 }
