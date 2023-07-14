@@ -35,7 +35,7 @@ const badges: Badge[] = [
     typeCollection: true,
     totalToCollect: 1,
     hasCollected: 0,
-    type: ItemTypes.FRUIT,
+    type: ItemTypes.STAR,
   },
   {
     id: 4,
@@ -47,7 +47,7 @@ const badges: Badge[] = [
     typeCollection: true,
     totalToCollect: 4,
     hasCollected: 0,
-    type: ItemTypes.FRUIT,
+    type: ItemTypes.STAR,
   },
   {
     id: 5,
@@ -59,7 +59,7 @@ const badges: Badge[] = [
     typeCollection: true,
     totalToCollect: 1,
     hasCollected: 0,
-    type: ItemTypes.KEY,
+    type: ItemTypes.COIN,
   },
   {
     id: 6,
@@ -71,7 +71,7 @@ const badges: Badge[] = [
     typeCollection: true,
     totalToCollect: 3,
     hasCollected: 0,
-    type: ItemTypes.KEY,
+    type: ItemTypes.COIN,
   },
   {
     id: 7,

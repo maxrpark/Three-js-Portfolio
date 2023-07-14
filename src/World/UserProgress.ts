@@ -29,9 +29,10 @@ export default class UserProgress {
   totalExperience: number;
   earnedExperience: number;
 
-  fruits: Collectables;
+  coins: Collectables;
+  diamonds: Collectables;
+  stars: Collectables;
 
-  keys: Collectables;
   numberOfCollectables: number;
   numberOfKeys: number;
   canDrive: boolean;
@@ -45,12 +46,17 @@ export default class UserProgress {
     this.city = this.experience.world.city;
     this.toastNotification = this.experience.world.toastNotification;
 
-    this.fruits = {
+    this.coins = {
       total: 0,
       collected: 0,
       items: [],
     };
-    this.keys = {
+    this.stars = {
+      total: 0,
+      collected: 0,
+      items: [],
+    };
+    this.diamonds = {
       total: 0,
       collected: 0,
       items: [],
@@ -66,23 +72,32 @@ export default class UserProgress {
       Object.assign(this, JSON.parse(localStorage.getItem(LOCAL_STORAGE)!));
 
       this.city.onLoadRemoveCollectedItems([
-        ...this.fruits.items,
-        ...this.keys.items,
+        ...this.coins.items,
+        ...this.diamonds.items,
+        ...this.stars.items,
       ]);
     } else {
-      this.fruits.total = this.city.collectables.length;
-      this.fruits.items = this.city.collectables.map((item) => {
+      this.stars.total = this.city.stars.length;
+      this.stars.items = this.city.stars.map((item) => {
         return {
           name: item.name,
-          type: ItemTypes.FRUIT,
+          type: ItemTypes.STAR,
           isCollected: false,
         };
       });
-      this.keys.total = this.city.keys.length;
-      this.keys.items = this.city.keys.map((item) => {
+      this.coins.total = this.city.coins.length;
+      this.coins.items = this.city.coins.map((item) => {
         return {
           name: item.name,
-          type: ItemTypes.KEY,
+          type: ItemTypes.COIN,
+          isCollected: false,
+        };
+      });
+      this.diamonds.total = this.city.diamonds.length;
+      this.diamonds.items = this.city.diamonds.map((item) => {
+        return {
+          name: item.name,
+          type: ItemTypes.COIN,
           isCollected: false,
         };
       });
@@ -108,24 +123,34 @@ export default class UserProgress {
   itemCollected(type: ItemTypeCollectable, name: string) {
     let collectedItem = {} as Collectables;
     switch (type) {
-      case ItemTypes.FRUIT:
-        this.fruits.items = this.updateItemCollection(this.fruits.items, name);
-        this.fruits.collected++;
-        collectedItem = this.fruits;
+      case ItemTypes.STAR:
+        this.stars.items = this.updateItemCollection(this.stars.items, name);
+        this.stars.collected++;
+        collectedItem = this.stars;
 
         break;
 
-      case ItemTypes.KEY:
-        this.keys.items = this.updateItemCollection(this.keys.items, name);
-        this.keys.collected++;
+      case ItemTypes.DIAMOND:
+        this.diamonds.items = this.updateItemCollection(
+          this.diamonds.items,
+          name
+        );
+        this.diamonds.collected++;
+        collectedItem = this.diamonds;
 
-        if (this.keys.collected === this.keys.total) {
+        break;
+
+      case ItemTypes.COIN:
+        this.coins.items = this.updateItemCollection(this.coins.items, name);
+        this.coins.collected++;
+
+        if (this.coins.collected === this.coins.total) {
           this.experience.world.exploringWorld.userCanDrive();
           this.canDrive = true;
           this.city.removeBody();
         }
 
-        collectedItem = this.keys;
+        collectedItem = this.coins;
         break;
 
       default:
@@ -227,8 +252,9 @@ export default class UserProgress {
 
   updateProgress() {
     const progress: ProgressStorage = {
-      fruits: this.fruits,
-      keys: this.keys,
+      stars: this.stars,
+      coins: this.coins,
+      diamonds: this.diamonds,
       badges: this.badges,
       totalExperience: this.totalExperience,
       earnedExperience: this.earnedExperience,

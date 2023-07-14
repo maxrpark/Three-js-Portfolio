@@ -32,13 +32,18 @@ export interface Item {
 }
 
 export interface ProgressStorage {
-  fruits: {
+  stars: {
     total: number;
     collected: number;
     items: Item[];
   };
 
-  keys: {
+  coins: {
+    total: number;
+    collected: number;
+    items: Item[];
+  };
+  diamonds: {
     total: number;
     collected: number;
     items: Item[];
@@ -51,13 +56,17 @@ export interface ProgressStorage {
 }
 
 export enum ItemTypes {
-  FRUIT = "fruit",
-  KEY = "key",
+  COIN = "coin",
+  STAR = "star",
+  DIAMOND = "diamond",
   TOWER_GAME = "tower_game",
   ACTIONS = "actions",
 }
 
-export type ItemTypeCollectable = ItemTypes.FRUIT | ItemTypes.KEY;
+export type ItemTypeCollectable =
+  | ItemTypes.COIN
+  | ItemTypes.STAR
+  | ItemTypes.DIAMOND;
 
 export type ItemTypeAll =
   | ItemTypeCollectable

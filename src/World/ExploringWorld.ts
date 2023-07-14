@@ -38,11 +38,14 @@ export default class ExploringWorld {
   get canDrive() {
     return this.userProgress.canDrive;
   }
-  get collectables() {
-    return this.city.collectables;
+  get stars() {
+    return this.city.stars;
   }
-  get keys() {
-    return this.city.keys;
+  get coins() {
+    return this.city.coins;
+  }
+  get diamonds() {
+    return this.city.diamonds;
   }
 
   setExploration() {
@@ -168,11 +171,14 @@ export default class ExploringWorld {
       }
     }
     if (this.canDrive) this.checkCharacterNearGarage();
-    if (this.collectables.length) {
-      this.checkItems(this.collectables, ItemTypes.FRUIT);
+    if (this.stars.length) {
+      this.checkItems(this.stars, ItemTypes.STAR);
     }
-    if (this.keys.length) {
-      this.checkItems(this.keys, ItemTypes.KEY);
+    if (this.coins.length) {
+      this.checkItems(this.coins, ItemTypes.COIN);
+    }
+    if (this.diamonds.length) {
+      this.checkItems(this.diamonds, ItemTypes.DIAMOND);
     }
   }
 }

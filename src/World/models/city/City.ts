@@ -7,13 +7,32 @@ import { PhysicsWorld } from "../../../experience/utils";
 import { Item, ItemTypeCollectable, ItemTypes } from "../../../ts/globalTs";
 import { gsap } from "gsap";
 
+gsap.registerEffect({
+  name: "itemRotate",
+  defaults: {},
+  effect: (targets: Mesh[], config: { duration: string }) => {
+    const { duration } = config;
+    const mesh = targets[0];
+
+    let tl = gsap.timeline();
+    tl.to(mesh.rotation, {
+      z: Math.PI * 2,
+      duration,
+      repeat: -1,
+      ease: "none",
+    });
+    return tl;
+  },
+});
+
 export default class City {
   private experience: Experience;
   private resources: Resources;
   public model: Mesh;
   blockCenterRight: BlockCenterRight;
-  collectables: Mesh[] = [];
-  keys: Mesh[] = [];
+  stars: Mesh[] = [];
+  diamonds: Mesh[] = [];
+  coins: Mesh[] = [];
   physicsBodies: Mesh[] = [];
   physics: PhysicsWorld;
   mazeBox3: Box3;
@@ -37,18 +56,23 @@ export default class City {
         child instanceof Mesh &&
         child.material instanceof MeshStandardMaterial
       ) {
-        if (child.name.includes("collectable_")) {
-          this.collectables.push(child);
-        }
         if (child.name.includes("body_")) {
           this.physicsBodies.push(child);
+          gsap.effects.itemRotate(child, { duration: 2 });
         }
-        if (child.name.includes("key_")) {
-          this.keys.push(child);
+        if (child.name.includes("star_")) {
+          this.stars.push(child);
+          gsap.effects.itemRotate(child, { duration: 2 });
+        }
+        if (child.name.includes("coin_")) {
+          this.coins.push(child);
+          gsap.effects.itemRotate(child, { duration: 2 });
+        }
+        if (child.name.includes("diamond_")) {
+          this.diamonds.push(child);
         }
         if (child.name.startsWith("maze")) {
           this.mazeBox3 = new Box3().setFromObject(child);
-          // this.keys.push(child);
         }
         if (child.name.startsWith("garage_door")) {
           this.garageDoor = child;
@@ -61,12 +85,8 @@ export default class City {
           // child.material = new MeshMatcapMaterial({
           //   matcap,
           // });
-          gsap.to(child.rotation, {
-            z: Math.PI * 2,
-            duration: 30,
-            repeat: -1,
-            ease: "none",
-          });
+
+          gsap.effects.itemRotate(child, { duration: 30 });
           child.castShadow = false;
           child.receiveShadow = false;
         }
@@ -112,13 +132,16 @@ export default class City {
       });
 
     switch (type) {
-      case ItemTypes.FRUIT:
-        this.collectables = this.collectables.filter(
+      case ItemTypes.STAR:
+        this.stars = this.stars.filter((object) => object.name !== item.name);
+        break;
+      case ItemTypes.COIN:
+        this.coins = this.coins.filter((object) => object.name !== item.name);
+        break;
+      case ItemTypes.DIAMOND:
+        this.diamonds = this.diamonds.filter(
           (object) => object.name !== item.name
         );
-        break;
-      case ItemTypes.KEY:
-        this.keys = this.keys.filter((object) => object.name !== item.name);
         break;
 
       default:
@@ -131,7 +154,7 @@ export default class City {
   }
 
   onLoadRemoveCollectedItems(array: Item[]) {
-    [...this.collectables, ...this.keys].map((item) => {
+    [...this.coins, ...this.stars, ...this.diamonds].map((item) => {
       if (array.find((el) => el.name === item.name && el.isCollected)) {
         item.visible = false;
         this.model.remove(item!);
