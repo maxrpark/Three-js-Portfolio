@@ -1,6 +1,6 @@
 import Resources from "../../../experience/utils/Resources";
 import { Experience } from "../../../experience/Experience";
-import { Box3, Mesh, MeshMatcapMaterial, MeshStandardMaterial } from "three";
+import { Box3, Mesh, MeshStandardMaterial } from "three";
 import { BlockCenterRight } from "./block";
 import * as CANNON from "cannon";
 import { PhysicsWorld } from "../../../experience/utils";
