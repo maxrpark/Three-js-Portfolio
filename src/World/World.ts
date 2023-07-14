@@ -102,13 +102,10 @@ export default class World {
 
     gsap.to(this.experience.camera.camera.position, {
       x: 4,
-      y: 3,
-      z: 10,
+      y: 6,
+      z: 17,
       duration: 1,
-      onUpdate: () =>
-        this.experience.camera.camera.lookAt(
-          this.experience.camera.camera.position
-        ),
+      onUpdate: () => this.experience.camera.camera.lookAt(1, 0, 0),
     });
   }
 
