@@ -3,12 +3,14 @@ export interface ToastMessage {
   title: string;
   text: string;
   className: string;
+  image: string;
 }
 
 export default class ToastNotification {
   toastWrapper: HTMLDivElement;
-  imgName: string = "";
+
   private _title: string = "";
+  private _img: string = "";
   private _text: string = "";
   private _className: string = "";
   constructor() {
@@ -36,6 +38,17 @@ export default class ToastNotification {
     )!.textContent = value;
   }
 
+  set img(value: string) {
+    this._img = value;
+    (
+      this.toastWrapper.querySelector(".toast-img-icon") as HTMLImageElement
+    ).src = value;
+  }
+
+  get img(): string {
+    return this._img;
+  }
+
   get className() {
     return this._className;
   }
@@ -49,12 +62,12 @@ export default class ToastNotification {
   createUI() {
     this.toastWrapper = document.createElement("div");
     this.toastWrapper.classList.add("toast-wrapper");
-    // <img src='src/static/images/fruit.jpeg' alt='' class='toast-img' />;
+
     this.toastWrapper.innerHTML = /*html*/ `
       <div class='toast-content' id="">
           <div
           class="toast-img">
-          
+          <img src="${this.img}" alt='' class='toast-img-icon' />
           </div>
           <div class='toast-description'>
             <p class="toast-description__title">${this.title}
@@ -76,10 +89,12 @@ export default class ToastNotification {
       yPercent: -100,
     });
   }
-  showToast({ title, text, className }: ToastMessage) {
+  showToast({ title, text, className, image }: ToastMessage) {
     this.title = title;
     this.text = text;
     this.className = className;
+    this.img = image;
+
     let tl = gsap.timeline({});
     tl.set(this.toastWrapper, { xPercent: -50, left: "50%", yPercent: -100 })
       .to(this.toastWrapper, { yPercent: 10, opacity: 1 })

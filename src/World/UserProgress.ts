@@ -201,6 +201,7 @@ export default class UserProgress {
         title: `${type.toLocaleUpperCase()} collector. `,
         text: `You had collected ${collected} out of ${total} ${type}s`,
         className: `explore-toast`,
+        image: "",
       });
     }
   }
@@ -247,6 +248,7 @@ export default class UserProgress {
       title: `${badge.name}. Earned ${badge.experience}XP`,
       text: badge.text,
       className: "completed",
+      image: badge.src,
     });
   }
 

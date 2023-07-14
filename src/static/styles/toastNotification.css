@@ -30,6 +30,12 @@
   background: gray;
 }
 
+.toast-img-icon {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .toast-description {
   width: calc(100% - 50px);
 }
