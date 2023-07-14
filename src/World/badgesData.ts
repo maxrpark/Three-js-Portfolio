@@ -3,7 +3,7 @@ import { Badge, ItemTypes } from "../ts/globalTs";
 const badges: Badge[] = [
   {
     id: 1,
-    src: "src/static/images/badges_img/01_city_stroller.jpeg",
+    src: "images/badges_img/01_city_stroller.jpeg",
     isCollected: false,
     name: "City Stroller",
     text: "Take your first stroll through the bustling city streets",
@@ -15,7 +15,7 @@ const badges: Badge[] = [
   },
   {
     id: 2,
-    src: "src/static/images/badges_img/02_sky_high_challenger.jpg",
+    src: "images/badges_img/02_sky_high_challenger.jpg",
     isCollected: false,
     name: "Sky High Challenger",
     text: "Embark on your first tower stacking adventure",
@@ -27,7 +27,7 @@ const badges: Badge[] = [
   },
   {
     id: 3,
-    src: "src/static/images/badges_img/03_treasure_seeker.jpeg",
+    src: "images/badges_img/03_treasure_seeker.jpeg",
     isCollected: false,
     name: "Treasure Seeker",
     text: "Discover your first hidden treasure item",
@@ -39,7 +39,7 @@ const badges: Badge[] = [
   },
   {
     id: 4,
-    src: "src/static/images/badges_img/04_master_collector.jpg",
+    src: "images/badges_img/04_master_collector.jpg",
     isCollected: false,
     name: "Master Collector",
     text: "Collect all the precious treasures",
@@ -51,7 +51,7 @@ const badges: Badge[] = [
   },
   {
     id: 5,
-    src: "src/static/images/badges_img/05_coin_master.jpg",
+    src: "images/badges_img/05_coin_master.jpg",
     isCollected: false,
     name: "Coin Master",
     text: "Obtain your first mystical Coin",
@@ -63,7 +63,7 @@ const badges: Badge[] = [
   },
   {
     id: 6,
-    src: "src/static/images/badges_img/06_car_owner.jpg",
+    src: "images/badges_img/06_car_owner.jpg",
     isCollected: false,
     name: "Car owner",
     text: "Collect all the keys to unlock the coins",
@@ -75,7 +75,7 @@ const badges: Badge[] = [
   },
   {
     id: 7,
-    src: "src/static/images/badges_img/07_tower_novice.jpg",
+    src: "images/badges_img/07_tower_novice.jpg",
     isCollected: false,
     name: "Tower Novice",
     text: "Reach the 5th level in the challenging tower stacking game",
@@ -87,7 +87,7 @@ const badges: Badge[] = [
   },
   {
     id: 8,
-    src: "src/static/images/badges_img/08_tower_pro.jpg",
+    src: "images/badges_img/08_tower_pro.jpg",
     isCollected: false,
     name: "Tower Pro",
     text: "Show your skills and conquer the 10th level in the tower stacking game",
@@ -99,7 +99,7 @@ const badges: Badge[] = [
   },
   {
     id: 9,
-    src: "src/static/images/badges_img/09_tower_champion.jpg",
+    src: "images/badges_img/09_tower_champion.jpg",
     isCollected: false,
     name: "Tower Champion",
     text: "Climb to the heights and reach the 15th level in the tower stacking game",
@@ -111,7 +111,7 @@ const badges: Badge[] = [
   },
   {
     id: 10,
-    src: "src/static/images/badges_img/10_tower_master.jpg",
+    src: "images/badges_img/10_tower_master.jpg",
     isCollected: false,
     name: "Tower Master",
     text: "Prove your tower stacking prowess by conquering the 20th level",
@@ -123,7 +123,7 @@ const badges: Badge[] = [
   },
   {
     id: 11,
-    src: "src/static/images/badges_img/11_driver.jpg",
+    src: "images/badges_img/11_driver.jpg",
     isCollected: false,
     name: "The driver",
     text: "Take your first drive around the city",
@@ -135,7 +135,7 @@ const badges: Badge[] = [
   },
   {
     id: 12,
-    src: "src/static/images/badges_img/12_Navigational_expert.jpg",
+    src: "images/badges_img/12_Navigational_expert.jpg",
     isCollected: false,
     name: "Navigational Expert",
     text: "Mastered the art of maze exploration",
@@ -147,7 +147,7 @@ const badges: Badge[] = [
   },
   {
     id: 13,
-    src: "src/static/images/badges_img/13_labyrinth_conqueror.jpg",
+    src: "images/badges_img/13_labyrinth_conqueror.jpg",
     isCollected: false,
     name: "Labyrinth Conqueror",
     text: "Explored every nook and cranny of a mysterious maze",
