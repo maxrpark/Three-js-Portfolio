@@ -198,8 +198,8 @@ export default class UserProgress {
       this.showCompletedBadgeNotification(earnedBadge);
     } else {
       this.toastNotification.showToast({
-        title: `${type}. `,
-        text: `You had collected ${collected} out of ${total}`,
+        title: `${type.toLocaleUpperCase()} collector. `,
+        text: `You had collected ${collected} out of ${total} ${type}s`,
         className: `explore-toast`,
       });
     }
