@@ -56,11 +56,6 @@ export default class World {
     this.experience = new Experience();
     this.stateMachine = this.experience.stateMachine;
     this.controllers = new Controllers();
-    this.environment = new Environment({
-      hasAmbientLight: true,
-      hasDirectionalLight: true,
-      castShadow: true,
-    });
 
     this.setLoadingScreen();
 
@@ -81,6 +76,14 @@ export default class World {
     this.menuIcon = new MenuIcon();
     this.exploringWorld = new ExploringWorld();
     this.modalProgress = new ModalProgress();
+
+    this.environment = new Environment({
+      // hasAmbientLight: true,
+      // hasDirectionalLight: true,
+      // castShadow: true,
+      environmentMapTexture:
+        this.experience.resources.items.environmentMapTexture,
+    });
 
     this.createModal();
 

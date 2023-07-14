@@ -1,5 +1,5 @@
 export interface SourceInt {
-  type: "cubeTextureLoader" | "textureLoader" | "gltfLoader";
+  type: "cubeTextureLoader" | "textureLoader" | "gltfLoader" | "rgbeLoader";
   name: string;
   path: string & string[];
 }
@@ -7,16 +7,21 @@ export interface SourceInt {
 export default [
   {
     name: "environmentMapTexture",
-    type: "cubeTextureLoader",
-    path: [
-      "textures/environmentMap/px.jpg",
-      "textures/environmentMap/nx.jpg",
-      "textures/environmentMap/py.jpg",
-      "textures/environmentMap/ny.jpg",
-      "textures/environmentMap/pz.jpg",
-      "textures/environmentMap/nz.jpg",
-    ],
+    type: "rgbeLoader",
+    path: "textures/environmentMap/hdr_1.hdr",
   },
+  // {
+  //   name: "environmentMapTexture",
+  //   type: "cubeTextureLoader",
+  //   path: [
+  //     "textures/environmentMap/px.jpg",
+  //     "textures/environmentMap/nx.jpg",
+  //     "textures/environmentMap/py.jpg",
+  //     "textures/environmentMap/ny.jpg",
+  //     "textures/environmentMap/pz.jpg",
+  //     "textures/environmentMap/nz.jpg",
+  //   ],
+  // },
   {
     name: "city",
     type: "gltfLoader",

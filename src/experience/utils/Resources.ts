@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 import { SourceInt } from "../../sources/base";
 import EventEmitter from "./EventEmitter";
 
@@ -7,6 +8,7 @@ interface Loaders {
   gltfLoader: GLTFLoader;
   textureLoader: THREE.TextureLoader;
   cubeTextureLoader: THREE.CubeTextureLoader;
+  rgbeLoader: RGBELoader;
 }
 
 type LoaderType = GLTF | THREE.Texture | THREE.CubeTexture;
@@ -43,6 +45,7 @@ export default class Resources extends EventEmitter implements ResourcesInt {
       gltfLoader: new GLTFLoader(),
       textureLoader: new THREE.TextureLoader(),
       cubeTextureLoader: new THREE.CubeTextureLoader(),
+      rgbeLoader: new RGBELoader(),
     };
 
     this.startLoading();

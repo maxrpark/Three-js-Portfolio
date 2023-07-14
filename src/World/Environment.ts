@@ -147,25 +147,30 @@ export class Environment implements EnvironmentInt {
   setEnvironmentMap() {
     this.environmentMap = {};
     this.environmentMap.intensity = 3.117;
-    this.environmentMap.texture = this.environmentMapTexture;
+
+    const envMap = this.experience.resources.items
+      .environmentMapTexture as THREE.Texture;
+    envMap.mapping = THREE.EquirectangularReflectionMapping;
+
+    this.environmentMap.texture = envMap;
     this.environmentMap.texture.encoding = THREE.sRGBEncoding;
 
-    this.scene.background = this.environmentMap.texture;
-    this.scene.environment = this.environmentMap.texture;
+    this.scene.background = envMap;
+    this.scene.environment = envMap;
 
-    this.environmentMap.updateMaterial = () => {
-      this.scene.traverse((child) => {
-        if (
-          child instanceof THREE.Mesh &&
-          child.material instanceof THREE.MeshStandardMaterial
-        ) {
-          child.material.envMap = this.environmentMap.texture;
-          child.material.envMapIntensity = this.environmentMap.intensity;
-          child.material.needsUpdate = true;
-        }
-      });
-    };
-    this.environmentMap.updateMaterial();
+    // this.environmentMap.updateMaterial = () => {
+    //   this.scene.traverse((child) => {
+    //     if (
+    //       child instanceof THREE.Mesh &&
+    //       child.material instanceof THREE.MeshStandardMaterial
+    //     ) {
+    //       child.material.envMap = this.environmentMap.texture;
+    //       // child.material.envMapIntensity = this.environmentMap.intensity;
+    //       child.material.needsUpdate = true;
+    //     }
+    //   });
+    // };
+    // this.environmentMap.updateMaterial();
 
     // Debug
 
