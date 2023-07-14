@@ -6,6 +6,7 @@ import { CharacterController } from "./utils";
 import UserProgress from "./UserProgress";
 import { ItemTypeCollectable, ItemTypes } from "../ts/globalTs";
 import { gsap } from "gsap";
+import Water from "./shaders/water/Water";
 
 export default class ExploringWorld {
   public controllers: CharacterController;
@@ -19,6 +20,9 @@ export default class ExploringWorld {
 
   isDriving: boolean = false;
   garageDoor: Mesh;
+
+  // Shader
+  water: Water;
 
   constructor() {
     this.experience = new Experience();
@@ -42,6 +46,7 @@ export default class ExploringWorld {
   }
 
   setExploration() {
+    this.setWater();
     this.controllers = new CharacterController();
     this.character = new Character(this.controllers);
     this.vehicle = new Vehicle(this.controllers);
@@ -50,6 +55,11 @@ export default class ExploringWorld {
       this.vehicle.model.mesh,
       this.character.model.mesh
     );
+  }
+
+  setWater() {
+    this.water = new Water();
+    this.experience.scene.add(this.water.mesh);
   }
 
   setWalkingMode() {
@@ -139,6 +149,7 @@ export default class ExploringWorld {
   }
 
   update() {
+    this.water.update();
     this.checkCanDrive();
     if (this.stateMachine.currentStateName === StatesNames.EXPLORING) {
       if (this.isDriving) {

@@ -16,10 +16,12 @@ export default class Water {
   debugFolder: GUI;
   constructor() {
     this.experience = new Experience();
+
     this.time = this.experience.time;
     this.debug = this.experience.debug;
 
     this.createMesh();
+    this.experience.scene.add(this.mesh);
 
     if (this.debug.active) {
       this.debugFolder = this.debug.ui.addFolder("Waves");
@@ -28,7 +30,7 @@ export default class Water {
   }
 
   createGeometry() {
-    this.geometry = new PlaneGeometry(20, 20, 512, 512);
+    this.geometry = new PlaneGeometry(0.7, 1.965, 512, 512);
   }
   createMaterial() {
     this.material = new ShaderMaterial({
@@ -36,17 +38,17 @@ export default class Water {
       fragmentShader,
       uniforms: {
         uTime: { value: 10 },
-        uBigWavesFrequency: { value: new Vector2(0.844, 0.611) },
-        uBigWavesElevation: { value: 0.181 },
-        uBigWavesSpeed: { value: 1.96 },
+        uBigWavesFrequency: { value: new Vector2(1.934, 2.698) },
+        uBigWavesElevation: { value: 0.028 },
+        uBigWavesSpeed: { value: 0.585 },
 
-        uSmallWavesElevation: { value: 0.132 },
-        uSmallWavesFrequency: { value: 1.446 },
-        uSmallWavesSpeed: { value: 0.126 },
-        uSmallIterations: { value: 3.579 },
+        uSmallWavesElevation: { value: 0.05 },
+        uSmallWavesFrequency: { value: 3.357 },
+        uSmallWavesSpeed: { value: 0.092 },
+        uSmallIterations: { value: 2.112 },
 
-        uColorOffset: { value: 0.149 },
-        uColorMultiplier: { value: 1.134 },
+        uColorOffset: { value: 0.009 },
+        uColorMultiplier: { value: 2.134 },
 
         uDepthColor: { value: new Color("#045076") },
         uSurfaceColor: { value: new Color("#cccccc") },
@@ -60,7 +62,8 @@ export default class Water {
     this.mesh = new Mesh(this.geometry, this.material);
 
     this.mesh.rotation.x = -Math.PI * 0.5;
-    this.mesh.position.y = -0.17;
+    this.mesh.position.y = 0.09;
+    this.mesh.position.z = 8.04;
   }
 
   debugger() {
@@ -70,6 +73,12 @@ export default class Water {
       .name("uFrequency x")
       .min(0)
       .max(20)
+      .step(0.001);
+    this.debugFolder
+      .add(this.mesh.position, "y")
+      .name("Position Y")
+      .min(0)
+      .max(1)
       .step(0.001);
     this.debugFolder
       .add(this.material.uniforms.uBigWavesFrequency.value, "y")

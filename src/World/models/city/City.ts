@@ -1,6 +1,6 @@
 import Resources from "../../../experience/utils/Resources";
 import { Experience } from "../../../experience/Experience";
-import { Box3, Mesh, MeshStandardMaterial } from "three";
+import { Box3, Mesh, MeshMatcapMaterial, MeshStandardMaterial } from "three";
 import { BlockCenterRight } from "./block";
 import * as CANNON from "cannon";
 import { PhysicsWorld } from "../../../experience/utils";
@@ -18,6 +18,7 @@ export default class City {
   physics: PhysicsWorld;
   mazeBox3: Box3;
   garageDoor: Mesh;
+
   garageBody: CANNON.Body;
   constructor() {
     this.experience = new Experience();
@@ -45,20 +46,21 @@ export default class City {
         if (child.name.includes("key_")) {
           this.keys.push(child);
         }
-        if (child.name.includes("maze")) {
+        if (child.name.startsWith("maze")) {
           this.mazeBox3 = new Box3().setFromObject(child);
           // this.keys.push(child);
         }
-        if (child.name.includes("garage_door")) {
+        if (child.name.startsWith("garage_door")) {
           this.garageDoor = child;
-        }
-        if (child.name.includes("garage_door")) {
-          console.log(child);
         }
 
         child.castShadow = true;
         child.receiveShadow = true;
         if (child.name.includes("maxi_ruti")) {
+          // const matcap = this.resources.items.mapCapText as THREE.Texture;
+          // child.material = new MeshMatcapMaterial({
+          //   matcap,
+          // });
           gsap.to(child.rotation, {
             z: Math.PI * 2,
             duration: 30,

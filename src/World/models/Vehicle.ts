@@ -35,7 +35,7 @@ class Model {
     this.physics = this.experience.physics;
     // @ts-ignore
     this.modelAnimations = mesh?.animations;
-    const modelScale = new Vector3(0.5, 0.5, 0.5);
+    const modelScale = new Vector3(0.8, 0.8, 0.8);
     this.mesh = mesh.scene;
 
     this.mesh.scale.set(modelScale.x, modelScale.y, modelScale.z);
@@ -50,7 +50,7 @@ class Model {
     const size = new Vector3();
     boundingBox.getSize(size);
 
-    const halfExtents = new CANNON.Vec3(size.x, size.y, size.z);
+    const halfExtents = new CANNON.Vec3(size.x / 2, size.y / 2, size.z / 2);
 
     this.body = new CANNON.Body({
       shape: new CANNON.Box(halfExtents),

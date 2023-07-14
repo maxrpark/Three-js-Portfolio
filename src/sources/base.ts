@@ -25,7 +25,7 @@ export default [
   {
     name: "Car",
     type: "gltfLoader",
-    path: "models/car/car.glb",
+    path: "models/car/vehicle.glb",
   },
   {
     name: "concreteColor",
@@ -78,9 +78,9 @@ export default [
     path: "textures/brick-wall/roughness.jpg",
   },
   {
-    name: "mapCap8",
+    name: "mapCapText",
     type: "textureLoader",
-    path: "textures/mapCaps/8.png",
+    path: "textures/mapCaps/4.png",
   },
   {
     name: "male_character",
