@@ -94,7 +94,7 @@ export default class City {
     });
     this.cityPhysicBodies();
 
-    this.model.position.y = -0.05;
+    // this.model.position.y = -0.05;
 
     this.experience.scene.add(this.model);
   }

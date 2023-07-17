@@ -35,10 +35,10 @@ class Model {
     this.physics = this.experience.physics;
     // @ts-ignore
     this.modelAnimations = mesh?.animations;
-    const modelScale = new Vector3(0.8, 0.8, 0.8);
+    // const modelScale = new Vector3(0.8, 0.8, 0.8);
     this.mesh = mesh.scene;
 
-    this.mesh.scale.set(modelScale.x, modelScale.y, modelScale.z);
+    // this.mesh.scale.set(modelScale.x, modelScale.y, modelScale.z);
     this.mesh.position.set(-1, 0, -6.9);
     this.mesh.name = "vehicle";
 
@@ -54,7 +54,7 @@ class Model {
 
     this.body = new CANNON.Body({
       shape: new CANNON.Box(halfExtents),
-      mass: 1,
+      mass: 150,
 
       allowSleep: false,
     });
@@ -108,6 +108,7 @@ class Model {
     this.body.vectorToWorldFrame(forwardDirection, forwardDirection);
 
     const velocityVector = forwardDirection.scale(velocity);
+
     this.body.velocity.copy(velocityVector);
 
     this.body.angularDamping = 1;
@@ -232,7 +233,10 @@ export default class Vehicle {
   }
 
   drivingControllers() {
-    if (this.controllers.keysPressed.ArrowUp) {
+    if (
+      this.controllers.keysPressed.ArrowUp &&
+      !this.controllers.keysPressed.ShiftLeft
+    ) {
       this.model.moveVehicle();
       this.model.positionSaved = false;
     }

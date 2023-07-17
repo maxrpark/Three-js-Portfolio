@@ -37,11 +37,14 @@ class Model {
     // @ts-ignore
     this.modelAnimations = mesh.animations;
 
-    const modelScale = new Vector3(0.003, 0.003, 0.003);
+    const modelScale = new Vector3(1, 1, 1);
     this.mesh = mesh.scene;
 
     this.mesh.rotateY(Math.PI);
     this.mesh.scale.set(modelScale.x, modelScale.y, modelScale.z);
+
+    this.mesh.receiveShadow = true;
+    this.mesh.castShadow = true;
 
     this.eulerRotation = new Euler(0, -10, 0, "XYZ");
 
@@ -52,8 +55,8 @@ class Model {
     boundingBox.getSize(size);
 
     const halfExtents = new CANNON.Vec3(
-      0.3 * size.x,
-      0.5 * size.y,
+      0.9 * size.x,
+      0.9 * size.y,
       0.5 * size.z
     );
 
@@ -75,7 +78,7 @@ class Model {
 
     this.physics.world.addBody(this.body);
 
-    this.pivotOffset = new CANNON.Vec3(0, -halfExtents.y + 0.05, 0); // Adjust
+    this.pivotOffset = new CANNON.Vec3(0, -halfExtents.y + 0.01, 0); // Adjust
     this.meshPositionPivot = new CANNON.Vec3();
   }
 
@@ -106,7 +109,7 @@ class Model {
   }
 
   moveForward(velocity = 1) {
-    const directionZ = 1;
+    const directionZ = velocity;
 
     const forwardDirection = new CANNON.Vec3(0, 0, directionZ);
     this.body.vectorToWorldFrame(forwardDirection, forwardDirection);
@@ -175,16 +178,16 @@ class Animations {
     };
 
     this.animation.actions.idle = this.animation.mixer.clipAction(
-      this.model.modelAnimations[7]
+      this.model.modelAnimations[1]
     );
     this.animation.actions.walking = this.animation.mixer.clipAction(
-      this.model.modelAnimations[0]
+      this.model.modelAnimations[2]
     );
     this.animation.actions.running = this.animation.mixer.clipAction(
       this.model.modelAnimations[3]
     );
 
-    this.animation.actions.current = this.animation.actions.idle;
+    this.animation.actions.current = this.animation.actions.walking;
     this.animation.actions.current.play();
 
     this.playAnimation("idle");
@@ -228,7 +231,7 @@ export default class Character {
     this.cameraCurrentPosition = new Vector3();
     this.cameraCurrentLockAt = new Vector3();
 
-    this.model = new Model(this.experience.resources.items.male_character);
+    this.model = new Model(this.experience.resources.items.male_character_1);
 
     this.animations = new Animations(this.model);
   }
@@ -261,7 +264,10 @@ export default class Character {
   }
 
   characterController() {
-    if (this.controllers.keysPressed.ArrowUp) {
+    if (
+      this.controllers.keysPressed.ArrowUp &&
+      !this.controllers.keysPressed.ShiftLeft
+    ) {
       this.model.moveForward();
       if (!this.isWalking) {
         this.isWalking = true;
@@ -273,7 +279,7 @@ export default class Character {
       this.controllers.keysPressed.ArrowUp &&
       this.controllers.keysPressed.ShiftLeft
     ) {
-      this.model.moveForward(3);
+      this.model.moveForward(1.8);
 
       if (!this.isRunning) {
         this.isRunning = true;

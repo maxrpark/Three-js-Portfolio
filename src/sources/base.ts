@@ -30,7 +30,7 @@ export default [
   {
     name: "Car",
     type: "gltfLoader",
-    path: "models/car/vehicle.glb",
+    path: "models/vehicle/vehicle.glb",
   },
   {
     name: "concreteColor",
@@ -91,5 +91,10 @@ export default [
     name: "male_character",
     type: "gltfLoader",
     path: "models/character/scene.gltf",
+  },
+  {
+    name: "male_character_1",
+    type: "gltfLoader",
+    path: "models/character_1/character.glb",
   },
 ] as SourceInt[];
