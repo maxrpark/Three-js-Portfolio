@@ -88,13 +88,8 @@ export default [
     path: "textures/mapCaps/4.png",
   },
   {
-    name: "male_character",
-    type: "gltfLoader",
-    path: "models/character/scene.gltf",
-  },
-  {
     name: "male_character_1",
     type: "gltfLoader",
-    path: "models/character_1/character.glb",
+    path: "models/character/character.glb",
   },
 ] as SourceInt[];

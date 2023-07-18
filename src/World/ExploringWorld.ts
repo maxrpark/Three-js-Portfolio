@@ -70,9 +70,9 @@ export default class ExploringWorld {
     this.character.model.mesh.visible = true;
     this.isDriving = false;
     this.character.model.position(
-      this.vehicle.model.mesh.position.x + 0.5,
-      this.vehicle.model.mesh.position.y + 0.5,
-      this.vehicle.model.mesh.position.z
+      this.vehicle.model.mesh.position.x + 0.7,
+      this.vehicle.model.mesh.position.y + 0.7,
+      this.vehicle.model.mesh.position.z + 0.7
     );
   }
 

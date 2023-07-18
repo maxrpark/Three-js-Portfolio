@@ -211,9 +211,9 @@ export default class Vehicle {
 
   updateCamera() {
     // TODO CREATE A CLASS
-    const idealOffset = new Vector3(0, 2, -2.5);
+    const idealOffset = new Vector3(0, 20, 0);
     const idealLookAt = new Vector3(0, 1, 0);
-    const lerp = 0.1;
+    const lerp = 0.05;
     const modelPosition = this.model.mesh.position.clone();
 
     const idealOffsetWorld = idealOffset

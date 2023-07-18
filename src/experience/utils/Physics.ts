@@ -29,7 +29,7 @@ export default class PhysicsWorld {
       this.defaultMaterial,
       this.defaultMaterial,
       {
-        friction: 0.1,
+        friction: 3,
         // restitution: 0.1,
       }
     );
@@ -38,7 +38,7 @@ export default class PhysicsWorld {
   createWorld() {
     this.createContact();
     this.world = new CANNON.World();
-
+    this.world.defaultContactMaterial.friction = 0;
     this.world.broadphase = new CANNON.SAPBroadphase(this.world);
     this.world.allowSleep = true;
     this.world.gravity.set(0, -9.82, 0);
