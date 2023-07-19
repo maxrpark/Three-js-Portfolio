@@ -87,7 +87,7 @@ export default class World {
 
     this.createModal();
 
-    this.stateMachine.change(new IntroState()); // DURING DEVELOPENT
+    // this.stateMachine.change(new IntroState()); // DURING DEVELOPENT
   }
 
   private setLoadingScreen() {
