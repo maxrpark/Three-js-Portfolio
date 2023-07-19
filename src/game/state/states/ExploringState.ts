@@ -51,6 +51,7 @@ export default class ExploringState extends GameState {
   public exit(): void {
     this.menuIcon.off("handleMenuClick");
     this.controllers.off("controllerMenu");
+    this.experience.world.exploringWorld.timeLine.reverse();
 
     setTimeout(() => {
       document.body.classList.remove("exploring");

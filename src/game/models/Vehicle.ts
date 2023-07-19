@@ -45,7 +45,7 @@ class Model {
 
     const halfExtents = new CANNON.Vec3(size.x / 2, size.y / 2, size.z / 2);
 
-    this.pivotOffset = new CANNON.Vec3(0, -halfExtents.y + 0.05, 0);
+    this.pivotOffset = new CANNON.Vec3(0, -halfExtents.y + 0.08, 0);
     this.meshPositionPivot = new CANNON.Vec3();
 
     this.body = new CANNON.Body({
@@ -140,14 +140,14 @@ export default class Vehicle {
   drivingControllers() {
     if (
       this.controllers.keysPressed.ArrowUp &&
-      !this.controllers.keysPressed.ShiftLeft
+      !this.controllers.keysPressed.Space
     ) {
       this.model.moveVehicle();
       this.model.positionSaved = false;
     }
     if (
       this.controllers.keysPressed.ArrowUp &&
-      this.controllers.keysPressed.ShiftLeft
+      this.controllers.keysPressed.Space
     ) {
       this.model.moveVehicle(12);
       this.model.positionSaved = false;
@@ -165,7 +165,7 @@ export default class Vehicle {
       !this.controllers.keysPressed.ArrowRight
     ) {
       if (this.controllers.keysPressed.ArrowUp) {
-        this.model.rotate(0.04);
+        this.model.rotate(0.03);
       } else if (this.controllers.keysPressed.ArrowDown) {
         this.model.rotate(-0.04);
       }
@@ -176,7 +176,7 @@ export default class Vehicle {
       !this.controllers.keysPressed.ArrowLeft
     ) {
       if (this.controllers.keysPressed.ArrowUp) {
-        this.model.rotate(-0.04);
+        this.model.rotate(-0.03);
       } else if (this.controllers.keysPressed.ArrowDown) {
         this.model.rotate(0.04);
       }
@@ -186,7 +186,7 @@ export default class Vehicle {
   update() {
     if (
       !this.controllers.keysPressed.ArrowUp &&
-      !this.controllers.keysPressed.ShiftLeft
+      !this.controllers.keysPressed.Space
     ) {
       if (!this.model.positionSaved) this.model.saveModelPosition();
     }

@@ -20,8 +20,6 @@ export default class Modal extends EventEmitter {
   }
 
   public intro() {
-    // Modal Content
-
     this.modalWrapper.innerHTML = /*html*/ ` 
     <div class="modal-content">
 
@@ -174,7 +172,7 @@ export default class Modal extends EventEmitter {
           yPercent: 0,
           opacity: 1,
           scale: 1,
-          stagger: 0.2,
+          stagger: 0.1,
         },
         "<"
       );

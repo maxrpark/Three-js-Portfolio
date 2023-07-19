@@ -18,6 +18,8 @@ export default class ToastNotification {
   private toastTitle: HTMLElement;
   private imageTag: HTMLImageElement;
 
+  tl: any;
+
   constructor() {
     this.createUI();
     this.toastTitle = this.toastWrapper.querySelector(
@@ -27,6 +29,8 @@ export default class ToastNotification {
       ".toast-description__message"
     )!;
     this.imageTag = this.toastWrapper.querySelector(".toast-img-icon")!;
+
+    this.toastAnimation();
   }
 
   get title(): string {
@@ -101,19 +105,23 @@ export default class ToastNotification {
       yPercent: -100,
     });
   }
-  showToast({ title, text, className, image }: ToastMessage) {
-    this.title = title;
-    this.text = text;
-    this.className = className;
-    this.img = image;
-
-    let tl = gsap.timeline({});
-    tl.set(this.toastWrapper, { xPercent: -50, left: "50%", yPercent: -100 })
+  toastAnimation() {
+    this.tl = gsap.timeline({ paused: true });
+    this.tl
+      .set(this.toastWrapper, { xPercent: -50, left: "50%", yPercent: -100 })
       .to(this.toastWrapper, { yPercent: 10, opacity: 1 })
       .to(this.toastWrapper, {
         delay: 3,
         opacity: 0,
         yPercent: -100,
       });
+  }
+  showToast({ title, text, className, image }: ToastMessage) {
+    this.title = title;
+    this.text = text;
+    this.className = className;
+    this.img = image;
+    this.tl.progress(0);
+    this.tl.play();
   }
 }

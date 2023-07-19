@@ -10,12 +10,14 @@ import Water from "./shaders/water/Water";
 import * as CANNON from "cannon";
 
 export default class ExploringWorld {
-  public controllers: CharacterController;
   private experience: Experience;
   private stateMachine: StateMachine;
   private userProgress: UserProgress;
   private drivingButton: HTMLButtonElement;
   private speedButton: HTMLButtonElement;
+  private infoButtons: HTMLDivElement;
+  public controllers: CharacterController;
+  showInfoButtons: boolean = true;
   character: Character;
   vehicle: Vehicle;
 
@@ -23,6 +25,8 @@ export default class ExploringWorld {
 
   isDriving: boolean = false;
   garageDoor: Mesh;
+
+  timeLine: any;
 
   // Shader
   water: Water;
@@ -35,6 +39,13 @@ export default class ExploringWorld {
 
     this.drivingButton = document.querySelector("#driveBtn")!;
     this.speedButton = document.querySelector("#runBtn")!;
+    this.infoButtons = document.querySelector("#controlsInfo")!;
+    this.showInfoButtons = true;
+
+    gsap.set(this.infoButtons, {
+      opacity: 0,
+      yPercent: 100,
+    });
 
     this.userProgress = this.experience.world.userProgress;
 
@@ -59,11 +70,32 @@ export default class ExploringWorld {
     this.controllers = new CharacterController();
     this.character = new Character(this.controllers);
     this.vehicle = new Vehicle(this.controllers);
+    this.infoButtonsAnimation();
 
     this.experience.scene.add(
       this.vehicle.model.mesh,
       this.character.model.mesh
     );
+  }
+
+  infoButtonsAnimation() {
+    let mm = gsap.matchMedia();
+    this.timeLine = gsap.timeline({ paused: true });
+    mm.add("(min-width: 687px)", () => {
+      this.timeLine
+        .to(this.infoButtons, {
+          delay: 1,
+          display: "block",
+        })
+        .to(this.infoButtons, {
+          opacity: 1,
+          yPercent: 0,
+        });
+    });
+  }
+
+  exportingStart() {
+    this.timeLine.play();
   }
 
   setWater() {
@@ -181,7 +213,7 @@ export default class ExploringWorld {
 
   update() {
     this.water.update();
-    this.checkCanDrive();
+
     if (this.stateMachine.currentStateName === StatesNames.EXPLORING) {
       if (this.isDriving) {
         this.vehicle.update();
@@ -198,7 +230,10 @@ export default class ExploringWorld {
         }
       }
     }
-    if (this.canDrive) this.checkCharacterNearGarage();
+    if (this.canDrive) {
+      this.checkCanDrive();
+      this.checkCharacterNearGarage();
+    }
     if (this.stars.length) {
       this.checkItems(this.stars, ItemTypes.STAR);
     }
@@ -207,6 +242,9 @@ export default class ExploringWorld {
     }
     if (this.diamonds.length) {
       this.checkItems(this.diamonds, ItemTypes.DIAMOND);
+    }
+    if (this.controllers.keysPressed.ArrowUp) {
+      this.timeLine.reverse();
     }
   }
 }

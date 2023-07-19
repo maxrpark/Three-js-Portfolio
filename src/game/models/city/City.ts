@@ -23,7 +23,7 @@ gsap.registerEffect({
 
     let tl = gsap.timeline();
     tl.to(mesh.rotation, {
-      z: Math.PI * 2,
+      y: Math.PI * 2,
       duration,
       repeat: -1,
       ease: "none",
@@ -103,7 +103,14 @@ export default class City {
         child.castShadow = true;
         child.receiveShadow = true;
         if (child.name.includes("maxi_ruti")) {
-          gsap.effects.itemRotate(child, { duration: 30 });
+          // gsap.effects.itemRotate(child, { duration: 30 });
+
+          gsap.to(child.rotation, {
+            z: Math.PI * 2,
+            duration: 30,
+            repeat: -1,
+            ease: "none",
+          });
           child.castShadow = false;
           child.receiveShadow = false;
         }

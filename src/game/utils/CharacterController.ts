@@ -8,7 +8,7 @@ export default class CharacterController {
     ArrowDown: boolean;
     ArrowLeft: boolean;
     ArrowRight: boolean;
-    ShiftLeft: boolean;
+    Space: boolean;
     Enter: boolean;
   };
 
@@ -23,7 +23,7 @@ export default class CharacterController {
       ArrowDown: false,
       ArrowLeft: false,
       ArrowRight: false,
-      ShiftLeft: false,
+      Space: false,
       Enter: false,
     };
 
@@ -83,7 +83,7 @@ export default class CharacterController {
           self.keysPressed.ArrowLeft = true;
           self.keysPressed.ArrowRight = false;
         }
-        if (this.getDirection() === "down" && !self.keysPressed.ShiftLeft) {
+        if (this.getDirection() === "down" && !self.keysPressed.Space) {
           self.keysPressed.ArrowUp = false;
           self.keysPressed.ArrowRight = false;
           self.keysPressed.ArrowLeft = false;
@@ -126,12 +126,12 @@ export default class CharacterController {
     runBtn.addEventListener("touchstart", (event: any) => {
       event.stopPropagation();
       runBtn.classList.add("running");
-      this.keysPressed.ShiftLeft = true;
+      this.keysPressed.Space = true;
     });
     runBtn.addEventListener("touchend", (event: any) => {
       event.stopPropagation();
       runBtn.classList.remove("running");
-      this.keysPressed.ShiftLeft = false;
+      this.keysPressed.Space = false;
     });
 
     const driveBtn = document.getElementById("driveBtn")!;

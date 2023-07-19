@@ -87,7 +87,7 @@ export default class World {
 
     this.createModal();
 
-    // this.stateMachine.change(new IntroState()); // DURING DEVELOPENT
+    this.stateMachine.change(new IntroState()); // DURING DEVELOPENT
   }
 
   private setLoadingScreen() {
@@ -113,6 +113,7 @@ export default class World {
     this.controllers.showPlayMenu();
     this.modal.closeModal();
     this.userProgress.checkBadgesByID(1);
+    this.exploringWorld.exportingStart();
   }
 
   createModal() {

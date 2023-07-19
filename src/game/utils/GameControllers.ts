@@ -14,9 +14,9 @@ export default class Controllers extends EventEmitter {
     this.buttonWrapper.classList.add("controllers-container");
 
     this.buttonWrapper.innerHTML = /*html*/ `
-    <button id="menu" class="control-btn btn-primary">
+   <button id="menu" class="control-btn btn-primary">
     <span class="inner-line"></span>
-    </button>
+   </button>
     <button id="drop" class="control-btn btn-primary">Drop</button>
     `;
 

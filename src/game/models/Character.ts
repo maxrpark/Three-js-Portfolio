@@ -237,6 +237,7 @@ export default class Character {
   isRunning: boolean = false;
   isNotMoving: boolean = true;
   isAroundMaze: boolean = false;
+  showCarAlertMessage: boolean = true;
 
   constructor(controllers: CharacterController) {
     this.experience = new Experience();
@@ -258,7 +259,7 @@ export default class Character {
   characterController() {
     if (
       this.controllers.keysPressed.ArrowUp &&
-      !this.controllers.keysPressed.ShiftLeft
+      !this.controllers.keysPressed.Space
     ) {
       this.model.moveForward();
       if (!this.isWalking) {
@@ -270,7 +271,7 @@ export default class Character {
     }
     if (
       this.controllers.keysPressed.ArrowUp &&
-      this.controllers.keysPressed.ShiftLeft
+      this.controllers.keysPressed.Space
     ) {
       this.model.moveForward(1.8);
 
@@ -288,7 +289,7 @@ export default class Character {
       this.animations.playAnimation("idle");
     }
 
-    if (!this.controllers.keysPressed.ShiftLeft && this.isRunning) {
+    if (!this.controllers.keysPressed.Space && this.isRunning) {
       this.isRunning = false;
       this.animations.playAnimation("walking");
     }
@@ -323,6 +324,17 @@ export default class Character {
       } else {
         this.model.rotate(-0.05);
       }
+    }
+    if (
+      this.controllers.keysPressed.Enter &&
+      !this.experience.world.userProgress.canDrive
+    ) {
+      this.experience.world.toastNotification.showToast({
+        title: `Vehicle not available`,
+        text: "Collect all the coins to unlock it.",
+        className: "completed",
+        image: "",
+      });
     }
   }
 
