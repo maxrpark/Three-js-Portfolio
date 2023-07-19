@@ -2,7 +2,7 @@ import GameState, { StateMachine, StatesNames } from "../GameState";
 import { Experience } from "../../../experience/Experience";
 import World from "../../World";
 import { Modal, MenuIcon, Controllers } from "../../utils";
-import { StartGameState } from "./";
+import { StartGameState } from ".";
 
 export default class IntroState extends GameState {
   private experience: Experience;

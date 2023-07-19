@@ -2,7 +2,7 @@ import GameState from "../GameState";
 import { Experience } from "../../../experience/Experience";
 import World from "../../World";
 import { StatesNames, StateMachine } from "../GameState";
-import { StartGameState } from "./";
+import { StartGameState } from ".";
 
 export default class ResetState extends GameState {
   private experience: Experience;

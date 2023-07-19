@@ -9,7 +9,7 @@ import { Ground } from "./objects";
 
 import { StateMachine, StatesNames } from "./state/GameState";
 import { IntroState, WorldCreationState, ExploringState } from "./state/states";
-import { Controllers, Modal, MenuIcon, LoadingModal } from "./utils/";
+import { Controllers, Modal, MenuIcon, LoadingModal } from "./utils";
 
 import { City } from "./models";
 import ExploringWorld from "./ExploringWorld";

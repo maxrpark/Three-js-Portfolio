@@ -2,10 +2,10 @@ import { Mesh } from "three";
 import { Time, Sizes, Camera, Renderer, Debug, PhysicsWorld } from "./utils";
 
 import { Scene } from "three";
-import World from "../World/World";
+import World from "../game/World";
 import Resources from "./utils/Resources";
 import source from "../sources/sources";
-import { StateMachine } from "../World/state/GameState";
+import { StateMachine } from "../game/state/GameState";
 
 declare global {
   interface Window {

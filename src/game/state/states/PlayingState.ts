@@ -3,8 +3,8 @@ import { Experience } from "../../../experience/Experience";
 import World from "../../World";
 import { StateMachine } from "../GameState";
 import MenuIcon from "../../utils/MenuIcon";
-import { PausedState } from "./";
-import { Controllers } from "../../utils/";
+import { PausedState } from ".";
+import { Controllers } from "../../utils";
 
 export default class PlayingState extends GameState {
   private experience: Experience;
