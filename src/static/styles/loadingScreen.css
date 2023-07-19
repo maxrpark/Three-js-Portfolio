@@ -50,7 +50,7 @@
 }
 
 .loading-text {
-  color: white;
+  color: var(--primary-white);
   font-size: 4rem;
   z-index: 1;
 }

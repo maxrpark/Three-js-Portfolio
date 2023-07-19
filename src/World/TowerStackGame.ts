@@ -2,7 +2,7 @@ import { Group } from "three";
 import { Experience } from "../experience/Experience";
 import { PhysicsWorld } from "../experience/utils";
 import { StateMachine } from "./state/GameState";
-import { GroundFloor, Text2D, TowerFloor } from "./objects";
+import { Text2D, TowerFloor } from "./objects";
 import { Controllers } from "./utils";
 import World from "./World";
 import { GameOverState } from "./state/states";
@@ -26,7 +26,6 @@ export default class TowerStack {
 
   private addedObjects: TowerFloor[] = [];
 
-  groundFloor: GroundFloor;
   public currentFloor: TowerFloor | null;
 
   // Variables
@@ -68,7 +67,6 @@ export default class TowerStack {
   }
 
   public setTowerStack() {
-    this.groundFloor = new GroundFloor({ floorSize: this.floorSize });
     this.tower = new Group();
     this.floorLevel = new Text2D({
       text: 0,
@@ -78,7 +76,6 @@ export default class TowerStack {
     });
 
     this.experience.scene.add(
-      this.groundFloor.mesh,
       this.tower,
       //@ts-ignore
       this.floorLevel.instance

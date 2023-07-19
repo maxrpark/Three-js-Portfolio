@@ -102,9 +102,12 @@ export default class UserProgress {
         };
       });
       this.badges = badges;
-      this.totalExperience = this.badges.reduce((acc: number, current: any) => {
-        return acc + current.experience;
-      }, 0);
+      this.totalExperience = this.badges.reduce(
+        (acc: number, current: Badge) => {
+          return acc + current.experience;
+        },
+        0
+      );
 
       this.towerMaxLevel = 0;
       this.earnedExperience = 0;

@@ -4,7 +4,7 @@ import { Time, Sizes, Camera, Renderer, Debug, PhysicsWorld } from "./utils";
 import { Scene } from "three";
 import World from "../World/World";
 import Resources from "./utils/Resources";
-import source from "../sources/base";
+import source from "../sources/sources";
 import { StateMachine } from "../World/state/GameState";
 
 declare global {

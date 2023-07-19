@@ -24,7 +24,7 @@
   height: 90px;
   display: flex;
   border: none;
-  border-radius: 50%;
+  border-radius: var(--border-radius-50);
   display: none;
 }
 
@@ -53,7 +53,7 @@
   height: 50px;
   right: 20px;
   top: 20px;
-  border-radius: 50%;
+  border-radius: var(--border-radius-50);
   z-index: 1;
   display: none;
 }

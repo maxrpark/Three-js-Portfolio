@@ -26,12 +26,24 @@ export default class Modal extends EventEmitter {
     <div class="modal-content">
 
       <div class="modal-texts-wrapper">
-          <h2 class="modal-texts">Project under construction</h2>
+          <h2 class="modal-texts">Maxi Ruti</h2>
+          <h3 class="modal-texts-wrapper">Creative Developer</h3>
        </div>
       <button id="gameStart" class="btn btn-primary">Tower Stack</button>
       <button id="exploreWorld" class="btn btn-primary">Explore</button>
       <button id="progressModal" class="btn btn-primary">My Progress</button>
+      <div class="social-icons">
+        <a href="https://twitter.com/MaxCodeJourney" target="_blank" class="btn btn-primary">
+          <i class="fa fa-twitter"></i>
+        </a>
+        <a href="https://github.com/maxrpark" target="_blank" class="btn btn-primary">
+          <i class="fa fa-github"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/maxi-ruti-202988227/" target="_blank" class="btn btn-primary">
+          <i class="fa fa-linkedin"></i>
+        </a>
       </div>
+    </div>
       `;
 
     // Modal Events
@@ -189,7 +201,7 @@ export default class Modal extends EventEmitter {
           scale: 0.9,
           stagger: {
             from: "end",
-            each: 0.2,
+            each: 0.1,
           },
         }
       )

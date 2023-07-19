@@ -15,7 +15,7 @@ interface EnvironmentInt {
   ambientLight: THREE.AmbientLight;
   directionalLight: THREE.DirectionalLight;
   scene: THREE.Scene;
-  environmentMapTexture: any;
+  environmentMapTexture: THREE.Texture;
   environmentMap: any;
   debug: Debug;
   debugFolder: GUI;

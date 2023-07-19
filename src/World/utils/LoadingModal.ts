@@ -14,13 +14,29 @@ export default class LoadingModal extends EventEmitter {
   modalWrapper: HTMLDivElement;
   loadingText: HTMLHeadElement;
 
+  textColors: string[];
+
   constructor() {
     super();
     this.experience = new Experience();
     this.resources = this.experience.resources;
     this.createModal();
 
+    this.textColors = [
+      "#388697",
+      "#B5FFE1",
+      "#08415C",
+      "#F3E8EE",
+      "#849324",
+      "#729B79",
+    ];
+
     this.resources.on("itemLoaded", () => this.modalLoader());
+    gsap.to(this.loadingText, {
+      keyframes: this.textColors.map((color) => ({ color })),
+      duration: 0.5 * this.textColors.length,
+      repeat: -1,
+    });
   }
 
   createModal() {
@@ -56,7 +72,7 @@ export default class LoadingModal extends EventEmitter {
   }
 
   animation() {
-    this.loadingText.textContent = this.loadingProgress as any;
+    this.loadingText.textContent = this.loadingProgress.toString();
   }
   progressModalOut() {
     let tl = gsap.timeline({ ease: "none" });

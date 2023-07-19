@@ -1,5 +1,6 @@
 import { Experience } from "../../experience/Experience";
 import EventEmitter from "../../experience/utils/EventEmitter";
+import { Badge } from "../../ts/globalTs";
 import UserProgress from "../UserProgress";
 import { gsap } from "gsap";
 export default class ModalProgress extends EventEmitter {
@@ -63,7 +64,7 @@ export default class ModalProgress extends EventEmitter {
       </div>
       <div class="progress-badges-wrapper">
       ${this.badges
-        .map((badge: any) => {
+        .map((badge: Badge) => {
           return this.singleProgress(badge);
         })
         .join("")}
@@ -80,7 +81,7 @@ export default class ModalProgress extends EventEmitter {
       `;
   }
 
-  singleProgress(badge: any) {
+  singleProgress(badge: Badge) {
     return /*html*/ `
             <div class="single-badge ${
               badge.isCollected ? "badge-collected" : ""

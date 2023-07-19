@@ -4,10 +4,17 @@
   right: 5px;
   z-index: 100;
   display: flex;
+
   justify-content: space-between;
   width: 100%;
   display: none;
   padding: 0 1rem;
+}
+
+.action-btns-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .mobile-directional-wrapper {
@@ -15,7 +22,7 @@
   height: 120px;
   background: rgba(255, 255, 255, 0.282);
 
-  border-radius: 50%;
+  border-radius: var(--border-radius-50);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,17 +35,19 @@
   width: 50%;
   height: 50%;
   background: white;
-  border-radius: 50%;
+  border-radius: var(--border-radius-50);
 }
 
 .action-btn {
   width: 70px;
   height: 70px;
-  background: white;
-  border-radius: 50%;
+  background: var(--primary-color);
+  color: var(--primary-white);
+  border-radius: var(--border-radius-50);
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 1.25rem;
 
   border: none;
 
@@ -54,11 +63,6 @@
 
 #driveBtn {
   display: none;
-}
-
-.running {
-  scale: 1.5;
-  opacity: 0.3;
 }
 
 @media screen and (min-width: 687px) {

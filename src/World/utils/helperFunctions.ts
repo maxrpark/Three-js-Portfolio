@@ -5,11 +5,11 @@ export const getLocalStorageItem = (key: LocalStorageTypes) => {
   if (!item) {
     item = {};
   } else {
-    item = JSON.parse(item);
+    item = JSON.parse(item as string);
   }
 
   return item;
 };
-export const setLocalStorageItem = (key: LocalStorageTypes, item: any) => {
+export const setLocalStorageItem = (key: LocalStorageTypes, item: string) => {
   localStorage.setItem(key, JSON.stringify(item));
 };

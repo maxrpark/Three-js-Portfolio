@@ -52,7 +52,7 @@ export default class Text2D {
     this.instance.text = text;
     this.instance.sync();
   }
-  public updatePositionY(positionY: any) {
+  public updatePositionY(positionY: number) {
     gsap.to(this.instance, {
       anchorY: positionY,
     });

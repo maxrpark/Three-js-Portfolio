@@ -1,6 +1,13 @@
 import Resources from "../../../experience/utils/Resources";
 import { Experience } from "../../../experience/Experience";
-import { Box3, Mesh, MeshStandardMaterial } from "three";
+import {
+  Box3,
+  Mesh,
+  MeshStandardMaterial,
+  Texture,
+  MeshBasicMaterial,
+  BoxGeometry,
+} from "three";
 import { BlockCenterRight } from "./block";
 import * as CANNON from "cannon";
 import { PhysicsWorld } from "../../../experience/utils";
@@ -58,7 +65,7 @@ export default class City {
       ) {
         if (child.name.includes("body_")) {
           this.physicsBodies.push(child);
-          gsap.effects.itemRotate(child, { duration: 2 });
+          child.visible = false;
         }
         if (child.name.includes("star_")) {
           this.stars.push(child);
@@ -70,9 +77,24 @@ export default class City {
         }
         if (child.name.includes("diamond_")) {
           this.diamonds.push(child);
+          gsap.effects.itemRotate(child, { duration: 2 });
         }
         if (child.name.startsWith("maze")) {
           this.mazeBox3 = new Box3().setFromObject(child);
+        }
+        if (child.name === "floor_base") {
+          this.physicsBodies.push(child);
+
+          const material = new MeshBasicMaterial({
+            map: this.resources.items.towerFloorColor as Texture,
+          });
+
+          const mesh = new Mesh(new BoxGeometry(1, 1, 1), material);
+          mesh.position.copy(child.position);
+          this.experience.scene.add(mesh);
+          child.visible = false;
+
+          this.experience.scene.remove(child);
         }
         if (child.name.startsWith("garage_door")) {
           this.garageDoor = child;
@@ -81,11 +103,6 @@ export default class City {
         child.castShadow = true;
         child.receiveShadow = true;
         if (child.name.includes("maxi_ruti")) {
-          // const matcap = this.resources.items.mapCapText as THREE.Texture;
-          // child.material = new MeshMatcapMaterial({
-          //   matcap,
-          // });
-
           gsap.effects.itemRotate(child, { duration: 30 });
           child.castShadow = false;
           child.receiveShadow = false;
@@ -93,8 +110,6 @@ export default class City {
       }
     });
     this.cityPhysicBodies();
-
-    // this.model.position.y = -0.05;
 
     this.experience.scene.add(this.model);
   }
@@ -167,7 +182,6 @@ export default class City {
     this.blockCenterRight = new BlockCenterRight();
 
     this.physicsBodies.forEach((item) => {
-      item.visible = false;
       const boundingBox = item.geometry.boundingBox!;
 
       const size = new CANNON.Vec3(
@@ -181,15 +195,14 @@ export default class City {
       const body = new CANNON.Body({
         shape,
         mass: 0,
-        type: CANNON.Body.KINEMATIC, // S
+        type: CANNON.Body.KINEMATIC,
       });
 
       const position = item.position.clone();
 
-      //@ts-ignore
       body.position.set(position.x, position.y, position.z);
-      //@ts-ignore
-      body.quaternion.copy(item.quaternion);
+
+      body.quaternion.copy(item.quaternion as any);
 
       this.physics.world.addBody(body);
 

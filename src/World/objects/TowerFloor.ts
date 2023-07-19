@@ -1,11 +1,10 @@
-import { BoxGeometry, Camera, Mesh, MeshStandardMaterial } from "three";
+import { BoxGeometry, Camera, Mesh, MeshBasicMaterial, Texture } from "three";
 import CANNON from "cannon";
 import { Experience } from "../../experience/Experience";
 import { PhysicsWorld, Time } from "../../experience/utils";
 import { gsap } from "gsap";
 import EventEmitter from "../../experience/utils/EventEmitter";
 import Resources from "../../experience/utils/Resources";
-import { MeshTextureInt } from "../../ts/globalTs";
 
 interface Props {
   positionY: number;
@@ -19,8 +18,7 @@ export default class TowerFloor extends EventEmitter {
   private resources: Resources;
 
   private geometry: BoxGeometry;
-  private material: MeshStandardMaterial;
-  public textures: MeshTextureInt;
+  private material: MeshBasicMaterial;
   public mesh: Mesh;
   public body: CANNON.Body;
 
@@ -56,16 +54,10 @@ export default class TowerFloor extends EventEmitter {
       this.floorSize
     );
   }
-  private setTexture() {
-    this.textures = {
-      map: this.resources.items.towerFloorColor,
-    };
-  }
-  private setMaterial() {
-    this.setTexture();
 
-    this.material = new MeshStandardMaterial({
-      ...this.textures,
+  private setMaterial() {
+    this.material = new MeshBasicMaterial({
+      map: this.resources.items.towerFloorColor as Texture,
     });
   }
   private setBody() {

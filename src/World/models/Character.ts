@@ -3,17 +3,17 @@ import {
   AnimationMixer,
   Box3,
   Euler,
-  Mesh,
+  Group,
   Vector3,
 } from "three";
+import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
+import * as CANNON from "cannon";
 import { Experience } from "../../experience/Experience";
-import { Camera } from "../../experience/Camera";
 import { gsap } from "gsap";
 
 import { PhysicsWorld, Time } from "../../experience/utils";
-import * as CANNON from "cannon";
 
-import { CharacterController } from "../utils";
+import { CharacterController, FollowCamera } from "../utils";
 import {
   getLocalStorageItem,
   setLocalStorageItem,
@@ -23,22 +23,27 @@ import { LocalStorageKeys } from "../../ts/globalTs";
 class Model {
   private experience: Experience;
   private physics: PhysicsWorld;
-  modelAnimations: AnimationClip[];
-  mesh: Mesh;
-  body: CANNON.Body;
   private pivotOffset: Vector3 | CANNON.Vec3;
   private meshPositionPivot: Vector3 | CANNON.Vec3;
   private eulerRotation: Euler;
+
+  modelAnimations: AnimationClip[];
+  mesh: Group;
+  body: CANNON.Body;
   positionSaved: boolean;
 
-  constructor(mesh: any) {
+  constructor(mesh: GLTF) {
     this.experience = new Experience();
     this.physics = this.experience.physics;
-    // @ts-ignore
     this.modelAnimations = mesh.animations;
-
-    const modelScale = new Vector3(1, 1, 1);
     this.mesh = mesh.scene;
+
+    this.setCharacter();
+  }
+
+  setCharacter() {
+    this.mesh.position.set(0, 0.1, 11.5);
+    const modelScale = new Vector3(1, 1, 1);
 
     this.mesh.rotateY(Math.PI);
     this.mesh.scale.set(modelScale.x, modelScale.y, modelScale.z);
@@ -46,7 +51,7 @@ class Model {
     this.mesh.receiveShadow = true;
     this.mesh.castShadow = true;
 
-    this.eulerRotation = new Euler(0, -10, 0, "XYZ");
+    this.eulerRotation = new Euler(0, -1, 0, "XYZ");
 
     const boundingBox = new Box3();
     boundingBox.setFromObject(this.mesh);
@@ -59,6 +64,9 @@ class Model {
       0.9 * size.y,
       0.5 * size.z
     );
+
+    this.pivotOffset = new CANNON.Vec3(0, -halfExtents.y + 0.01, 0); // Adjust
+    this.meshPositionPivot = new CANNON.Vec3();
 
     this.body = new CANNON.Body({
       shape: new CANNON.Box(halfExtents),
@@ -75,11 +83,7 @@ class Model {
     );
 
     this.setInitialPosition();
-
     this.physics.world.addBody(this.body);
-
-    this.pivotOffset = new CANNON.Vec3(0, -halfExtents.y + 0.01, 0); // Adjust
-    this.meshPositionPivot = new CANNON.Vec3();
   }
 
   position(x = 0, y = 1, z = 11.5) {
@@ -98,6 +102,13 @@ class Model {
     } else {
       this.position();
     }
+
+    this.body.quaternion.setFromEuler(
+      this.eulerRotation.x,
+      Math.PI,
+      this.eulerRotation.z,
+      "XYZ"
+    );
   }
 
   savePlayerPosition() {
@@ -142,8 +153,8 @@ class Model {
 
   public update() {
     this.body.position.vadd(
-      this.pivotOffset as any,
-      this.meshPositionPivot as any
+      this.pivotOffset as CANNON.Vec3,
+      this.meshPositionPivot as CANNON.Vec3
     );
 
     this.mesh.position.copy(this.meshPositionPivot as any);
@@ -211,56 +222,37 @@ class Animations {
 
 export default class Character {
   experience: Experience;
-  camera: Camera;
   model: Model;
+  followCamera: FollowCamera;
+  controllers: CharacterController;
   animations: Animations;
+
   cameraCurrentPosition: Vector3;
   cameraCurrentLockAt: Vector3;
 
+  defaultOffset: Vector3;
+  nearMazeOffset: Vector3;
+
   isWalking: boolean = false;
   isRunning: boolean = false;
+  isNotMoving: boolean = true;
   isAroundMaze: boolean = false;
-
-  controllers: CharacterController;
 
   constructor(controllers: CharacterController) {
     this.experience = new Experience();
-    this.camera = this.experience.camera;
     this.controllers = controllers;
+    this.defaultOffset = new Vector3(0, 1, -2.5);
+    this.nearMazeOffset = new Vector3(0, 6, -2.5);
+    this.followCamera = new FollowCamera({
+      idealLookAt: new Vector3(0, 0.7, 0),
+      idealOffset: this.defaultOffset,
+    });
 
-    this.cameraCurrentPosition = new Vector3();
-    this.cameraCurrentLockAt = new Vector3();
-
-    this.model = new Model(this.experience.resources.items.male_character_1);
+    this.model = new Model(
+      this.experience.resources.items.male_character_1 as GLTF
+    );
 
     this.animations = new Animations(this.model);
-  }
-
-  updateCamera() {
-    let idealOffset = new Vector3(0, 1, -2.5);
-    let idealLookAt = new Vector3(0, 0.7, 0);
-
-    if (this.isAroundMaze) {
-      idealOffset = new Vector3(0, 6, -2.5);
-    }
-
-    const lerp = 0.1;
-    const modelPosition = this.model.mesh.position.clone();
-
-    const idealOffsetWorld = idealOffset
-      .clone()
-      .applyQuaternion(this.model.mesh.quaternion)
-      .add(modelPosition);
-    const idealLookAtWorld = idealLookAt
-      .clone()
-      .applyQuaternion(this.model.mesh.quaternion)
-      .add(modelPosition);
-
-    this.cameraCurrentPosition.lerp(idealOffsetWorld, lerp);
-    this.cameraCurrentLockAt.lerp(idealLookAtWorld, lerp);
-
-    this.camera.camera.position.copy(this.cameraCurrentPosition);
-    this.camera.camera.lookAt(this.cameraCurrentLockAt);
   }
 
   characterController() {
@@ -270,6 +262,7 @@ export default class Character {
     ) {
       this.model.moveForward();
       if (!this.isWalking) {
+        this.isNotMoving = false;
         this.isWalking = true;
         this.model.positionSaved = false;
         this.animations.playAnimation("walking");
@@ -282,14 +275,16 @@ export default class Character {
       this.model.moveForward(1.8);
 
       if (!this.isRunning) {
+        this.isNotMoving = false;
         this.isRunning = true;
         this.model.positionSaved = false;
         this.animations.playAnimation("running");
       }
     }
-    if (!this.controllers.keysPressed.ArrowUp && this.isWalking) {
+    if (!this.controllers.keysPressed.ArrowUp && !this.isNotMoving) {
       this.isWalking = false;
       this.isRunning = false;
+      this.isNotMoving = true;
       this.animations.playAnimation("idle");
     }
 
@@ -332,13 +327,20 @@ export default class Character {
   }
 
   update() {
-    // Mobile controller
-
     if (!this.isRunning && !this.isWalking) {
       if (!this.model.positionSaved) this.model.savePlayerPosition();
     }
 
-    this.updateCamera();
+    if (this.isAroundMaze) {
+      this.followCamera.updateIdealOffset(this.nearMazeOffset);
+    } else {
+      this.followCamera.updateIdealOffset(this.defaultOffset);
+    }
+    this.followCamera.updateCamera(
+      this.model.mesh.position,
+      this.model.mesh.quaternion,
+      0.1
+    );
     this.characterController();
     this.animations.update();
 

@@ -7,12 +7,15 @@ import UserProgress from "./UserProgress";
 import { ItemTypeCollectable, ItemTypes } from "../ts/globalTs";
 import { gsap } from "gsap";
 import Water from "./shaders/water/Water";
+import * as CANNON from "cannon";
 
 export default class ExploringWorld {
   public controllers: CharacterController;
   private experience: Experience;
   private stateMachine: StateMachine;
   private userProgress: UserProgress;
+  private drivingButton: HTMLButtonElement;
+  private speedButton: HTMLButtonElement;
   character: Character;
   vehicle: Vehicle;
 
@@ -29,6 +32,9 @@ export default class ExploringWorld {
     this.stateMachine = this.experience.stateMachine;
     this.city = this.experience.world.city;
     this.garageDoor = this.city.garageDoor;
+
+    this.drivingButton = document.querySelector("#driveBtn")!;
+    this.speedButton = document.querySelector("#runBtn")!;
 
     this.userProgress = this.experience.world.userProgress;
 
@@ -70,10 +76,17 @@ export default class ExploringWorld {
     this.character.model.mesh.visible = true;
     this.isDriving = false;
     this.character.model.position(
-      this.vehicle.model.mesh.position.x + 0.7,
-      this.vehicle.model.mesh.position.y + 0.7,
-      this.vehicle.model.mesh.position.z + 0.7
+      this.vehicle.model.mesh.position.x + 0.5,
+      this.vehicle.model.mesh.position.y + 0.5,
+      this.vehicle.model.mesh.position.z + 0.5
     );
+    this.drivingButton.innerHTML = `
+    <i class="fa-solid fa-car"></i>
+    `;
+
+    this.speedButton.innerHTML = `
+    <i class="fa-solid fa-person-running"></i>
+    `;
   }
 
   setDrivingMode() {
@@ -82,6 +95,12 @@ export default class ExploringWorld {
     this.controllers.keysPressed.Enter = false;
     this.character.model.mesh.visible = false;
     this.isDriving = true;
+    this.drivingButton.innerHTML = `
+    <i class="fa-solid fa-right-from-bracket"></i>
+    `;
+    this.speedButton.innerHTML = `
+    <i class="fa-solid fa-truck-fast"></i>
+    `;
   }
   checkCanDrive() {
     if (
@@ -89,11 +108,14 @@ export default class ExploringWorld {
         this.vehicle.model.mesh.position
       ) <= 1
     ) {
-      document.getElementById("driveBtn")!.style.display = "block";
-      // this.isDriving = true;
-    } else {
-      // document.getElementById("driveBtn")!.style.display = "none";
-      // this.isDriving = false;
+      this.drivingButton!.style.display = "block";
+    } else if (
+      !this.isDriving &&
+      this.character.model.mesh.position.distanceTo(
+        this.vehicle.model.mesh.position
+      ) >= 1
+    ) {
+      this.drivingButton!.style.display = "none";
     }
   }
 
@@ -145,10 +167,16 @@ export default class ExploringWorld {
   }
 
   userCanDrive() {
-    this.character.model.position(-0.85, 0, -12);
-    this.character.model.body.quaternion.copy(
-      this.vehicle.model.body.quaternion
-    );
+    this.character.model.position(-0.84, 0.35, -5.4);
+
+    const carPosition = this.vehicle.model.body.position;
+    const characterPosition = this.character.model.body.position;
+
+    const direction = new CANNON.Vec3();
+    direction.copy(carPosition).vsub(characterPosition).normalize();
+
+    const angle = Math.atan2(direction.x, direction.z);
+    this.character.model.body.quaternion.setFromEuler(0, angle, 0, "XYZ");
   }
 
   update() {
@@ -158,14 +186,14 @@ export default class ExploringWorld {
       if (this.isDriving) {
         this.vehicle.update();
 
-        if (this.controllers.keysPressed.Enter) {
+        if (this.controllers.keysPressed.Enter && this.canDrive) {
           this.setWalkingMode();
         }
       } else {
         this.character.update();
         this.checkIsInsideMaze();
 
-        if (this.controllers.keysPressed.Enter) {
+        if (this.controllers.keysPressed.Enter && this.canDrive) {
           this.setDrivingMode();
         }
       }

@@ -22,6 +22,7 @@
   --border-radius-2: 10px;
   --border-radius-3: 15px;
   --border-radius-4: 20px;
+  --border-radius-50: 50%;
   --border-radius-100: 100%;
 }
 html,
@@ -41,10 +42,11 @@ canvas {
   border: none;
   width: 200px;
   height: 70px;
+  cursor: pointer;
 }
 
 .btn-primary {
-  border-radius: 10px;
+  border-radius: var(--border-radius-2);
   border: 0;
   background-color: var(--primary-color);
   letter-spacing: 1.5px;
@@ -89,7 +91,7 @@ canvas {
 }
 
 .button-gsap-animation {
-  border-radius: 10px;
+  border-radius: var(--border-radius-2);
   background: #ffc34c;
   color: #444;
   font-size: 14px;
@@ -99,7 +101,7 @@ canvas {
 }
 
 #time {
-  color: white;
+  color: var(--primary-white);
   display: flex;
   justify-content: center;
   align-items: center;

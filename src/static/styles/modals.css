@@ -17,4 +17,21 @@
 
 .modal-texts-wrapper {
   font-size: 2rem;
+  text-align: center;
+}
+
+.social-icons {
+  display: flex;
+  gap: 1rem;
+}
+
+/* --primary-white: #ffffff;
+  --primary-color: rgb(255, 56, 86); */
+.social-icons a {
+  color: var(--primary-white);
+  background: var(--primary-color);
+  padding: 1rem;
+  border-radius: var(--border-radius-2);
+  width: fit-content;
+  height: fit-content;
 }

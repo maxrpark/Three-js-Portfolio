@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { GLTF, GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
-import { SourceInt } from "../../sources/base";
+import { SourceInt } from "../../sources/sources";
 import EventEmitter from "./EventEmitter";
 
 interface Loaders {

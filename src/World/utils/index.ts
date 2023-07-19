@@ -4,6 +4,7 @@ import MenuIcon from "./MenuIcon";
 import LoadingModal from "./LoadingModal";
 import CharacterController from "./CharacterController";
 import ModalProgress from "./ModalProgress";
+import FollowCamera from "./FollowCamera";
 export {
   Controllers,
   Modal,
@@ -11,4 +12,5 @@ export {
   LoadingModal,
   CharacterController,
   ModalProgress,
+  FollowCamera,
 };
