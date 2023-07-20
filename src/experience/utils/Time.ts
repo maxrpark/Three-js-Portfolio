@@ -1,15 +1,7 @@
 import { Clock } from "three";
 import EventEmitter from "./EventEmitter";
 
-export interface TimeInt extends EventEmitter {
-  start: number;
-  current: number;
-  delta: number;
-  elapsed: number;
-  tick: () => void;
-}
-
-export class Time extends EventEmitter implements TimeInt {
+export class Time extends EventEmitter {
   start: number;
   current: number;
   delta: number;

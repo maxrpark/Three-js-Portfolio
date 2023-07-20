@@ -1,11 +1,6 @@
 import EventEmitter from "./EventEmitter";
-export interface SizesInt extends EventEmitter {
-  width: number;
-  height: number;
-  pixelRatio: number;
-}
 
-export class Sizes extends EventEmitter implements SizesInt {
+export class Sizes extends EventEmitter {
   width: number;
   height: number;
   pixelRatio: number;

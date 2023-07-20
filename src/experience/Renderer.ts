@@ -14,15 +14,7 @@ import {
 } from "three";
 import GUI from "lil-gui";
 
-export interface RendererInt {
-  renderer: WebGLRenderer;
-  experience: ExperienceInt;
-  scene: Scene;
-  canvas: HTMLCanvasElement;
-  camera: Camera;
-}
-
-export class Renderer implements RendererInt {
+export class Renderer {
   renderer: WebGLRenderer;
   experience: ExperienceInt;
   scene: Scene;

@@ -17,17 +17,7 @@ export interface ResourceItemsInt {
   [key: string]: LoaderType;
 }
 
-interface ResourcesInt extends EventEmitter {
-  sources: SourceInt[];
-  items: ResourceItemsInt;
-  toUpload: number;
-  uploaded: number;
-  loaders: Loaders;
-  startLoading: () => void;
-  loadSource: (source: SourceInt, file: LoaderType) => void;
-}
-
-export default class Resources extends EventEmitter implements ResourcesInt {
+export default class Resources extends EventEmitter {
   sources: SourceInt[];
   items: ResourceItemsInt;
   toUpload: number;

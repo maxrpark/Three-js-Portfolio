@@ -4,21 +4,7 @@ import { Debug, Sizes } from "./utils";
 import { PerspectiveCamera, Scene } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-export interface CameraInt {
-  experience: ExperienceInt;
-  camera: PerspectiveCamera;
-  scene: Scene;
-  controls: OrbitControls;
-  canvas: HTMLCanvasElement;
-  debug: Debug;
-  debugFolder: GUI;
-  setCamera: () => void;
-  setControls: () => void;
-  resize: () => void;
-  update: () => void;
-}
-
-export class Camera implements CameraInt {
+export class Camera {
   experience: ExperienceInt;
   camera: PerspectiveCamera;
   scene: Scene;
