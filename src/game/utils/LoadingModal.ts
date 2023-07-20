@@ -15,6 +15,7 @@ export default class LoadingModal extends EventEmitter {
   loadingText: HTMLHeadElement;
 
   textColors: string[];
+  textColorsAni: any;
 
   constructor() {
     super();
@@ -32,7 +33,7 @@ export default class LoadingModal extends EventEmitter {
     ];
 
     this.resources.on("itemLoaded", () => this.modalLoader());
-    gsap.to(this.loadingText, {
+    this.textColorsAni = gsap.to(this.loadingText, {
       keyframes: this.textColors.map((color) => ({ color })),
       duration: 0.5 * this.textColors.length,
       repeat: -1,
@@ -82,6 +83,7 @@ export default class LoadingModal extends EventEmitter {
     tl.to(this.loadingText, {
       opacity: 0,
       y: -60,
+      onComplete: () => this.textColorsAni.kill(),
     })
       .set(".modal-text", {
         visibility: "visible",
