@@ -11,9 +11,6 @@ import {
   ReinhardToneMapping,
   CineonToneMapping,
   ACESFilmicToneMapping,
-  // sRGBEncoding,
-  // CineonToneMapping,
-  // PCFSoftShadowMap,
 } from "three";
 import GUI from "lil-gui";
 
@@ -63,7 +60,7 @@ export class Renderer implements RendererInt {
 
     this.renderer.outputEncoding = sRGBEncoding;
     this.renderer.toneMapping = LinearToneMapping;
-    this.renderer.toneMappingExposure = 1;
+    this.renderer.toneMappingExposure = 0.6;
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = PCFSoftShadowMap;
 

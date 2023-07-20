@@ -43,6 +43,7 @@ export default class PlayingState extends GameState {
     this.menuIcon.off("handleMenuClick");
     this.controllers.off("controllerDrop");
     this.controllers.off("controllerMenu");
+    this.world.towerStack.timeLine.reverse();
   }
 
   public createWorld(): void {}

@@ -1,13 +1,6 @@
 import Resources from "../../../experience/utils/Resources";
 import { Experience } from "../../../experience/Experience";
-import {
-  Box3,
-  Mesh,
-  MeshStandardMaterial,
-  Texture,
-  MeshBasicMaterial,
-  BoxGeometry,
-} from "three";
+import { Box3, Mesh, MeshStandardMaterial, Texture, BoxGeometry } from "three";
 import { BlockCenterRight } from "./block";
 import * as CANNON from "cannon";
 import { PhysicsWorld } from "../../../experience/utils";
@@ -85,7 +78,7 @@ export default class City {
         if (child.name === "floor_base") {
           this.physicsBodies.push(child);
 
-          const material = new MeshBasicMaterial({
+          const material = new MeshStandardMaterial({
             map: this.resources.items.towerFloorColor as Texture,
           });
 

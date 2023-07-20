@@ -4,6 +4,8 @@ import {
   Box3,
   Euler,
   Group,
+  Mesh,
+  MeshStandardMaterial,
   Vector3,
 } from "three";
 import { GLTF } from "three/examples/jsm/loaders/GLTFLoader";
@@ -42,8 +44,17 @@ class Model {
   }
 
   setCharacter() {
-    this.mesh.position.set(0, 0.1, 11.5);
     const modelScale = new Vector3(1, 1, 1);
+
+    this.mesh.traverse((child) => {
+      if (
+        child instanceof Mesh &&
+        child.material instanceof MeshStandardMaterial
+      ) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
 
     this.mesh.rotateY(Math.PI);
     this.mesh.scale.set(modelScale.x, modelScale.y, modelScale.z);
@@ -88,6 +99,7 @@ class Model {
 
   position(x = 0, y = 1, z = 11.5) {
     this.body.position = new CANNON.Vec3(x, y, z);
+    this.mesh.position.set(x, 0.1, z);
   }
 
   setInitialPosition() {
@@ -198,7 +210,7 @@ class Animations {
       this.model.modelAnimations[3]
     );
 
-    this.animation.actions.current = this.animation.actions.walking;
+    this.animation.actions.current = this.animation.actions.idle;
     this.animation.actions.current.play();
 
     this.playAnimation("idle");
@@ -259,7 +271,7 @@ export default class Character {
   characterController() {
     if (
       this.controllers.keysPressed.ArrowUp &&
-      !this.controllers.keysPressed.Space
+      !this.controllers.keysPressed.ShiftLeft
     ) {
       this.model.moveForward();
       if (!this.isWalking) {
@@ -271,7 +283,7 @@ export default class Character {
     }
     if (
       this.controllers.keysPressed.ArrowUp &&
-      this.controllers.keysPressed.Space
+      this.controllers.keysPressed.ShiftLeft
     ) {
       this.model.moveForward(1.8);
 
@@ -289,7 +301,7 @@ export default class Character {
       this.animations.playAnimation("idle");
     }
 
-    if (!this.controllers.keysPressed.Space && this.isRunning) {
+    if (!this.controllers.keysPressed.ShiftLeft && this.isRunning) {
       this.isRunning = false;
       this.animations.playAnimation("walking");
     }

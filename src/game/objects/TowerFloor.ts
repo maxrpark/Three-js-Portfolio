@@ -1,4 +1,10 @@
-import { BoxGeometry, Camera, Mesh, MeshBasicMaterial, Texture } from "three";
+import {
+  BoxGeometry,
+  Camera,
+  Mesh,
+  MeshStandardMaterial,
+  Texture,
+} from "three";
 import CANNON from "cannon";
 import { Experience } from "../../experience/Experience";
 import { PhysicsWorld, Time } from "../../experience/utils";
@@ -18,7 +24,7 @@ export default class TowerFloor extends EventEmitter {
   private resources: Resources;
 
   private geometry: BoxGeometry;
-  private material: MeshBasicMaterial;
+  private material: MeshStandardMaterial;
   public mesh: Mesh;
   public body: CANNON.Body;
 
@@ -56,7 +62,7 @@ export default class TowerFloor extends EventEmitter {
   }
 
   private setMaterial() {
-    this.material = new MeshBasicMaterial({
+    this.material = new MeshStandardMaterial({
       map: this.resources.items.towerFloorColor as Texture,
     });
   }

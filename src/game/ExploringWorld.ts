@@ -17,7 +17,6 @@ export default class ExploringWorld {
   private speedButton: HTMLButtonElement;
   private infoButtons: HTMLDivElement;
   public controllers: CharacterController;
-  showInfoButtons: boolean = true;
   character: Character;
   vehicle: Vehicle;
 
@@ -40,7 +39,6 @@ export default class ExploringWorld {
     this.drivingButton = document.querySelector("#driveBtn")!;
     this.speedButton = document.querySelector("#runBtn")!;
     this.infoButtons = document.querySelector("#controlsInfo")!;
-    this.showInfoButtons = true;
 
     gsap.set(this.infoButtons, {
       opacity: 0,
@@ -112,6 +110,7 @@ export default class ExploringWorld {
       this.vehicle.model.mesh.position.y + 0.5,
       this.vehicle.model.mesh.position.z + 0.5
     );
+    this.vehicle.model.mesh.position.y = 0;
     this.drivingButton.innerHTML = `
     <i class="fa-solid fa-car"></i>
     `;

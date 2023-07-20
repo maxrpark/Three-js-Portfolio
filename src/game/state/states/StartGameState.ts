@@ -29,6 +29,7 @@ export default class StartGameState extends GameState {
   public intro(): void {}
   public start(): void {
     this.towerStack.setGameStart();
+    this.world.exploringWorld.character.model.position();
     this.stateMachine.change(new PlayingState());
   }
   public playing(): void {}

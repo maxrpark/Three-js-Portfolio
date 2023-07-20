@@ -1,4 +1,12 @@
-import { AnimationClip, Box3, Euler, Group, Vector3 } from "three";
+import {
+  AnimationClip,
+  Box3,
+  Euler,
+  Group,
+  Mesh,
+  MeshStandardMaterial,
+  Vector3,
+} from "three";
 import { Experience } from "../../experience/Experience";
 
 import { PhysicsWorld } from "../../experience/utils";
@@ -35,6 +43,16 @@ class Model {
   setVehicle() {
     this.mesh.name = "vehicle";
 
+    this.mesh.traverse((child) => {
+      if (
+        child instanceof Mesh &&
+        child.material instanceof MeshStandardMaterial
+      ) {
+        child.castShadow = true;
+        child.receiveShadow = true;
+      }
+    });
+
     this.eulerRotation = new Euler(0, 0, 0, "XYZ");
 
     const boundingBox = new Box3();
@@ -45,7 +63,7 @@ class Model {
 
     const halfExtents = new CANNON.Vec3(size.x / 2, size.y / 2, size.z / 2);
 
-    this.pivotOffset = new CANNON.Vec3(0, -halfExtents.y + 0.08, 0);
+    this.pivotOffset = new CANNON.Vec3(0, -halfExtents.y + 0.1, 0);
     this.meshPositionPivot = new CANNON.Vec3();
 
     this.body = new CANNON.Body({
@@ -140,14 +158,14 @@ export default class Vehicle {
   drivingControllers() {
     if (
       this.controllers.keysPressed.ArrowUp &&
-      !this.controllers.keysPressed.Space
+      !this.controllers.keysPressed.ShiftLeft
     ) {
       this.model.moveVehicle();
       this.model.positionSaved = false;
     }
     if (
       this.controllers.keysPressed.ArrowUp &&
-      this.controllers.keysPressed.Space
+      this.controllers.keysPressed.ShiftLeft
     ) {
       this.model.moveVehicle(12);
       this.model.positionSaved = false;
@@ -186,7 +204,7 @@ export default class Vehicle {
   update() {
     if (
       !this.controllers.keysPressed.ArrowUp &&
-      !this.controllers.keysPressed.Space
+      !this.controllers.keysPressed.ShiftLeft
     ) {
       if (!this.model.positionSaved) this.model.saveModelPosition();
     }

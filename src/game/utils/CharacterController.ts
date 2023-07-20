@@ -8,7 +8,7 @@ export default class CharacterController {
     ArrowDown: boolean;
     ArrowLeft: boolean;
     ArrowRight: boolean;
-    Space: boolean;
+    ShiftLeft: boolean;
     Enter: boolean;
   };
 
@@ -23,7 +23,7 @@ export default class CharacterController {
       ArrowDown: false,
       ArrowLeft: false,
       ArrowRight: false,
-      Space: false,
+      ShiftLeft: false,
       Enter: false,
     };
 
@@ -37,6 +37,17 @@ export default class CharacterController {
     window.addEventListener("keydown", (event) => {
       //@ts-ignore
       this.keysPressed[event.code] = true;
+
+      // Additional controls
+      if (event.code === "KeyW") {
+        this.keysPressed.ArrowUp = true;
+      } else if (event.code === "KeyA") {
+        this.keysPressed.ArrowLeft = true;
+      } else if (event.code === "KeyD") {
+        this.keysPressed.ArrowRight = true;
+      } else if (event.code === "KeyS") {
+        this.keysPressed.ArrowDown = true;
+      }
     });
 
     window.addEventListener("keyup", (event) => {
@@ -45,6 +56,17 @@ export default class CharacterController {
       }
       //@ts-ignore
       this.keysPressed[event.code as string] = false;
+
+      // Additional controls
+      if (event.code === "KeyW") {
+        this.keysPressed.ArrowUp = false;
+      } else if (event.code === "KeyA") {
+        this.keysPressed.ArrowLeft = false;
+      } else if (event.code === "KeyD") {
+        this.keysPressed.ArrowRight = false;
+      } else if (event.code === "KeyS") {
+        this.keysPressed.ArrowDown = false;
+      }
     });
   }
 
@@ -83,7 +105,7 @@ export default class CharacterController {
           self.keysPressed.ArrowLeft = true;
           self.keysPressed.ArrowRight = false;
         }
-        if (this.getDirection() === "down" && !self.keysPressed.Space) {
+        if (this.getDirection() === "down" && !self.keysPressed.ShiftLeft) {
           self.keysPressed.ArrowUp = false;
           self.keysPressed.ArrowRight = false;
           self.keysPressed.ArrowLeft = false;
@@ -126,12 +148,12 @@ export default class CharacterController {
     runBtn.addEventListener("touchstart", (event: any) => {
       event.stopPropagation();
       runBtn.classList.add("running");
-      this.keysPressed.Space = true;
+      this.keysPressed.ShiftLeft = true;
     });
     runBtn.addEventListener("touchend", (event: any) => {
       event.stopPropagation();
       runBtn.classList.remove("running");
-      this.keysPressed.Space = false;
+      this.keysPressed.ShiftLeft = false;
     });
 
     const driveBtn = document.getElementById("driveBtn")!;

@@ -228,6 +228,15 @@ export default class Modal extends EventEmitter {
         }
       )
       .fromTo(
+        this.modalWrapper,
+        {
+          display: "flex",
+        },
+        {
+          display: "none",
+        }
+      )
+      .fromTo(
         ".menu-icon, .control-btn",
         {
           opacity: 0,

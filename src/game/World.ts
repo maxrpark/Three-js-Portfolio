@@ -79,8 +79,9 @@ export default class World {
 
     this.environment = new Environment({
       // hasAmbientLight: true,
-      // hasDirectionalLight: true,
-      // castShadow: true,
+      hasHemisphereLight: true,
+      hasDirectionalLight: true,
+      castShadow: true,
       environmentMapTexture:
         this.experience.resources.items.environmentMapTexture,
     });
@@ -124,6 +125,7 @@ export default class World {
   }
 
   update() {
+    // if (this.environment) this.environment.update();
     if (this.stateMachine.currentStateName === StatesNames.EXPLORING) {
       this.exploringWorld.update();
     }

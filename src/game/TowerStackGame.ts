@@ -15,6 +15,8 @@ export default class TowerStack {
   private physics: PhysicsWorld;
   public stateMachine: StateMachine;
   public userProgress: UserProgress;
+  private buttonInfo: HTMLDivElement;
+  timeLine: any;
 
   //
   controllers: Controllers;
@@ -43,7 +45,14 @@ export default class TowerStack {
 
     this.userProgress = this.experience.world.userProgress;
 
+    this.buttonInfo = document.querySelector("#towerStackInfo")!;
+    gsap.set(this.buttonInfo, {
+      opacity: 0,
+      yPercent: 100,
+    });
+
     this.setTowerStack();
+    this.infoButtonsAnimation();
   }
 
   private set floorPositionY(value: number) {
@@ -95,7 +104,11 @@ export default class TowerStack {
         this.experience.camera.camera.lookAt(
           this.experience.camera.camera.position
         ),
-      onComplete: () => this.addFloor(),
+      onComplete: () => {
+        this.addFloor();
+
+        this.timeLine.play();
+      },
     });
 
     this.setGameOver = false;
@@ -137,6 +150,10 @@ export default class TowerStack {
   //// Tower game actions
 
   private addFloor() {
+    if (this.getScore === 1) {
+      this.timeLine.reverse();
+    }
+
     if (this.currentFloor)
       this.floorPositionY = this.currentFloor.mesh.position.y;
     this.currentFloor = new TowerFloor({
@@ -182,13 +199,19 @@ export default class TowerStack {
     );
   }
 
-  // Others
-
-  createModal() {
-    // this.modal = new Modal();
-    // this.modal.on("handleExploreWorld", () => {
-    //   this.stateMachine.change(new ExploringState());
-    // });
+  infoButtonsAnimation() {
+    let mm = gsap.matchMedia();
+    this.timeLine = gsap.timeline({ paused: true });
+    mm.add("(min-width: 687px)", () => {
+      this.timeLine
+        .to(this.buttonInfo, {
+          display: "block",
+        })
+        .to(this.buttonInfo, {
+          opacity: 1,
+          yPercent: 0,
+        });
+    });
   }
 
   public dropFloor() {
