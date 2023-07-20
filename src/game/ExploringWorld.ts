@@ -154,7 +154,7 @@ export default class ExploringWorld {
     array.forEach((item) => {
       if (
         item.visible &&
-        this.character.model.mesh.position.distanceTo(item.position) <= 0.4
+        this.character.model.mesh.position.distanceTo(item.position) <= 0.5
       ) {
         this.city.removeItemFound(item, type);
 
