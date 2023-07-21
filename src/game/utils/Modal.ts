@@ -27,8 +27,8 @@ export default class Modal extends EventEmitter {
           <h2 class="modal-texts">Maxi Ruti</h2>
           <h3 class="modal-texts-wrapper">Creative Developer</h3>
        </div>
-      <button id="gameStart" class="btn btn-primary">Tower Stack</button>
-      <button id="exploreWorld" class="btn btn-primary">Explore</button>
+       <button id="exploreWorld" class="btn btn-primary">Explore</button>
+       <button id="gameStart" class="btn btn-primary">Tower Stack</button>
       <button id="progressModal" class="btn btn-primary">My Progress</button>
       <div class="social-icons">
         <a href="https://twitter.com/MaxCodeJourney" target="_blank" class="btn btn-primary">
