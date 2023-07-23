@@ -105,7 +105,9 @@ export default class ModalProgress extends EventEmitter {
                 ? `
             <div class="single-badge__progress">
                 <div class="progress-container">
-                <div class="progress-bar" style="width:${badge.isCollected}%"></div>   
+                <div class="progress-bar" style="width:${
+                  (badge.hasCollected * 100) / badge.totalToCollect
+                }%"></div>   
                 </div> 
       
               <small>${badge.hasCollected}/${badge.totalToCollect}</small>

@@ -11,7 +11,7 @@ import badges from "./badgesData";
 import { City } from "./models";
 import ToastNotification from "./utils/ToastNotification";
 
-const LOCAL_STORAGE = "MAX_R_PARK_1";
+const LOCAL_STORAGE = "MAX_R_PARK";
 
 export interface Collectables {
   total: number;
@@ -45,6 +45,7 @@ export default class UserProgress {
     this.experience = new Experience();
     this.city = this.experience.world.city;
     this.toastNotification = this.experience.world.toastNotification;
+    this.towerMaxLevel = 0;
 
     this.coins = {
       total: 0,
@@ -67,7 +68,6 @@ export default class UserProgress {
   }
 
   getLocalStorage() {
-    // localStorage.removeItem("MAX_R_PARK");
     if (localStorage.getItem(LOCAL_STORAGE)) {
       Object.assign(this, JSON.parse(localStorage.getItem(LOCAL_STORAGE)!));
 
@@ -77,6 +77,7 @@ export default class UserProgress {
         ...this.stars.items,
       ]);
     } else {
+      localStorage.clear();
       this.stars.total = this.city.stars.length;
       this.stars.items = this.city.stars.map((item) => {
         return {
@@ -215,13 +216,13 @@ export default class UserProgress {
         return badge;
       }
 
-      if (this.towerMaxLevel < towerLevel) {
-        this.towerMaxLevel = towerLevel;
-        badge.hasCollected = this.towerMaxLevel;
-      }
+      this.towerMaxLevel = Math.max(this.towerMaxLevel, towerLevel);
+      badge.hasCollected = this.towerMaxLevel;
+
       if (badge.totalToCollect === badge.hasCollected) {
         badge.isCollected = true;
         this.earnedExperience += badge.experience;
+        badge.hasCollected = this.towerMaxLevel;
         this.showCompletedBadgeNotification(badge);
       }
 
@@ -263,7 +264,7 @@ export default class UserProgress {
       badges: this.badges,
       totalExperience: this.totalExperience,
       earnedExperience: this.earnedExperience,
-      maxTowerLevel: this.towerMaxLevel,
+      towerMaxLevel: this.towerMaxLevel,
       canDrive: this.canDrive,
     };
 

@@ -37,7 +37,7 @@ export interface ProgressStorage {
   badges: Badge[];
   totalExperience: number;
   earnedExperience: number;
-  maxTowerLevel: number;
+  towerMaxLevel: number;
   canDrive: boolean;
 }
 
