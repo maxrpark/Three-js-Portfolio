@@ -254,8 +254,9 @@ export default class Character {
   constructor(controllers: CharacterController) {
     this.experience = new Experience();
     this.controllers = controllers;
-    this.defaultOffset = new Vector3(0, 1, -2.5);
+    this.defaultOffset = new Vector3(0, 1, -1.6);
     this.nearMazeOffset = new Vector3(0, 6, -2.5);
+
     this.followCamera = new FollowCamera({
       idealLookAt: new Vector3(0, 0.7, 0),
       idealOffset: this.defaultOffset,
