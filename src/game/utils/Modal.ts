@@ -34,16 +34,20 @@ export default class Modal extends EventEmitter {
         <a href="https://twitter.com/MaxCodeJourney" target="_blank" class="btn btn-primary">
           <i class="fa fa-twitter"></i>
         </a>
-        <a href="https://github.com/maxrpark" target="_blank" class="btn btn-primary">
-          <i class="fa fa-github"></i>
+        <a href="https://portfolio.maxiruti.com/" target="_blank" class="btn btn-primary">
+        <i class="fa-solid fa-globe"></i>
         </a>
         <a href="https://www.linkedin.com/in/maxi-ruti-202988227/" target="_blank" class="btn btn-primary">
-          <i class="fa fa-linkedin"></i>
+        <i class="fa fa-linkedin"></i>
         </a>
-      </div>
+        
+        </div>
     </div>
-      `;
+        `;
 
+    // <a href="https://github.com/maxrpark" target="_blank" class="btn btn-primary">
+    //   <i class="fa fa-github"></i>
+    // </a>
     // Modal Events
     const gameStart = document.getElementById("gameStart")!;
     const exploreWorld = document.getElementById("exploreWorld")!;
@@ -72,15 +76,15 @@ export default class Modal extends EventEmitter {
           <h3 class="modal-texts-wrapper">Your score is ${score}</h3>
        </div>
       <button id="gameRestart" class="btn btn-primary">Try Again</button>
-      <button id="exploreWorld" class="btn btn-primary">Explore</button>
       <button id="progressModal" class="btn btn-primary">My Progress</button>
       <button id="exitGame" class="btn btn-primary">Exit</button>
-    </div>
-    `;
+      </div>
+      `;
+    // <button id="exploreWorld" class="btn btn-primary">Explore</button>
 
     // Modal Events
     const gameRestart = this.modalWrapper.querySelector("#gameRestart")!;
-    const exploreWorld = this.modalWrapper.querySelector("#exploreWorld")!;
+    // const exploreWorld = this.modalWrapper.querySelector("#exploreWorld")!;
     const progressModal = this.modalWrapper.querySelector("#progressModal")!;
 
     const exitGame = this.modalWrapper.querySelector("#exitGame")!;
@@ -91,9 +95,9 @@ export default class Modal extends EventEmitter {
       this.trigger("handleGameRestart")
     );
 
-    exploreWorld.addEventListener("click", () =>
-      this.trigger("handleExploreWorld")
-    );
+    // exploreWorld.addEventListener("click", () =>
+    //   this.trigger("handleExploreWorld")
+    // );
     progressModal.addEventListener("click", () =>
       this.trigger("handleProgressModal")
     );
