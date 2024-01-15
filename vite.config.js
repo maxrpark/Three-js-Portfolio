@@ -17,10 +17,11 @@ export default {
       input: {
         home: "index.html",
         projects: "projects.html",
-        target: "esnext",
         // Add more entries for additional pages
       },
     },
   },
+  target: "esnext",
+
   plugins: [glsl()],
 };
