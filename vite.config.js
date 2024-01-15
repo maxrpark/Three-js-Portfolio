@@ -17,7 +17,7 @@ export default {
       input: {
         home: "index.html",
         projects: "projects.html",
-        target: "ESNext",
+        target: "esnext",
         // Add more entries for additional pages
       },
     },
