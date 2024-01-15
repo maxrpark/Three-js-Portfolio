@@ -55,8 +55,46 @@
 
     <title>Maxi Ruti || Creative Developer</title>
   </head>
-  <body>
-    <div id="app"></div>
+  <body class="dark-mode">
+    <div id="app">
+      <div class="desktop">
+        <canvas id="canvas-projects"></canvas>
+        <div class="desktop-content">
+          <h2 class="desktop-content__title">Projects</h2>
+          <div class="desktop-content__links">
+            <a
+              href="https://twitter.com/MaxCodeJourney"
+              target="_blank"
+              class="desktop-content__links-link"
+            >
+              <i class="fa fa-twitter"></i>
+            </a>
+            <a
+              href="https://portfolio.maxiruti.com/"
+              class="desktop-content__links-link"
+            >
+              <i class="fa-solid fa-globe"></i>
+            </a>
+            <a
+              href="https://www.linkedin.com/in/maxi-ruti-202988227/"
+              target="_blank"
+              class="desktop-content__links-link"
+            >
+              <i class="fa fa-linkedin"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- Mobile -->
+      <div class="section-center">
+        <h2>Projects</h2>
+        <div class="underline"></div>
+      </div>
+      <!-- content -->
+      <div class="section-projects">
+        <div class="projects"></div>
+      </div>
+    </div>
 
     <script type="module" src="/src/projects.ts"></script>
   </body>

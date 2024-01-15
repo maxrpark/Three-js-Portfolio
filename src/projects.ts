@@ -6,34 +6,53 @@ import { BasicPlane } from "./projects/plane/BasicPlane";
 import { gsap } from "gsap";
 import { Observer } from "gsap/Observer";
 import axios from "axios";
-const loader = new THREE.TextureLoader();
-
 gsap.registerPlugin(Observer);
-const canvas = document.createElement("canvas");
-
-document.querySelector("#app")?.appendChild(canvas);
-
-// const getData = async () => {
-//   const res = await axios(
-//     "https://my-portfolio-blog-website.netlify.app/api/myProjects"
-//   );
-//   const data = await res.data;
-//   const projects = data
-//     .filter((project: any) => project.featured === true)
-//     .map((el: any) => {
-//       return { ...el, texture: loader.load(el.url) };
-//     });
-
-//   return projects;
-// };
-
-// const data = await getData();
-
 interface Project {
+  id: string;
+  name: string;
+  shortDsc: string;
   texture: THREE.Texture;
   featured: boolean;
   url: string;
+  version: string;
+  pageUrl: string;
+  gitUrl: string;
 }
+
+const loader = new THREE.TextureLoader();
+
+const canvas = document.getElementById("canvas-projects")!;
+
+const projectsSection = document.querySelector(".projects")!;
+
+const projectsMobile = (data: Project[]) => {
+  const projects = data
+    .map(function (project) {
+      return ` 
+        <article data-id"${project.id}" class="single-project id">
+          <div class="project-info">
+          <div class="img-container">
+            <img class="project-img img" src="${project.url}" alt="${project.name}" />
+            </div>
+            <div class="project-description">
+              <h4 class="">${project.version}</h4>
+              <h2 class="project-name">${project.name}</h2>
+              </div>
+            </div>
+          </div>
+          <div class="project-links">
+            <a href="${project.gitUrl}" target="_blank"
+              ><i class="fab fa-github"></i></a>
+          
+              <a class=" btn project-btn" href="${project.pageUrl}" target="_blank">visit</a>
+            
+          </div>
+        </article>
+       `;
+    })
+    .join("");
+  projectsSection.innerHTML = projects;
+};
 
 const getData = () => {
   return axios("https://my-portfolio-blog-website.netlify.app/api/myProjects")
@@ -57,13 +76,14 @@ const slidersArray: BasicPlane[] = [];
 const meshArray: THREE.Mesh[] = [];
 const meshWidth = 4;
 const separationFactor = meshWidth + 0.3;
-
 getData().then((result) => {
   data = result;
 
   // Object
 
-  const numberOfImages = data.length;
+  projectsMobile(data);
+
+  let numberOfImages = data.length;
 
   for (let i = 0; i < numberOfImages; i++) {
     let plane = new BasicPlane({
@@ -90,12 +110,13 @@ getData().then((result) => {
   Observer.create({
     target: window,
     type: "wheel,touch",
+    tolerance: 20,
     onChange: (self) => {
       velocity = +(self.velocityY / 10000).toFixed(2);
 
       slidersArray.forEach((plane) => {
-        plane.material.uniforms.uVelocity.value = velocity;
         plane.mesh.position.x -= velocity * 1.1;
+        plane.material.uniforms.uVelocity.value = velocity;
 
         const threshold = ((numberOfImages - 1) * separationFactor) / 2;
 
@@ -107,9 +128,6 @@ getData().then((result) => {
       });
     },
   });
-
-  // Continue with the rest of your code that depends on `data`
-  // For example, you can call a function or perform other actions here
 });
 
 // sizes
@@ -185,11 +203,6 @@ renderer.domElement.addEventListener("click", onClickImage);
 const tick = () => {
   // const elapse = clock.getElapsedTime();
   renderer.render(scene, camera);
-
-  slidersArray.forEach((plane) => {
-    // plane.update(elapse);
-    plane.material.uniforms.uVelocity.value = velocity;
-  });
 
   window.requestAnimationFrame(tick);
 };
