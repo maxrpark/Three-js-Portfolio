@@ -37,7 +37,7 @@ export class BasicPlane {
     this.mesh = new THREE.Mesh(this.geometry, this.material);
   }
 
-  update(time: number) {
-    // this.mesh.rotation.y = this.material.uniforms.uVelocity.value * 0.1;
-  }
+  // update(time: number) {
+  //   // this.mesh.rotation.y = this.material.uniforms.uVelocity.value * 0.1;
+  // }
 }

@@ -152,13 +152,13 @@ const onClickImage = (event: MouseEvent) => {
 };
 
 renderer.domElement.addEventListener("click", onClickImage);
-const clock = new THREE.Clock();
+// const clock = new THREE.Clock();
 const tick = () => {
-  const elapse = clock.getElapsedTime();
+  // const elapse = clock.getElapsedTime();
   renderer.render(scene, camera);
 
   slidersArray.forEach((plane) => {
-    plane.update(elapse);
+    // plane.update(elapse);
     plane.material.uniforms.uVelocity.value = velocity;
   });
 
