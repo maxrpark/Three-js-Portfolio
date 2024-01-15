@@ -152,7 +152,6 @@ const onClickImage = (event: MouseEvent) => {
 };
 
 renderer.domElement.addEventListener("click", onClickImage);
-const maxDistance = 3;
 const clock = new THREE.Clock();
 const tick = () => {
   const elapse = clock.getElapsedTime();
@@ -160,14 +159,7 @@ const tick = () => {
 
   slidersArray.forEach((plane) => {
     plane.update(elapse);
-
     plane.material.uniforms.uVelocity.value = velocity;
-
-    const distance = Math.abs(0 - plane.mesh.position.x);
-
-    // const t = 1.0 - Math.min(distance / maxDistance, 1.0);
-
-    // plane.mesh.position.z = THREE.MathUtils.lerp(0, 0.5, t);
   });
 
   window.requestAnimationFrame(tick);
