@@ -1,0 +1,29 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-black: #000000;
+  --primary-white: #ffffff;
+  --primary-color: rgb(255, 56, 86);
+  --primary-font: "Roboto", sans-serif;
+  --border-radius-1: 5px;
+  --border-radius-2: 10px;
+  --border-radius-3: 15px;
+  --border-radius-4: 20px;
+  --border-radius-50: 50%;
+  --border-radius-100: 100%;
+}
+html,
+body {
+  overflow: hidden;
+  font-family: var(--primary-font);
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+}

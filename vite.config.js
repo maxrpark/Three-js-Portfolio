@@ -12,11 +12,14 @@ export default {
   //     host: true,
   //     open: !isCodeSandbox // Open if it's not a CodeSandbox
   // },
-  // build:
-  // {
-  //     outDir: '../dist',
-  //     emptyOutDir: true,
-  //     sourcemap: true
-  // },
+  build: {
+    rollupOptions: {
+      input: {
+        page1: "index.html",
+        page2: "projects.html",
+        // Add more entries for additional pages
+      },
+    },
+  },
   plugins: [glsl()],
 };
