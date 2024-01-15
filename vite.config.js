@@ -12,6 +12,11 @@ export default {
   //     host: true,
   //     open: !isCodeSandbox // Open if it's not a CodeSandbox
   // },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: "esnext",
+    },
+  },
   build: {
     rollupOptions: {
       input: {
