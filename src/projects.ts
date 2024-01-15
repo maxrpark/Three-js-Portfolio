@@ -13,21 +13,104 @@ const canvas = document.createElement("canvas");
 
 document.querySelector("#app")?.appendChild(canvas);
 
-const getData = async () => {
-  const res = await axios(
-    "https://my-portfolio-blog-website.netlify.app/api/myProjects"
-  );
-  const data = await res.data;
-  const projects = data
-    .filter((project: any) => project.featured === true)
-    .map((el: any) => {
-      return { ...el, texture: loader.load(el.url) };
-    });
+// const getData = async () => {
+//   const res = await axios(
+//     "https://my-portfolio-blog-website.netlify.app/api/myProjects"
+//   );
+//   const data = await res.data;
+//   const projects = data
+//     .filter((project: any) => project.featured === true)
+//     .map((el: any) => {
+//       return { ...el, texture: loader.load(el.url) };
+//     });
 
-  return projects;
+//   return projects;
+// };
+
+// const data = await getData();
+
+interface Project {
+  texture: THREE.Texture;
+  featured: boolean;
+  url: string;
+}
+
+const getData = () => {
+  return axios("https://my-portfolio-blog-website.netlify.app/api/myProjects")
+    .then((res) => res.data)
+    .then((data) => {
+      const projects = data
+        .filter((project: Project) => project.featured === true)
+        .map((el: Project) => {
+          return { ...el, texture: loader.load(el.url) };
+        });
+
+      return projects;
+    });
 };
 
-const data = await getData();
+let data;
+let parent = new THREE.Group();
+let velocity = 0;
+
+const slidersArray: BasicPlane[] = [];
+const meshArray: THREE.Mesh[] = [];
+const meshWidth = 4;
+const separationFactor = meshWidth + 0.3;
+
+getData().then((result) => {
+  data = result;
+
+  // Object
+
+  const numberOfImages = data.length;
+
+  for (let i = 0; i < numberOfImages; i++) {
+    let plane = new BasicPlane({
+      width: meshWidth,
+      height: 3,
+      texture: data[i].texture,
+    });
+
+    const positionOffset = (i - (numberOfImages - 1) / 2) * separationFactor;
+
+    plane.mesh.position.x = positionOffset;
+
+    slidersArray.push(plane);
+
+    parent.add(plane.mesh);
+    meshArray.push(plane.mesh);
+  }
+  parent.rotation.y = 0.3;
+  parent.position.z = -1;
+  scene.add(parent);
+
+  /// GSAP
+
+  Observer.create({
+    target: window,
+    type: "wheel,touch",
+    onChange: (self) => {
+      velocity = +(self.velocityY / 10000).toFixed(2);
+
+      slidersArray.forEach((plane) => {
+        plane.material.uniforms.uVelocity.value = velocity;
+        plane.mesh.position.x -= velocity * 1.1;
+
+        const threshold = ((numberOfImages - 1) * separationFactor) / 2;
+
+        if (plane.mesh.position.x > threshold) {
+          plane.mesh.position.x -= numberOfImages * separationFactor;
+        } else if (plane.mesh.position.x < -threshold) {
+          plane.mesh.position.x += numberOfImages * separationFactor;
+        }
+      });
+    },
+  });
+
+  // Continue with the rest of your code that depends on `data`
+  // For example, you can call a function or perform other actions here
+});
 
 // sizes
 
@@ -51,35 +134,6 @@ camera.position.set(0, 0, 4);
 
 scene.add(camera);
 
-// Object
-
-let parent = new THREE.Group();
-const slidersArray: BasicPlane[] = [];
-const meshArray: THREE.Mesh[] = [];
-const meshWidth = 4;
-const separationFactor = meshWidth + 0.3;
-const numberOfImages = data.length;
-
-for (let i = 0; i < numberOfImages; i++) {
-  let plane = new BasicPlane({
-    width: meshWidth,
-    height: 3,
-    texture: data[i].texture,
-  });
-
-  const positionOffset = (i - (numberOfImages - 1) / 2) * separationFactor;
-
-  plane.mesh.position.x = positionOffset;
-
-  slidersArray.push(plane);
-
-  parent.add(plane.mesh);
-  meshArray.push(plane.mesh);
-}
-parent.rotation.y = 0.3;
-parent.position.z = -1;
-scene.add(parent);
-
 // Renderer
 const renderer = new THREE.WebGLRenderer({
   canvas,
@@ -96,31 +150,6 @@ window.addEventListener("resize", () => {
   camera.updateProjectionMatrix();
 
   renderer.setSize(sizes.width, sizes.height);
-});
-
-/// GSAP
-
-let velocity = 0;
-
-Observer.create({
-  target: window,
-  type: "wheel,touch",
-  onChange: (self) => {
-    velocity = +(self.velocityY / 10000).toFixed(2);
-
-    slidersArray.forEach((plane) => {
-      plane.material.uniforms.uVelocity.value = velocity;
-      plane.mesh.position.x -= velocity * 1.1;
-
-      const threshold = ((numberOfImages - 1) * separationFactor) / 2;
-
-      if (plane.mesh.position.x > threshold) {
-        plane.mesh.position.x -= numberOfImages * separationFactor;
-      } else if (plane.mesh.position.x < -threshold) {
-        plane.mesh.position.x += numberOfImages * separationFactor;
-      }
-    });
-  },
 });
 
 //EVENTS
