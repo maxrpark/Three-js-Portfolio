@@ -15,8 +15,9 @@ export default {
   build: {
     rollupOptions: {
       input: {
-        page1: "index.html",
-        page2: "projects.html",
+        home: "index.html",
+        projects: "projects.html",
+        target: "ESNext",
         // Add more entries for additional pages
       },
     },
