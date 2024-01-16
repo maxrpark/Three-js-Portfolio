@@ -6,6 +6,7 @@ interface Props {
   width: number;
   height: number;
   texture: THREE.Texture;
+  url: string;
 }
 
 export class BasicPlane {
@@ -15,6 +16,7 @@ export class BasicPlane {
   width: number;
   height: number;
   texture: THREE.Texture;
+  url: string;
 
   constructor(props: Props) {
     Object.assign(this, props);
@@ -35,6 +37,7 @@ export class BasicPlane {
       },
     });
     this.mesh = new THREE.Mesh(this.geometry, this.material);
+    this.mesh.userData = { url: this.url };
   }
 
   // update(time: number) {

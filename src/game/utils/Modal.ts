@@ -34,7 +34,7 @@ export default class Modal extends EventEmitter {
         <a href="https://twitter.com/MaxCodeJourney" target="_blank" class="btn btn-primary">
           <i class="fa fa-twitter"></i>
         </a>
-        <a href="https://portfolio.maxiruti.com/"  class="btn btn-primary">
+        <a href="/projects.html"  class="btn btn-primary">
         <i class="fa-solid fa-globe"></i>
         </a>
         <a href="https://www.linkedin.com/in/maxi-ruti-202988227/" target="_blank" class="btn btn-primary">

@@ -64,3 +64,15 @@ export enum LocalStorageKeys {
 }
 
 export type LocalStorageTypes = LocalStorageKeys.POSITIONS;
+
+export interface Project {
+  id: string;
+  name: string;
+  shortDsc: string;
+  texture: THREE.Texture;
+  featured: boolean;
+  url: string;
+  version: string;
+  pageUrl: string;
+  gitUrl: string;
+}

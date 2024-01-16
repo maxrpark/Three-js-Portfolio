@@ -125,6 +125,21 @@ ul {
   object-fit: cover;
 }
 
+.go-back-btn {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  z-index: 30;
+  background-color: var(--primary-white);
+  top: 20px;
+  left: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  color: var(--primary-black);
+}
+
 /* 
 ============
 Desktop
@@ -166,17 +181,49 @@ Desktop
   display: flex;
   justify-content: center;
   align-items: center;
-  background: white;
+  background: var(--primary-white);
+  color: var(--primary-black);
+
   font-size: 2rem;
-  color: #000000;
   border-radius: 50%;
+  transition: var(--transition);
+  border: 2px solid var(--primary-white);
+}
+
+.desktop-content__links-link:hover {
+  background: var(--primary-black);
+  color: var(--primary-white);
 }
 
 /* 
 ============
 Mobile
 ============
- */
+/* Links */
+
+.mobile__links {
+  color: var(--white);
+  font-size: 10vw;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.mobile__links-link {
+  width: 35px;
+  height: 35px;
+
+  align-items: center;
+  text-align: center;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  font-size: 1.25rem;
+  color: #000000;
+  border-radius: 50%;
+}
 
 /* buttons */
 .btn {
