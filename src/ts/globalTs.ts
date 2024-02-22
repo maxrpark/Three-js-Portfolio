@@ -69,10 +69,13 @@ export interface Project {
   id: string;
   name: string;
   shortDsc: string;
+  longDsc: string;
   texture: THREE.Texture;
   featured: boolean;
   url: string;
   version: string;
   pageUrl: string;
   gitUrl: string;
+  video: string;
+  tags: [];
 }

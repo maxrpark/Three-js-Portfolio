@@ -18,6 +18,8 @@
     "axios": "^1.6.5",
     "cannon": "^0.6.2",
     "cannon-es-debugger": "^1.0.0",
+    "contentful": "^10.6.21",
+    "dotenv": "^16.4.5",
     "gsap": "^3.11.5",
     "lil-gui": "^0.18.0",
     "three": "^0.150.1",

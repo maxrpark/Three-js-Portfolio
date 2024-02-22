@@ -17,11 +17,10 @@ export default class ExploringWorld {
   private speedButton: HTMLButtonElement;
   private infoButtons: HTMLDivElement;
   public controllers: CharacterController;
+
   character: Character;
   vehicle: Vehicle;
-
   city: City;
-
   isDriving: boolean = false;
   garageDoor: Mesh;
 

@@ -24,10 +24,7 @@ export default class TowerStack {
   // world elements
   private tower: Group = new Group();
   private floorLevel: Text2D;
-  // public water: Water;
-
   private addedObjects: TowerFloor[] = [];
-
   public currentFloor: TowerFloor | null;
 
   // Variables
@@ -106,7 +103,6 @@ export default class TowerStack {
         ),
       onComplete: () => {
         this.addFloor();
-
         this.timeLine.play();
       },
     });
