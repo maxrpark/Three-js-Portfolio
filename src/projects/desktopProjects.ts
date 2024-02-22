@@ -63,7 +63,7 @@ export const setThreeExperience = (data: Project[]) => {
       width: meshWidth,
       height: 3,
       texture: data[i].texture,
-      url: data[i].pageUrl,
+      url: data[i].projectUrl,
     });
 
     const positionOffset = (i - (numberOfImages - 1) / 2) * separationFactor;
@@ -113,14 +113,9 @@ export const setThreeExperience = (data: Project[]) => {
   };
 
   let clickedImage: THREE.Mesh | null = null;
+  let intersects: any[] = [];
 
   const onClickImage = (event: MouseEvent) => {
-    mousePosition(event);
-
-    raycaster.setFromCamera(mouse, camera);
-
-    const intersects = raycaster.intersectObjects(meshArray);
-
     if (intersects.length > 0) {
       const intersectedMesh = intersects[0].object as THREE.Mesh;
       if (clickedImage) {
@@ -131,6 +126,18 @@ export const setThreeExperience = (data: Project[]) => {
   };
 
   renderer.domElement.addEventListener("click", onClickImage);
+  renderer.domElement.addEventListener("mousemove", (event) => {
+    mousePosition(event);
+
+    raycaster.setFromCamera(mouse, camera);
+
+    intersects = raycaster.intersectObjects(meshArray);
+    if (intersects.length > 0) {
+      document.body.style.cursor = "pointer";
+    } else {
+      document.body.style.cursor = "auto";
+    }
+  });
   const tick = () => {
     renderer.render(scene, camera);
 

@@ -74,7 +74,7 @@ export interface Project {
   featured: boolean;
   url: string;
   version: string;
-  pageUrl: string;
+  projectUrl: string;
   gitUrl: string;
   video: string;
   tags: [];
