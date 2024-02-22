@@ -115,7 +115,7 @@ export const setThreeExperience = (data: Project[]) => {
   let clickedImage: THREE.Mesh | null = null;
   let intersects: any[] = [];
 
-  const onClickImage = (event: MouseEvent) => {
+  const onClickImage = () => {
     if (intersects.length > 0) {
       const intersectedMesh = intersects[0].object as THREE.Mesh;
       if (clickedImage) {
