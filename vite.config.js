@@ -18,6 +18,7 @@ export default {
       input: {
         home: "index.html",
         projects: "projects.html",
+        project: "project.html",
         // Add more entries for additional pages
       },
     },

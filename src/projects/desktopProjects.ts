@@ -62,8 +62,8 @@ export const setThreeExperience = (data: Project[]) => {
     let plane = new BasicPlane({
       width: meshWidth,
       height: 3,
-      texture: data[i].texture,
-      url: data[i].projectUrl,
+      texture: data[i].texture!,
+      url: data[i].id,
     });
 
     const positionOffset = (i - (numberOfImages - 1) / 2) * separationFactor;
@@ -120,8 +120,10 @@ export const setThreeExperience = (data: Project[]) => {
       const intersectedMesh = intersects[0].object as THREE.Mesh;
       if (clickedImage) {
       }
+
       clickedImage = intersectedMesh;
       window.open(clickedImage.userData.url, "_blank");
+      // window.location.href = `/project.html?id=${clickedImage.userData.url}`;
     }
   };
 

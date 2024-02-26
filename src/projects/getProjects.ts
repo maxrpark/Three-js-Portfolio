@@ -10,7 +10,7 @@ const client = createClient({
   accessToken: import.meta.env.VITE_ACCESS_TOKEN!,
 });
 
-export const getData = () => {
+export const getAllProjects = () => {
   return client
     .getEntries({ content_type: "projects" })
     .then((data) => {
@@ -21,16 +21,15 @@ export const getData = () => {
 
         const {
           name,
-          shortDsc,
+          // shortDsc,
           longDsc,
-          projectUrl,
-          gitUrl,
-          tags,
+          // projectUrl,
+          // gitUrl,
+          // tags,
           version,
           image,
-          projectID,
-          featured,
-          video,
+          // featured,
+          // video,
         } = item.fields;
 
         //@ts-ignore
@@ -39,29 +38,58 @@ export const getData = () => {
         const texture = loader.load(url);
 
         return {
-          video,
-          projectID,
+          // video,
           name,
-          shortDsc,
+          // shortDsc,
           longDsc,
-          projectUrl,
-          gitUrl,
-          tags,
+          // projectUrl,
+          // gitUrl,
+          // tags,
           version,
           url,
           texture,
           id,
-          featured,
+          // featured,
         };
       });
 
-      // const projects = data
-      //   .filter((project: Project) => project.featured === true)
-      //   .map((el: Project) => {
-      //     return { ...el, texture: loader.load(el.url) };
-      //   });
-
       return projects;
+    })
+    .catch(console.error);
+};
+export const getSingleProject = (id: string) => {
+  return client
+    .getEntry(id)
+    .then((item) => {
+      const {
+        name,
+        shortDsc,
+        longDsc,
+        projectUrl,
+        gitUrl,
+        tags,
+        version,
+        image,
+        featured,
+        video,
+      } = item.fields;
+
+      //@ts-ignore
+      const url = image?.fields?.file?.url;
+
+      return {
+        video,
+        name,
+        shortDsc,
+        longDsc,
+        projectUrl,
+        gitUrl,
+        tags,
+        version,
+        url,
+        id,
+        featured,
+      };
     })
     .catch(console.error);
 };

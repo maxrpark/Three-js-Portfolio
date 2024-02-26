@@ -69,8 +69,8 @@ export interface Project {
   id: string;
   name: string;
   shortDsc: string;
-  longDsc: string;
-  texture: THREE.Texture;
+  longDsc: any;
+  texture?: THREE.Texture;
   featured: boolean;
   url: string;
   version: string;

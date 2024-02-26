@@ -20,8 +20,10 @@ export const projectsMobile = (data: Project[]) => {
           <div class="project-links">
             <a href="${project.gitUrl}" target="_blank"
               ><i class="fab fa-github"></i></a>
-          
-              <a class=" btn project-btn" href="${project.projectUrl}" target="_blank">visit</a>
+          <a class=" btn project-btn" href="${project.projectUrl}" target="_blank">visit</a>
+          <!-- 
+              <a class=" btn project-btn" href="/project.html?id=${project.id}" >visit</a>
+              -->
             
           </div>
         </article>
