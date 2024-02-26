@@ -63,7 +63,7 @@ export const setThreeExperience = (data: Project[]) => {
       width: meshWidth,
       height: 3,
       texture: data[i].texture!,
-      url: data[i].projectUrl,
+      url: data[i].id,
     });
 
     const positionOffset = (i - (numberOfImages - 1) / 2) * separationFactor;
@@ -85,21 +85,23 @@ export const setThreeExperience = (data: Project[]) => {
     target: window,
     type: "wheel,touch",
     tolerance: 20,
+    onStopDelay: 0.0,
+
     onChange: (self) => {
       velocity = +(self.velocityY / 10000).toFixed(2);
+      // velocity = THREE.MathUtils.lerp(velocity, 0, 0.05);
+      // slidersArray.forEach((plane) => {
+      //   plane.mesh.position.x -= velocity * 1.1;
+      //   plane.material.uniforms.uVelocity.value = velocity;
 
-      slidersArray.forEach((plane) => {
-        plane.mesh.position.x -= velocity * 1.1;
-        plane.material.uniforms.uVelocity.value = velocity;
+      //   const threshold = ((numberOfImages - 1) * separationFactor) / 2;
 
-        const threshold = ((numberOfImages - 1) * separationFactor) / 2;
-
-        if (plane.mesh.position.x > threshold) {
-          plane.mesh.position.x -= numberOfImages * separationFactor;
-        } else if (plane.mesh.position.x < -threshold) {
-          plane.mesh.position.x += numberOfImages * separationFactor;
-        }
-      });
+      //   if (plane.mesh.position.x > threshold) {
+      //     plane.mesh.position.x -= numberOfImages * separationFactor;
+      //   } else if (plane.mesh.position.x < -threshold) {
+      //     plane.mesh.position.x += numberOfImages * separationFactor;
+      //   }
+      // });
     },
   });
 
@@ -122,8 +124,8 @@ export const setThreeExperience = (data: Project[]) => {
       }
 
       clickedImage = intersectedMesh;
-      window.open(clickedImage.userData.url, "_blank");
-      // window.location.href = `/project.html?id=${clickedImage.userData.url}`;
+      // window.open(clickedImage.userData.url, "_blank");
+      window.location.href = `/project.html?id=${clickedImage.userData.url}`;
     }
   };
 
@@ -140,8 +142,26 @@ export const setThreeExperience = (data: Project[]) => {
       document.body.style.cursor = "auto";
     }
   });
+  velocity = 1;
   const tick = () => {
     renderer.render(scene, camera);
+
+    if (Math.abs(velocity) >= 0) {
+      velocity = THREE.MathUtils.lerp(velocity, 0, 0.05);
+      // velocity += 0.0005;
+      slidersArray.forEach((plane) => {
+        plane.mesh.position.x -= velocity * 1.1;
+        plane.material.uniforms.uVelocity.value = velocity;
+
+        const threshold = ((numberOfImages - 1) * separationFactor) / 2;
+
+        if (plane.mesh.position.x > threshold) {
+          plane.mesh.position.x -= numberOfImages * separationFactor;
+        } else if (plane.mesh.position.x < -threshold) {
+          plane.mesh.position.x += numberOfImages * separationFactor;
+        }
+      });
+    }
 
     window.requestAnimationFrame(tick);
   };
