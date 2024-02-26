@@ -63,7 +63,7 @@ export const setThreeExperience = (data: Project[]) => {
       width: meshWidth,
       height: 3,
       texture: data[i].texture!,
-      url: data[i].id,
+      url: data[i].projectUrl,
     });
 
     const positionOffset = (i - (numberOfImages - 1) / 2) * separationFactor;
