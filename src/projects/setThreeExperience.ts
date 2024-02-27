@@ -91,7 +91,7 @@ export const setThreeExperience = (data: Project[]) => {
 
     onChange: (self) => {
       let yVelocity = +(self.velocityY / 10000).toFixed(2);
-      let xVelocity = +(self.velocityX / 10000).toFixed(2);
+      let xVelocity = -(self.velocityX / 10000).toFixed(2);
       velocity = yVelocity + xVelocity;
     },
   });
