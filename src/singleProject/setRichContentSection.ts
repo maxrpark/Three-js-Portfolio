@@ -21,8 +21,6 @@ export const setRichContentSection = (longDsc: any) => {
 
       // renderNode: {
       [BLOCKS.PARAGRAPH]: (node: any) => {
-        console.log(node.content[0].value);
-
         let text = node.content[0].value
           .split(" ")
           .map((el: string) => {
@@ -59,7 +57,7 @@ export const setRichContentSection = (longDsc: any) => {
       scrollTrigger: {
         trigger: el,
         start: "top bottom",
-        end: "+100px",
+        end: "+50px",
         once: true,
       },
     });
@@ -67,6 +65,8 @@ export const setRichContentSection = (longDsc: any) => {
     tl.from(words, {
       yPercent: (i) => i * 3,
       opacity: 0,
+      duration: 0.3,
+
       stagger: {
         amount: words.length * 0.015,
       },

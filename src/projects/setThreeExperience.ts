@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { BasicPlane } from "../projects/plane/BasicPlane";
+import { BasicPlane } from "./plane/BasicPlane";
 import { gsap } from "gsap";
 import { Observer } from "gsap/Observer";
 import { Project } from "../ts/globalTs";
@@ -63,7 +63,8 @@ export const setThreeExperience = (data: Project[]) => {
       width: meshWidth,
       height: 3,
       texture: data[i].texture!,
-      url: data[i].id,
+      url: data[i].projectUrl,
+      // url: data[i].id,
     });
 
     const positionOffset = (i - (numberOfImages - 1) / 2) * separationFactor;
@@ -88,20 +89,9 @@ export const setThreeExperience = (data: Project[]) => {
     onStopDelay: 0.0,
 
     onChange: (self) => {
-      velocity = +(self.velocityY / 10000).toFixed(2);
-      // velocity = THREE.MathUtils.lerp(velocity, 0, 0.05);
-      // slidersArray.forEach((plane) => {
-      //   plane.mesh.position.x -= velocity * 1.1;
-      //   plane.material.uniforms.uVelocity.value = velocity;
-
-      //   const threshold = ((numberOfImages - 1) * separationFactor) / 2;
-
-      //   if (plane.mesh.position.x > threshold) {
-      //     plane.mesh.position.x -= numberOfImages * separationFactor;
-      //   } else if (plane.mesh.position.x < -threshold) {
-      //     plane.mesh.position.x += numberOfImages * separationFactor;
-      //   }
-      // });
+      let yVelocity = +(self.velocityY / 10000).toFixed(2);
+      let xVelocity = +(self.velocityX / 10000).toFixed(2);
+      velocity = yVelocity + xVelocity;
     },
   });
 
@@ -124,8 +114,9 @@ export const setThreeExperience = (data: Project[]) => {
       }
 
       clickedImage = intersectedMesh;
-      // window.open(clickedImage.userData.url, "_blank");
-      window.location.href = `/project.html?id=${clickedImage.userData.url}`;
+      window.open(clickedImage.userData.url, "_blank");
+
+      // window.location.href = `/project.html?id=${clickedImage.userData.url}`;
     }
   };
 
@@ -142,7 +133,9 @@ export const setThreeExperience = (data: Project[]) => {
       document.body.style.cursor = "auto";
     }
   });
-  velocity = 1;
+  setTimeout(() => {
+    velocity = 1;
+  });
   const tick = () => {
     renderer.render(scene, camera);
 
