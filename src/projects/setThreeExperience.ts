@@ -25,16 +25,17 @@ export const setThreeExperience = (data: Project[]) => {
   );
 
   camera.position.set(0, 0, 4);
-
   scene.add(camera);
 
   // Renderer
   const renderer = new THREE.WebGLRenderer({
     canvas,
     antialias: true,
+    alpha: true,
   });
   renderer.setSize(sizes.width, sizes.height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(0x0f0e17);
 
   window.addEventListener("resize", () => {
     sizes.width = window.innerWidth;
@@ -141,7 +142,6 @@ export const setThreeExperience = (data: Project[]) => {
 
     if (Math.abs(velocity) >= 0) {
       velocity = THREE.MathUtils.lerp(velocity, 0, 0.05);
-      // velocity += 0.0005;
       slidersArray.forEach((plane) => {
         plane.mesh.position.x -= velocity * 1.1;
         plane.material.uniforms.uVelocity.value = velocity;
