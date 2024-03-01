@@ -13,6 +13,7 @@ const sizes = {
 };
 
 const canvas = document.getElementById("canvas-projects")!;
+const loadingOverlay = document.getElementById("loadingOverlay")!;
 
 export const setThreeExperience = (data: Project[]) => {
   const scene = new THREE.Scene();
@@ -136,7 +137,8 @@ export const setThreeExperience = (data: Project[]) => {
   });
   setTimeout(() => {
     velocity = 1;
-  });
+    loadingOverlay.style.display = "none";
+  }, 500);
   const tick = () => {
     renderer.render(scene, camera);
 

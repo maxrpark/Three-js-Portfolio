@@ -36,10 +36,9 @@ export const setRichContentSection = (longDsc: any) => {
 
   //
 
-  document.getElementById("rich-text-body")!.innerHTML = documentToHtmlString(
-    longDsc,
-    options
-  );
+  const articleSection = document.getElementById("rich-text-body")!;
+
+  articleSection.innerHTML = documentToHtmlString(longDsc, options);
 
   const paragraphs = gsap.utils.toArray(
     ".single-text"
@@ -73,7 +72,7 @@ export const setRichContentSection = (longDsc: any) => {
     });
   });
 
-  const headers = gsap.utils.toArray("h1, h2, h3");
+  const headers = gsap.utils.toArray("h1, h2, h3", articleSection);
   headers.forEach((el: any) => {
     gsap.from(el, {
       yPercent: 100,

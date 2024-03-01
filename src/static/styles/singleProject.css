@@ -116,6 +116,22 @@ html.lenis {
 
 /* HERO */
 
+.go-back-btn {
+  position: absolute;
+  /* top: 1rem; */
+  left: 1rem;
+  z-index: 30;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  width: 40px;
+  height: 40px;
+  background-color: var(--primary-white-1);
+  border-radius: 50%;
+  color: var(--primary-black);
+}
+
 .hero {
   width: 100%;
   height: 60vh;
@@ -267,8 +283,7 @@ html.lenis {
 .next-project-section {
   width: 100%;
   height: 40vh;
-
-  position: sticky;
+  position: relative;
   bottom: 0;
   cursor: pointer;
   overflow: hidden;
@@ -299,6 +314,9 @@ html.lenis {
 }
 
 @media screen and (min-width: 768px) {
+  .next-project-section {
+    position: sticky;
+  }
   .next-project-text {
     width: 100%;
     position: absolute;
