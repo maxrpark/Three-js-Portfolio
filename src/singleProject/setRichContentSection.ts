@@ -40,6 +40,31 @@ export const setRichContentSection = (longDsc: any) => {
 
   articleSection.innerHTML = documentToHtmlString(longDsc, options);
 
+  // Image Animation
+
+  const imageWrapper = gsap.utils.toArray(".image-wrapper") as HTMLDivElement[];
+
+  gsap.set("body-article-img", {
+    yPercent: 10,
+    opacity: 0,
+    scale: 0.7,
+  });
+  imageWrapper.forEach((el: HTMLDivElement) => {
+    const img = el.querySelector(".body-article-img");
+    gsap.to(img, {
+      yPercent: 0,
+      opacity: 1,
+      scale: 1,
+      duration: 1,
+      scrollTrigger: {
+        trigger: el,
+        start: "top 80%",
+        end: "top center",
+        once: true,
+      },
+    });
+  });
+
   const paragraphs = gsap.utils.toArray(
     ".single-text"
   ) as HTMLParagraphElement[];
@@ -47,23 +72,27 @@ export const setRichContentSection = (longDsc: any) => {
   gsap.set(".content-span", {
     display: "inline-block",
     marginLeft: "5px",
+    opacity: 0,
   });
 
   paragraphs.forEach((el: HTMLParagraphElement) => {
     const words = el.querySelectorAll(".content-span");
 
+    gsap.set(words, {
+      yPercent: (i) => i * 3,
+    });
+
     let tl = gsap.timeline({
       scrollTrigger: {
         trigger: el,
         start: "top bottom",
-        end: "+50px",
         once: true,
       },
     });
 
-    tl.from(words, {
-      yPercent: (i) => i * 3,
-      opacity: 0,
+    tl.to(words, {
+      yPercent: 0,
+      opacity: 1,
       duration: 0.3,
 
       stagger: {
@@ -73,31 +102,18 @@ export const setRichContentSection = (longDsc: any) => {
   });
 
   const headers = gsap.utils.toArray("h1, h2, h3", articleSection);
+
+  gsap.set(headers, {
+    yPercent: 100,
+    opacity: 0,
+  });
   headers.forEach((el: any) => {
-    gsap.from(el, {
-      yPercent: 100,
-      opacity: 0,
+    gsap.to(el, {
+      yPercent: 0,
+      opacity: 1,
       scrollTrigger: {
         trigger: el,
         start: "top bottom",
-        once: true,
-      },
-    });
-  });
-
-  const imageWrapper = gsap.utils.toArray(".image-wrapper") as HTMLDivElement[];
-
-  imageWrapper.forEach((el: HTMLDivElement) => {
-    const img = el.querySelector(".body-article-img");
-    gsap.from(img, {
-      yPercent: 10,
-      opacity: 0,
-      scale: 0.7,
-      duration: 1,
-      scrollTrigger: {
-        trigger: el,
-        start: "top 80%",
-        end: "top center",
         once: true,
       },
     });

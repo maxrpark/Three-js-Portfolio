@@ -65,8 +65,8 @@ export const setThreeExperience = (data: Project[]) => {
       width: meshWidth,
       height: 3,
       texture: data[i].texture!,
-      url: data[i].projectUrl,
-      // url: data[i].id,
+      // url: data[i].projectUrl,
+      url: data[i].id,
     });
 
     const positionOffset = (i - (numberOfImages - 1) / 2) * separationFactor;
@@ -116,9 +116,9 @@ export const setThreeExperience = (data: Project[]) => {
       }
 
       clickedImage = intersectedMesh;
-      window.open(clickedImage.userData.url, "_blank");
+      // window.open(clickedImage.userData.url, "_blank");
 
-      // window.location.href = `/project.html?id=${clickedImage.userData.url}`;
+      window.location.href = `/project.html?id=${clickedImage.userData.url}`;
     }
   };
 
