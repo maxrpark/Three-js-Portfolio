@@ -44,7 +44,7 @@ export const setRichContentSection = (longDsc: any) => {
 
   const imageWrapper = gsap.utils.toArray(".image-wrapper") as HTMLDivElement[];
 
-  gsap.set("body-article-img", {
+  gsap.set(".body-article-img", {
     yPercent: 10,
     opacity: 0,
     scale: 0.7,
@@ -76,7 +76,7 @@ export const setRichContentSection = (longDsc: any) => {
   });
 
   paragraphs.forEach((el: HTMLParagraphElement) => {
-    const words = el.querySelectorAll(".content-span");
+    const words = gsap.utils.toArray(".content-span", el);
 
     gsap.set(words, {
       yPercent: (i) => i * 3,
@@ -85,7 +85,8 @@ export const setRichContentSection = (longDsc: any) => {
     let tl = gsap.timeline({
       scrollTrigger: {
         trigger: el,
-        start: "top bottom",
+        start: "top 90%",
+        // markers: true,
         once: true,
       },
     });
@@ -113,7 +114,9 @@ export const setRichContentSection = (longDsc: any) => {
       opacity: 1,
       scrollTrigger: {
         trigger: el,
-        start: "top bottom",
+        // start: "top bottom",
+        start: "top 90%",
+        // markers: true,
         once: true,
       },
     });
