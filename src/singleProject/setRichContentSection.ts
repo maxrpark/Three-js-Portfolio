@@ -37,88 +37,100 @@ export const setRichContentSection = (longDsc: any) => {
   //
 
   const articleSection = document.getElementById("rich-text-body")!;
+  gsap.set(articleSection, {
+    opacity: 0,
+  });
 
   articleSection.innerHTML = documentToHtmlString(longDsc, options);
 
   // Image Animation
 
-  const imageWrapper = gsap.utils.toArray(".image-wrapper") as HTMLDivElement[];
-
-  gsap.set(".body-article-img", {
-    yPercent: 10,
-    opacity: 0,
-    scale: 0.7,
-  });
-  imageWrapper.forEach((el: HTMLDivElement) => {
-    const img = el.querySelector(".body-article-img");
-    gsap.to(img, {
-      yPercent: 0,
+  setTimeout(() => {
+    gsap.to(articleSection, {
       opacity: 1,
-      scale: 1,
-      duration: 1,
-      scrollTrigger: {
-        trigger: el,
-        start: "top 80%",
-        end: "top center",
-        once: true,
-      },
     });
-  });
+    const imageWrapper = gsap.utils.toArray(
+      ".image-wrapper"
+    ) as HTMLDivElement[];
 
-  const paragraphs = gsap.utils.toArray(
-    ".single-text"
-  ) as HTMLParagraphElement[];
-
-  gsap.set(".content-span", {
-    display: "inline-block",
-    marginLeft: "5px",
-    opacity: 0,
-  });
-
-  paragraphs.forEach((el: HTMLParagraphElement) => {
-    const words = gsap.utils.toArray(".content-span", el);
-
-    gsap.set(words, {
-      yPercent: (i) => i * 3,
+    gsap.set(".body-article-img", {
+      yPercent: 10,
+      opacity: 0,
+      scale: 0.7,
+    });
+    imageWrapper.forEach((el: HTMLDivElement) => {
+      const img = el.querySelector(".body-article-img");
+      gsap.to(img, {
+        yPercent: 0,
+        opacity: 1,
+        scale: 1,
+        duration: 1,
+        scrollTrigger: {
+          trigger: el,
+          start: "top 80%",
+          end: "top center",
+          once: true,
+        },
+      });
     });
 
-    let tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: el,
-        start: "top 90%",
-        // markers: true,
-        once: true,
-      },
+    const paragraphs = gsap.utils.toArray(
+      ".single-text"
+    ) as HTMLParagraphElement[];
+
+    gsap.set(".content-span", {
+      display: "inline-block",
+      marginLeft: "5px",
+      opacity: 0,
     });
 
-    tl.to(words, {
-      yPercent: 0,
-      opacity: 1,
-      duration: 0.3,
+    paragraphs.forEach((el: HTMLParagraphElement) => {
+      const words = gsap.utils.toArray(".content-span", el);
 
-      stagger: {
-        amount: words.length * 0.015,
-      },
+      gsap.set(words, {
+        yPercent: (i) => i * 3,
+      });
+
+      let tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: el,
+          start: "top 90%",
+          // start: "top bottom",s
+          // markers: true,
+          once: true,
+        },
+      });
+
+      tl.to(words, {
+        yPercent: 0,
+        opacity: 1,
+        duration: 0.3,
+
+        stagger: {
+          amount: words.length * 0.015,
+        },
+      });
     });
-  });
 
-  const headers = gsap.utils.toArray("h1, h2, h3", articleSection);
+    const headers = gsap.utils.toArray("h1, h2, h3", articleSection);
 
-  gsap.set(headers, {
-    yPercent: 100,
-    opacity: 0,
-  });
-  headers.forEach((el: any) => {
-    gsap.to(el, {
-      yPercent: 0,
-      opacity: 1,
-      scrollTrigger: {
-        trigger: el,
-        // start: "top bottom",
-        start: "top 90%",
-        // markers: true,
-        once: true,
-      },
+    gsap.set(headers, {
+      yPercent: 100,
+      opacity: 0,
     });
-  });
+    headers.forEach((el: any) => {
+      gsap.to(el, {
+        yPercent: 0,
+        opacity: 1,
+        scrollTrigger: {
+          trigger: el,
+          // start: "top bottom",
+          start: "top 90%",
+          // markers: true,
+          once: true,
+        },
+      });
+    });
+    ScrollTrigger.refresh();
+  }, 200);
 };
