@@ -413,6 +413,7 @@ footer {
   gap: 1rem;
   padding: 1rem;
 }
+
 footer p {
   color: var(--primary-white-1);
   font-size: clamp(1.5rem, 2vw, 4rem);
@@ -424,8 +425,8 @@ footer p {
 }
 
 .social-link i {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
 
   align-items: center;
   text-align: center;
@@ -436,7 +437,7 @@ footer p {
   background: var(--primary-white-1);
   color: var(--primary-black);
 
-  font-size: 2rem;
+  font-size: 1rem;
   border-radius: 50%;
   transition: var(--transition-1);
   border: 2px solid var(--primary-white-1);
