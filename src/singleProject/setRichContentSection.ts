@@ -19,18 +19,33 @@ export const setRichContentSection = (longDsc: any) => {
         return ""; // Return empty string if image data is not available
       },
 
-      // renderNode: {
       [BLOCKS.PARAGRAPH]: (node: any) => {
-        let text = node.content[0].value
-          .split(" ")
-          .map((el: string) => {
-            return `<span class="content-span" >${el} </span>`;
+        let text = node.content
+          .map((childNode: any) => {
+            if (childNode.nodeType === "text") {
+              return childNode.value
+                .split(" ")
+                .map((word: string) => {
+                  return `<span class="content-span">${word} </span>`;
+                })
+                .join("");
+            } else if (childNode.nodeType === "hyperlink") {
+              const target = childNode.data.uri.startsWith(
+                "https://www.maxiruti.com/"
+              )
+                ? "_self"
+                : "_blank";
+
+              return `<a href="${childNode.data.uri}" target="${target}">
+              ${childNode.content[0].value}</a>
+             `;
+            } else {
+              return "";
+            }
           })
           .join("");
-
         return `<p class='single-text'>${text}</p>`;
       },
-      // },
     },
   };
 
