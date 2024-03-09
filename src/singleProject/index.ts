@@ -16,7 +16,6 @@ const urlParams = new URLSearchParams(window.location.search);
 // Extract the project ID from the query parameters
 const projectId = urlParams.get("id");
 
-window.scrollTo(0, 0);
 if (!projectId) {
   window.location.href = "/projects";
 }
@@ -30,6 +29,9 @@ getSingleProject(projectId!).then((result) => {
     result as unknown as Project;
 
   const lenis = new Lenis();
+  lenis.scrollTo(0, {
+    immediate: true,
+  });
 
   function raf(time: number) {
     lenis.raf(time);
