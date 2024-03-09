@@ -81,6 +81,7 @@ export const setRichContentSection = (longDsc: any) => {
         scale: 1,
         duration: 1,
         scrollTrigger: {
+          onRefresh: (self) => self.progress && self.animation!.progress(1),
           trigger: el,
           start: "top 80%",
           end: "top center",
@@ -108,6 +109,7 @@ export const setRichContentSection = (longDsc: any) => {
 
       let tl = gsap.timeline({
         scrollTrigger: {
+          onRefresh: (self) => self.progress && self.animation!.progress(1),
           trigger: el,
           start: "top 90%",
           // start: "top bottom",s
@@ -138,6 +140,7 @@ export const setRichContentSection = (longDsc: any) => {
         yPercent: 0,
         opacity: 1,
         scrollTrigger: {
+          onRefresh: (self) => self.progress && self.animation!.progress(1),
           trigger: el,
           // start: "top bottom",
           start: "top 90%",

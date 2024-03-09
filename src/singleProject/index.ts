@@ -2,9 +2,6 @@ import "../static/styles/singleProject.css";
 
 import { getAllProjects, getSingleProject } from "../projects/getProjects";
 import { Project } from "../ts/globalTs";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-gsap.registerPlugin(ScrollTrigger);
 
 import Lenis from "@studio-freight/lenis";
 import { videoHeroSection } from "./videoHeroSection";
