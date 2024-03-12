@@ -34,7 +34,7 @@ export const videoHeroSection = ({
   shortDsc,
 }: Params) => {
   hero.appendChild(iframDIV);
-  video.src = projectVideo;
+  video.src = projectVideo + "?rel=0&showinfo=0&modestbranding=1";
   projectDesc.textContent = shortDsc;
   setBGImage(videoCover, image);
 
