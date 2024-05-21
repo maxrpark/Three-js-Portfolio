@@ -71,14 +71,14 @@ export const setRichContentSection = (longDsc: any) => {
     gsap.set(".body-article-img", {
       yPercent: 10,
       opacity: 0,
-      scale: 0.7,
+      // scale: 0.7,
     });
     imageWrapper.forEach((el: HTMLDivElement) => {
       const img = el.querySelector(".body-article-img");
       gsap.to(img, {
         yPercent: 0,
         opacity: 1,
-        scale: 1,
+        // scale: 1,
         duration: 1,
         scrollTrigger: {
           onRefresh: (self) => self.progress && self.animation!.progress(1),
