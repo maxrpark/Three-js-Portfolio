@@ -8,6 +8,9 @@ import { videoHeroSection } from "./videoHeroSection";
 import { setSideSection } from "./sideSection";
 import { setNextProjectSection } from "./nextProjectSection";
 import { setRichContentSection } from "./setRichContentSection";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
 
 const urlParams = new URLSearchParams(window.location.search);
 // Extract the project ID from the query parameters
@@ -48,6 +51,12 @@ getSingleProject(projectId!).then((result) => {
   setSideSection({ projectUrl, version, tags });
 });
 
-getAllProjects().then((projects: any) => {
-  setNextProjectSection(projects, projectId!);
-});
+getAllProjects()
+  .then((projects: any) => {
+    setNextProjectSection(projects, projectId!);
+  })
+  .then(() => {
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 1000);
+  });
